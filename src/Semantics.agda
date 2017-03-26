@@ -51,8 +51,8 @@ module _ {{_ : Model}} where
     _⟦_⇒_⟧ : World → Type → Type → Set
     w ⟦ A ⇒ B ⟧ = ∀ {w′} → w ≤ w′ → w′ ⊩ A → w′ ⊩ B
 
-  ⟦pac⟧ : ∀ {w} → w ⊩ ○ → w ⟦○⟧
-  ⟦pac⟧ f l = f l
+  ⟦gnd⟧ : ∀ {w} → w ⊩ ○ → w ⟦○⟧
+  ⟦gnd⟧ f l = f l
 
   ⟦app⟧⟪_,_⟫ : ∀ A B {w} → w ⊩ A ⇒ B → w ⟦ A ⇒ B ⟧
   ⟦app⟧⟪ A , B ⟫ f l a = f l a
@@ -74,7 +74,7 @@ module _ {{_ : Model}} where
     syntax ⟦=⟧ {A} f f′ = f ⟦=⟧⟪ A ⟫ f′
 
     ⟦=⟧ : ∀ {A w} → w ⊩ A → w ⊩ A → Set
-    ⟦=⟧ {○}      {w} f f′ = ∀ {w′} → (l : w ≤ w′) → ⟦pac⟧ f l ≡ ⟦pac⟧ f′ l
+    ⟦=⟧ {○}      {w} f f′ = ∀ {w′} → (l : w ≤ w′) → ⟦gnd⟧ f l ≡ ⟦gnd⟧ f′ l
     ⟦=⟧ {A ⇒ B} {w} f f′ = ∀ {w′} {a : w′ ⊩ A} → (l : w ≤ w′) → ⟦♯⟧⟪ A ⟫ a →
                             ⟦app⟧⟪ A , B ⟫ f l a ⟦=⟧⟪ B ⟫ ⟦app⟧⟪ A , B ⟫ f′ l a
 
