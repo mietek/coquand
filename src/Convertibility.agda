@@ -3,151 +3,136 @@ module Convertibility where
 open import Syntax public
 
 
--- Convertibility of derivations.
+-- 3.4. Convertibility of proof trees
 
 mutual
-  infix 4 _≅⊦_
-  data _≅⊦_ : ∀ {A Γ} → Γ ⊢ A → Γ ⊢ A → Set where
-    refl≅⊦  : ∀ {A Γ} {d : Γ ⊢ A} → d ≅⊦ d
+  infix 4 _≅_
+  data _≅_ : ∀ {A Γ} → Γ ⊢ A → Γ ⊢ A → Set where
+    refl≅  : ∀ {A Γ} {M : Γ ⊢ A} → M ≅ M
 
-    trans≅⊦ : ∀ {A Γ} {d d′ d″ : Γ ⊢ A} → d ≅⊦ d′ → d′ ≅⊦ d″ → d ≅⊦ d″
+    trans≅ : ∀ {A Γ} {M M′ M″ : Γ ⊢ A} → M ≅ M′ → M′ ≅ M″ → M ≅ M″
 
-    sym≅⊦   : ∀ {A Γ} {d d′ : Γ ⊢ A} → d ≅⊦ d′ → d′ ≅⊦ d
+    sym≅   : ∀ {A Γ} {M M′ : Γ ⊢ A} → M ≅ M′ → M′ ≅ M
 
+    cong▸  : ∀ {A Δ Γ} {M M′ : Γ ⊢ A} {γ γ′ : Δ ⇛ Γ} →
+             M ≅ M′ → γ ≅ₛ γ′ → M ▸ γ ≅ M′ ▸ γ′
 
-    -- Congruences.
+    congλ  : ∀ {x A B Γ} {{_ : fresh x Γ}} {M M′ : [ Γ , x ∷ A ] ⊢ B} →
+             M ≅ M′ → λ[ x ∷ A ] M ≅ λ[ x ∷ A ] M′
 
-    conglam : ∀ {x A B Γ} {{_ : x ∥ Γ}} {d d′ : Γ , x ∷ A ⊢ B} →
-              d ≅⊦ d′ → lam x d ≅⊦ lam x d′
+    cong∙  : ∀ {A B Γ} {M M′ : Γ ⊢ A ⇒ B} {N N′ : Γ ⊢ A} →
+             M ≅ M′ → N ≅ N′ → M ∙ N ≅ M′ ∙ N′
 
-    congapp : ∀ {A B Γ} {d d′ : Γ ⊢ A ⇒ B} {e e′ : Γ ⊢ A} →
-              d ≅⊦ d′ → e ≅⊦ e′ → app d e ≅⊦ app d′ e′
+    conv≅₁ : ∀ {x A B Δ Γ} {{_ : fresh x Γ}} → (M : [ Γ , x ∷ A ] ⊢ B) (N : Δ ⊢ A) (γ : Δ ⇛ Γ) →
+             λ[ x ∷ A ] M ▸ γ ∙ N ≅ M ▸ [ γ , x ≔ N ]
 
-    cong◂   : ∀ {A Γ Γ′} {d d′ : Γ ⊢ A} {s s′ : Γ ⋘ Γ′} →
-              d ≅⊦ d′ → s ≅« s′ → d ◂ s ≅⊦ d′ ◂ s′
+    conv≅₂ : ∀ {x A B Γ} {{_ : fresh x Γ}} → (M : Γ ⊢ A ⇒ B) (c : [ Γ , x ∷ A ] ⊇ Γ) →
+             M ≅ λ[ x ∷ A ] (M ▸ π c ∙ v[ x ∷ A ] occ₁)
 
+    conv≅₃ : ∀ {x A Δ Γ} {{_ : fresh x Γ}} → (M : Δ ⊢ A) (γ : Δ ⇛ Γ) →
+             v[ x ∷ A ] occ₁ ▸ [ γ , x ≔ M ] ≅ M
 
-    -- Conversions.
+    conv≅₄ : ∀ {x A Δ Γ} → (i : Occur x A Γ) (j : Occur x A Δ) (c : Δ ⊇ Γ) →
+             v[ x ∷ A ] i ▸ π c ≅ v[ x ∷ A ] j
 
-    reduce⇒   : ∀ {x A B Γ Γ′} {{_ : x ∥ Γ}} → (d : Γ , x ∷ A ⊢ B) (e : Γ′ ⊢ A) (s : Γ ⋘ Γ′) →
-                 app (lam x d ◂ s) e ≅⊦ d ◂ [ x ≔ e ] s
+    conv≅₅ : ∀ {A Γ} → (M : Γ ⊢ A) (c : Γ ⊇ Γ) →
+             M ▸ π c ≅ M
 
-    expand⇒   : ∀ {x A B Γ} {{_ : x ∥ Γ}} → (d : Γ ⊢ A ⇒ B) (l : Γ ⊆ Γ , x ∷ A) →
-                 d ≅⊦ lam x (app (d ◂ sub l) (var x top))
+    conv≅₆ : ∀ {A B Δ Γ} → (M : Γ ⊢ A ⇒ B) (N : Γ ⊢ A) (γ : Δ ⇛ Γ) →
+             (M ∙ N) ▸ γ ≅ (M ▸ γ) ∙ (N ▸ γ)
 
-    convert≅⊦₁ : ∀ {x A Γ Γ′} {{_ : x ∥ Γ}} → (d : Γ′ ⊢ A) (s : Γ ⋘ Γ′) →
-                 var x top ◂ [ x ≔ d ] s ≅⊦ d
+    conv≅₇ : ∀ {A Θ Δ Γ} → (M : Γ ⊢ A) (δ : Δ ⇛ Θ) (γ : Θ ⇛ Γ) →
+             (M ▸ γ) ▸ δ ≅ M ▸ (γ ∘ δ)
 
-    convert≅⊦₂ : ∀ {x A Γ Γ′} → (i : x ∷ A ∈ Γ) (i′ : x ∷ A ∈ Γ′) (l : Γ ⊆ Γ′) →
-                 var x i ◂ sub l ≅⊦ var x i′
+  infix 4 _≅ₛ_
+  data _≅ₛ_ : ∀ {Δ Γ} → Δ ⇛ Γ → Δ ⇛ Γ → Set where
+     refl≅ₛ  : ∀ {Δ Γ} {γ : Δ ⇛ Γ} → γ ≅ₛ γ
 
-    convert≅⊦₃ : ∀ {A Γ} → (d : Γ ⊢ A) (l : Γ ⊆ Γ) →
-                 d ◂ sub l ≅⊦ d
+     trans≅ₛ : ∀ {Δ Γ} {γ γ′ γ″ : Δ ⇛ Γ} → γ ≅ₛ γ′ → γ′ ≅ₛ γ″ → γ ≅ₛ γ″
 
-    convert≅⊦₄ : ∀ {A B Γ Γ′} → (d : Γ ⊢ A ⇒ B) (e : Γ ⊢ A) (s : Γ ⋘ Γ′) →
-                 app d e ◂ s ≅⊦ app (d ◂ s) (e ◂ s)
+     sym≅ₛ   : ∀ {Δ Γ} {γ γ′ : Δ ⇛ Γ} → γ ≅ₛ γ′ → γ′ ≅ₛ γ
 
-    convert≅⊦₅ : ∀ {A Γ Γ′ Γ″} → (d : Γ ⊢ A) (l : Γ ⋘ Γ′) (l′ : Γ′ ⋘ Γ″) →
-                 (d ◂ l) ◂ l′ ≅⊦ d ◂ (l • l′)
+     congπ   : ∀ {Δ Γ} {c c′ : Δ ⊇ Γ} →
+               c ≡ c′ → π c ≅ₛ π c′
 
+     cong∘   : ∀ {Θ Δ Γ} {δ δ′ : Δ ⇛ Θ} {γ γ′ : Θ ⇛ Γ} →
+               δ ≅ₛ δ′ → γ ≅ₛ γ′ → γ ∘ δ ≅ₛ γ′ ∘ δ′
 
--- Convertibility of substitutions.
+     cong≔   : ∀ {x A Δ Γ} {{_ : fresh x Γ}} {M M′ : Δ ⊢ A} {γ γ′ : Δ ⇛ Γ} →
+               M ≅ M′ → γ ≅ₛ γ′ → [ γ , x ≔ M ] ≅ₛ [ γ′ , x ≔ M′ ]
 
-  infix 4 _≅«_
-  data _≅«_ : ∀ {Γ Γ′} → Γ ⋘ Γ′ → Γ ⋘ Γ′ → Set where
-    refl≅«  : ∀ {Γ Γ′} {s : Γ ⋘ Γ′} → s ≅« s
+     conv≅ₛ₁ : ∀ {Ω Θ Δ Γ} → (θ : Ω ⇛ Δ) (δ : Δ ⇛ Θ) (γ : Θ ⇛ Γ) →
+               (γ ∘ δ) ∘ θ ≅ₛ γ ∘ (δ ∘ θ)
 
-    trans≅« : ∀ {Γ Γ′} {s s′ s″ : Γ ⋘ Γ′} → s ≅« s′ → s′ ≅« s″ → s ≅« s″
+     conv≅ₛ₂ : ∀ {x A Θ Δ Γ} {{_ : fresh x Γ}} → (M : Θ ⊢ A) (δ : Δ ⇛ Θ) (γ : Θ ⇛ Γ) →
+               [ γ , x ≔ M ] ∘ δ ≅ₛ [ γ ∘ δ , x ≔ M ▸ δ ]
 
-    sym≅«   : ∀ {Γ Γ′} {s s′ : Γ ⋘ Γ′} → s ≅« s′ → s′ ≅« s
+     conv≅ₛ₃ : ∀ {x A Δ Γ} {{_ : fresh x Γ}} → (M : Δ ⊢ A) (γ : Δ ⇛ Γ) (c : [ Γ , x ∷ A ] ⊇ Γ) →
+               π c ∘ [ γ , x ≔ M ] ≅ₛ γ
 
+     conv≅s₄ : ∀ {Θ Δ Γ} → (c₁ : Δ ⊇ Γ) (c₂ : Θ ⊇ Δ) (c₃ : Θ ⊇ Γ) →
+               π c₁ ∘ π c₂ ≅ₛ π c₃
 
-    -- Congruences.
+     conv≅ₛ₅ : ∀ {Δ Γ} → (γ : Γ ⇛ Δ) (c : Γ ⊇ Γ) →
+               γ ∘ π c ≅ₛ γ
 
-    congsub : ∀ {Γ Γ′} {l l′ : Γ ⊆ Γ′} →
-              l ≡ l′ → sub l ≅« sub l′
+     conv≅ₛ₆ : ∀ {Γ} → (γ : Γ ⇛ []) (c : Γ ⊇ []) →
+               γ ≅ₛ π c
 
-    cong•   : ∀ {Γ Γ′ Γ″} {s s′ : Γ ⋘ Γ′} {t t′ : Γ′ ⋘ Γ″} →
-              s ≅« s′ → t ≅« t′ → s • t ≅« s′ • t′
-
-    cong≔   : ∀ {x A Γ Γ′} {{_ : x ∥ Γ}} {d d′ : Γ′ ⊢ A} {s s′ : Γ ⋘ Γ′} →
-              d ≅⊦ d′ → s ≅« s′ → [ x ≔ d ] s ≅« [ x ≔ d′ ] s′
-
-
-    -- Conversions.
-
-    convert≅«₁ : ∀ {Γ Γ′ Γ″ Γ‴} → (s : Γ ⋘ Γ′) (s′ : Γ′ ⋘ Γ″) (s″ : Γ″ ⋘ Γ‴) →
-                 (s • s′) • s″ ≅« s • (s′ • s″)
-
-    convert≅«₂ : ∀ {x A Γ Γ′ Γ″} {{_ : x ∥ Γ}} → (d : Γ′ ⊢ A) (s : Γ ⋘ Γ′) (s′ : Γ′ ⋘ Γ″) →
-                 [ x ≔ d ] s • s′ ≅« [ x ≔ d ◂ s′ ] (s • s′)
-
-    convert≅«₃ : ∀ {x A Γ Γ′} {{_ : x ∥ Γ}} → (l : Γ ⊆ Γ , x ∷ A) (d : Γ′ ⊢ A) (s : Γ ⋘ Γ′) →
-                 sub l • [ x ≔ d ] s ≅« s
-
-    convert≅«₄ : ∀ {Γ Γ′ Γ″} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ″) (l″ : Γ ⊆ Γ″) →
-                 sub l • sub l′ ≅« sub l″
-
-    convert≅«₅ : ∀ {Γ Γ′} → (s : Γ ⋘ Γ′) (l : Γ′ ⊆ Γ′) →
-                 s • sub l ≅« s
-
-    convert≅«₆ : ∀ {Γ} → (s : ∅ ⋘ Γ) (l : ∅ ⊆ Γ) →
-                 s ≅« sub l
-
-    convert≅«₇ : ∀ {x A Γ Γ′} {{_ : x ∥ Γ}} → (i : x ∷ A ∈ Γ , x ∷ A) (s : Γ , x ∷ A ⋘ Γ′) (l : Γ ⊆ Γ , x ∷ A) →
-                 s ≅« [ x ≔ var x i ◂ s ] (sub l • s)
+     conv≅ₛ₇ : ∀ {x A Δ Γ} {{_ : fresh x Γ}} → (i : Occur x A Δ) (γ : Δ ⇛ [ Γ , x ∷ A ]) (c : [ Γ , x ∷ A ] ⊇ Γ) →
+               γ ≅ₛ [ π c ∘ γ , x ≔ v[ x ∷ A ] i ]
 
 
--- Lemmas.
+-- Lemmas
 
-≡→≅⊦ : ∀ {A Γ} {d d′ : Γ ⊢ A} → d ≡ d′ → d ≅⊦ d′
-≡→≅⊦ refl = refl≅⊦
+≡→≅ : ∀ {A Γ} {M M′ : Γ ⊢ A} → M ≡ M′ → M ≅ M′
+≡→≅ refl = refl≅
 
-≡→≅« : ∀ {Γ Γ′} {s s′ : Γ ⋘ Γ′} → s ≡ s′ → s ≅« s′
-≡→≅« refl = refl≅«
-
-
--- Equational reasoning with convertibility of derivations.
-
-infix 1 proof≅⊦_
-proof≅⊦_ : ∀ {A Γ} {d d′ : Γ ⊢ A} → d ≅⊦ d′ → d ≅⊦ d′
-proof≅⊦_ p = p
-
-infixr 2 _≡→≅⊦⟨_⟩_
-_≡→≅⊦⟨_⟩_ : ∀ {A Γ} (d {d′ d″} : Γ ⊢ A) → d ≡ d′ → d′ ≅⊦ d″ → d ≅⊦ d″
-d ≡→≅⊦⟨ p ⟩ p′ = trans≅⊦ (≡→≅⊦ p) p′
-
-infixr 2 _≅⊦⟨⟩_
-_≅⊦⟨⟩_ : ∀ {A Γ} (d {d′} : Γ ⊢ A) → d ≅⊦ d′ → d ≅⊦ d′
-d ≅⊦⟨⟩ p = p
-
-infixr 2 _≅⊦⟨_⟩_
-_≅⊦⟨_⟩_ : ∀ {A Γ} (d {d′ d″} : Γ ⊢ A) → d ≅⊦ d′ → d′ ≅⊦ d″ → d ≅⊦ d″
-d ≅⊦⟨ p ⟩ p′ = trans≅⊦ p p′
-
-infix 3 _∎≅⊦
-_∎≅⊦ : ∀ {A Γ} (d : Γ ⊢ A) → d ≅⊦ d
-d ∎≅⊦ = refl≅⊦
+≡→≅ₛ : ∀ {Δ Γ} {γ γ′ : Δ ⇛ Γ} → γ ≡ γ′ → γ ≅ₛ γ′
+≡→≅ₛ refl = refl≅ₛ
 
 
--- Equational reasoning with convertibility of substitutions.
+-- Equational reasoning
 
-infix 1 proof≅«_
-proof≅«_ : ∀ {Γ Γ′} {s s′ : Γ ⋘ Γ′} → s ≅« s′ → s ≅« s′
-proof≅«_ p = p
+infix 1 proof≅_
+proof≅_ : ∀ {A Γ} {M M′ : Γ ⊢ A} → M ≅ M′ → M ≅ M′
+proof≅_ p = p
 
-infixr 2 _≡→≅«⟨_⟩_
-_≡→≅«⟨_⟩_ : ∀ {Γ Γ′} (s {s′ s″} : Γ ⋘ Γ′) → s ≡ s′ → s′ ≅« s″ → s ≅« s″
-s ≡→≅«⟨ p ⟩ p′ = trans≅« (≡→≅« p) p′
+infixr 2 _≡→≅⟨_⟩_
+_≡→≅⟨_⟩_ : ∀ {A Γ} (M {M′ M″} : Γ ⊢ A) → M ≡ M′ → M′ ≅ M″ → M ≅ M″
+M ≡→≅⟨ p ⟩ p′ = trans≅ (≡→≅ p) p′
 
-infixr 2 _≅«⟨⟩_
-_≅«⟨⟩_ : ∀ {Γ Γ′} (s {s′} : Γ ⋘ Γ′) → s ≅« s′ → s ≅« s′
-s ≅«⟨⟩ p = p
+infixr 2 _≅⟨⟩_
+_≅⟨⟩_ : ∀ {A Γ} (M {M′} : Γ ⊢ A) → M ≅ M′ → M ≅ M′
+M ≅⟨⟩ p = p
 
-infixr 2 _≅«⟨_⟩_
-_≅«⟨_⟩_ : ∀ {Γ Γ′} (s {s′ s″} : Γ ⋘ Γ′) → s ≅« s′ → s′ ≅« s″ → s ≅« s″
-s ≅«⟨ p ⟩ p′ = trans≅« p p′
+infixr 2 _≅⟨_⟩_
+_≅⟨_⟩_ : ∀ {A Γ} (M {M′ M″} : Γ ⊢ A) → M ≅ M′ → M′ ≅ M″ → M ≅ M″
+M ≅⟨ p ⟩ p′ = trans≅ p p′
 
-infix 3 _∎≅«
-_∎≅« : ∀ {Γ Γ′} (s : Γ ⋘ Γ′) → s ≅« s
-s ∎≅« = refl≅«
+infix 3 _∎≅
+_∎≅ : ∀ {A Γ} (M : Γ ⊢ A) → M ≅ M
+M ∎≅ = refl≅
+
+
+-- Equational reasoning for substitutions
+
+infix 1 proof≅ₛ_
+proof≅ₛ_ : ∀ {Δ Γ} {γ γ′ : Δ ⇛ Γ} → γ ≅ₛ γ′ → γ ≅ₛ γ′
+proof≅ₛ_ p = p
+
+infixr 2 _≡→≅ₛ⟨_⟩_
+_≡→≅ₛ⟨_⟩_ : ∀ {Δ Γ} (γ {γ′ γ″} : Δ ⇛ Γ) → γ ≡ γ′ → γ′ ≅ₛ γ″ → γ ≅ₛ γ″
+γ ≡→≅ₛ⟨ p ⟩ p′ = trans≅ₛ (≡→≅ₛ p) p′
+
+infixr 2 _≅ₛ⟨⟩_
+_≅ₛ⟨⟩_ : ∀ {Δ Γ} (γ {γ′} : Δ ⇛ Γ) → γ ≅ₛ γ′ → γ ≅ₛ γ′
+γ ≅ₛ⟨⟩ p = p
+
+infixr 2 _≅ₛ⟨_⟩_
+_≅ₛ⟨_⟩_ : ∀ {Δ Γ} (γ {γ′ γ″} : Δ ⇛ Γ) → γ ≅ₛ γ′ → γ′ ≅ₛ γ″ → γ ≅ₛ γ″
+γ ≅ₛ⟨ p ⟩ p′ = trans≅ₛ p p′
+
+infix 3 _∎≅ₛ
+_∎≅ₛ : ∀ {Δ Γ} (γ : Δ ⇛ Γ) → γ ≅ₛ γ
+γ ∎≅ₛ = refl≅ₛ

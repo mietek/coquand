@@ -1,137 +1,139 @@
 module Syntax where
 
 open import Prelude public
+  renaming (∙ to tt)
+  hiding (_∘_ ; subst)
 
 
--- Names.
-
-Name : Set
-Name = Nat
-
-
--- Types.
+-- 3.1. Definitions of types
 
 infixr 7 _⇒_
-data Type : Set where
-  ○    : Type
-  _⇒_ : Type → Type → Type
+data 𝒯 : Set where
+  o    : 𝒯
+  _⇒_ : 𝒯 → 𝒯 → 𝒯
 
 
--- Contexts and freshness.
+-- 3.2. Definition of contexts
+
+abstract
+  Name : Set
+  Name = Nat
+
+  _≟Name_ : (x x′ : Name) → Dec (x ≡ x′)
+  _≟Name_ = _≟Nat_
 
 mutual
-  infixl 5 _,_∷_
-  data Context : Set where
-    ∅     : Context
-    _,_∷_ : (Γ : Context) (x : Name) {{_ : x ∥ Γ}} → Type → Context
+  data 𝒞 : Set where
+    []      : 𝒞
+    [_,_∷_] : (Γ : 𝒞) (x : Name) {{_ : fresh x Γ}} → 𝒯 → 𝒞
 
-  infix 4 _∥_
-  _∥_ : Name → Context → Set
-  x ∥ ∅         = ⊤
-  x ∥ Γ , y ∷ A = x ≢ y ∧ x ∥ Γ
+  fresh : Name → 𝒞 → Set
+  fresh x []            = ⊤
+  fresh x [ Γ , y ∷ A ] = x ≢ y ∧ fresh x Γ
 
-infix 4 _∦_
-_∦_ : Name → Context → Set
-x ∦ Γ = ¬ (x ∥ Γ)
+data Occur (x : Name) (A : 𝒯) : 𝒞 → Set where
+  occ₁ : ∀ {Γ}     {{_ : fresh x Γ}} → Occur x A [ Γ , x ∷ A ]
+  occ₂ : ∀ {y B Γ} {{_ : fresh y Γ}} → Occur x A Γ → Occur x A [ Γ , y ∷ B ]
 
+fresh→¬Occur : ∀ {x A Γ} {{_ : fresh x Γ}} → ¬ (Occur x A Γ)
+fresh→¬Occur {{x≢x , _}} occ₁     = refl ↯ x≢x
+fresh→¬Occur {{_   , φ}} (occ₂ i) = i ↯ fresh→¬Occur {{φ}}
 
--- Occurrences of names in contexts.
-
-infix 3 _∷_∈_
-data _∷_∈_ (x : Name) (A : Type) : Context → Set where
-  top : ∀ {Γ}     {{_ : x ∥ Γ}} → x ∷ A ∈ Γ , x ∷ A
-  pop : ∀ {y B Γ} {{_ : y ∥ Γ}} → x ∷ A ∈ Γ → x ∷ A ∈ Γ , y ∷ B
-
-_∷_∉_ : Name → Type → Context → Set
-x ∷ A ∉ Γ = ¬ (x ∷ A ∈ Γ)
-
-∥→∉ : ∀ {x A Γ} {{_ : x ∥ Γ}} → x ∷ A ∉ Γ
-∥→∉ {{x≢x , _}} top     = refl ↯ x≢x
-∥→∉ {{_ , x∥Γ}} (pop i) = i ↯ ∥→∉ {{x∥Γ}}
-
-
--- Context inclusion.
-
-infix 3 _⊆_
-data _⊆_ : Context → Context → Set where
-  bot  : ∀ {Γ}                      → ∅ ⊆ Γ
-  push : ∀ {x A Γ Γ′} {{_ : x ∥ Γ}} → Γ ⊆ Γ′ → x ∷ A ∈ Γ′ → Γ , x ∷ A ⊆ Γ′
-
-infix 3 _⊈_
-_⊈_ : Context → Context → Set
-Γ ⊈ Γ′ = ¬ (Γ ⊆ Γ′)
+infix 3 _⊇_
+data _⊇_ : 𝒞 → 𝒞 → Set where
+  gt₁ : ∀ {Γ}                         → Γ ⊇ []
+  gt₂ : ∀ {x A Δ Γ} {{_ : fresh x Δ}} → Γ ⊇ Δ → Occur x A Γ → Γ ⊇ [ Δ , x ∷ A ]
 
 
 -- Lemmas.
 
-ext⊆ : ∀ {Γ Γ′} → (∀ {x A} → x ∷ A ∈ Γ → x ∷ A ∈ Γ′) → Γ ⊆ Γ′
-ext⊆ {∅}           f = bot
-ext⊆ {(Γ , x ∷ A)} f = push (ext⊆ (f ∘ pop)) (f top)
+Lemma₁ : ∀ {Δ Γ} → (∀ {x A} → Occur x A Δ → Occur x A Γ) → Γ ⊇ Δ
+Lemma₁ {[]}            f = gt₁
+Lemma₁ {[ Γ , x ∷ A ]} f = gt₂ (Lemma₁ (λ i → f (occ₂ i))) (f occ₁)
 
-mono⊆∈ : ∀ {x A Γ Γ′} → Γ ⊆ Γ′ → x ∷ A ∈ Γ → x ∷ A ∈ Γ′
-mono⊆∈ bot        ()
-mono⊆∈ (push l i) top     = i
-mono⊆∈ (push l i) (pop j) = mono⊆∈ l j
+ext⊇ = Lemma₁
 
-refl⊆ : ∀ {Γ} → Γ ⊆ Γ
-refl⊆ = ext⊆ id
+Lemma₂ : ∀ {x A Δ Γ} → Occur x A Δ → Γ ⊇ Δ → Occur x A Γ
+Lemma₂ ()       gt₁
+Lemma₂ occ₁     (gt₂ c i) = i
+Lemma₂ (occ₂ i) (gt₂ c j) = Lemma₂ i c
 
-trans⊆ : ∀ {Γ Γ′ Γ″} → Γ ⊆ Γ′ → Γ′ ⊆ Γ″ → Γ ⊆ Γ″
-trans⊆ l l′ = ext⊆ (mono⊆∈ l′ ∘ mono⊆∈ l)
+mono∈ = Lemma₂
 
-weak⊆ : ∀ {x A Γ} {{_ : x ∥ Γ}} → Γ ⊆ Γ , x ∷ A
-weak⊆ = ext⊆ pop
+Lemma₃ : ∀ {Γ} → Γ ⊇ Γ
+Lemma₃ = Lemma₁ id
 
-uniq∈ : ∀ {Γ x A} → (i i′ : x ∷ A ∈ Γ) → i ≡ i′
-uniq∈ top     top      = refl
-uniq∈ top     (pop i′) = i′ ↯ ∥→∉
-uniq∈ (pop i) top      = i ↯ ∥→∉
-uniq∈ (pop i) (pop i′) = cong pop (uniq∈ i i′)
+refl⊇ = Lemma₃
 
-uniq⊆ : ∀ {Γ Γ′} → (l l′ : Γ ⊆ Γ′) → l ≡ l′
-uniq⊆ bot        bot          = refl
-uniq⊆ (push l i) (push l′ i′) = cong² push (uniq⊆ l l′) (uniq∈ i i′)
+Lemma₄ : ∀ {Θ Δ Γ} → Θ ⊇ Γ → Γ ⊇ Δ → Θ ⊇ Δ
+Lemma₄ c₁ c₂ = Lemma₁ (λ i → Lemma₂ (Lemma₂ i c₂) c₁)
 
-lem₁ = ext⊆
-lem₂ = mono⊆∈
-lem₃ = refl⊆
-lem₄ = trans⊆
-lem₅ = weak⊆
-lem₆ = uniq∈
-lem₇ = uniq⊆
+trans⊇ = Lemma₄
+
+Lemma₅ : ∀ {x A Γ} {{_ : fresh x Γ}} → [ Γ , x ∷ A ] ⊇ Γ
+Lemma₅ = Lemma₁ occ₂
+
+weak⊇ = Lemma₅
+
+Lemma₆ : ∀ {Γ x A} → (i i′ : Occur x A Γ) → i ≡ i′
+Lemma₆ occ₁     occ₁      = refl
+Lemma₆ occ₁     (occ₂ i′) = i′ ↯ fresh→¬Occur
+Lemma₆ (occ₂ i) occ₁      = i ↯ fresh→¬Occur
+Lemma₆ (occ₂ i) (occ₂ i′) = cong occ₂ (Lemma₆ i i′)
+
+uniq∈ = Lemma₆
+
+Lemma₇ : ∀ {Δ Γ} → (c c′ : Γ ⊇ Δ) → c ≡ c′
+Lemma₇ gt₁       gt₁         = refl
+Lemma₇ (gt₂ l i) (gt₂ l′ i′) = cong² gt₂ (Lemma₇ l l′) (Lemma₆ i i′)
+
+uniq⊇ = Lemma₇
 
 
 -- Lemmas.
 
-idtrans⊆₁ : ∀ {Γ Γ′} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ′) → trans⊆ l l′ ≡ l
-idtrans⊆₁ l l′ = uniq⊆ (trans⊆ l l′) l
+-- idtrans⊆₁ : ∀ {Γ Γ′} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ′) → Lemma₄ l l′ ≡ l
+-- idtrans⊆₁ l l′ = uniq⊆ (Lemma₄ l l′) l
+--
+-- idtrans⊆₂ : ∀ {Γ Γ′} → (l : Γ ⊆ Γ) (l′ : Γ ⊆ Γ′) → Lemma₄ l l′ ≡ l′
+-- idtrans⊆₂ l l′ = uniq⊆ (Lemma₄ l l′) l′
+--
+-- assoctrans⊆ : ∀ {Γ Γ′ Γ″ Γ‴} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ″) (l″ : Γ″ ⊆ Γ‴) →
+--               Lemma₄ l (Lemma₄ l′ l″) ≡ Lemma₄ (Lemma₄ l l′) l″
+-- assoctrans⊆ l l′ l″ = uniq⊆ (Lemma₄ l (Lemma₄ l′ l″)) (Lemma₄ (Lemma₄ l l′) l″)
+--
+-- comptrans⊆ : ∀ {Γ Γ′ Γ″} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ″) (l″ : Γ ⊆ Γ″) →
+--              Lemma₄ l l′ ≡ l″
+-- comptrans⊆ l l′ l″ = uniq⊆ (Lemma₄ l l′) l″
 
-idtrans⊆₂ : ∀ {Γ Γ′} → (l : Γ ⊆ Γ) (l′ : Γ ⊆ Γ′) → trans⊆ l l′ ≡ l′
-idtrans⊆₂ l l′ = uniq⊆ (trans⊆ l l′) l′
 
-assoctrans⊆ : ∀ {Γ Γ′ Γ″ Γ‴} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ″) (l″ : Γ″ ⊆ Γ‴) →
-              trans⊆ l (trans⊆ l′ l″) ≡ trans⊆ (trans⊆ l l′) l″
-assoctrans⊆ l l′ l″ = uniq⊆ (trans⊆ l (trans⊆ l′ l″)) (trans⊆ (trans⊆ l l′) l″)
-
-comptrans⊆ : ∀ {Γ Γ′ Γ″} → (l : Γ ⊆ Γ′) (l′ : Γ′ ⊆ Γ″) (l″ : Γ ⊆ Γ″) →
-             trans⊆ l l′ ≡ l″
-comptrans⊆ l l′ l″ = uniq⊆ (trans⊆ l l′) l″
-
-
--- Derivations and substitutions.
+-- 3.3. Definition of proof trees
 
 mutual
   infix 3 _⊢_
-  infixl 5 _◂_
-  data _⊢_ : Context → Type → Set where
-    var : ∀ x {A Γ}                 → x ∷ A ∈ Γ → Γ ⊢ A
-    lam : ∀ x {A B Γ} {{_ : x ∥ Γ}} → Γ , x ∷ A ⊢ B → Γ ⊢ A ⇒ B
-    app : ∀ {A B Γ}                 → Γ ⊢ A ⇒ B → Γ ⊢ A → Γ ⊢ B
-    _◂_ : ∀ {A Γ Γ′}                → Γ ⊢ A → Γ ⋘ Γ′ → Γ′ ⊢ A
+  data _⊢_ : 𝒞 → 𝒯 → Set where
+    var    : ∀ {x A Γ}                     → (i : Occur x A Γ) → Γ ⊢ A
+    subst  : ∀ {A Δ Γ}                     → (M : Γ ⊢ A) → (γ : Δ ⇛ Γ) → Δ ⊢ A
+    lambda : ∀ {x A B Γ} {{_ : fresh x Γ}} → (M : [ Γ , x ∷ A ] ⊢ B) → Γ ⊢ A ⇒ B
+    apply  : ∀ {A B Γ}                     → (M : Γ ⊢ A ⇒ B) → (N : Γ ⊢ A) → Γ ⊢ B
 
-  infix 3 _⋘_
-  infixl 6 _•_
-  data _⋘_ : Context → Context → Set where
-    sub    : ∀ {Γ Γ′}                   → Γ ⊆ Γ′ → Γ ⋘ Γ′
-    _•_    : ∀ {Γ Γ′ Γ″}                → Γ ⋘ Γ′ → Γ′ ⋘ Γ″ → Γ ⋘ Γ″
-    [_≔_]_ : ∀ x {A Γ Γ′} {{_ : x ∥ Γ}} → Γ′ ⊢ A → Γ ⋘ Γ′ → Γ , x ∷ A ⋘ Γ′
+  infix 3 _⇛_
+  data _⇛_ : 𝒞 → 𝒞 → Set where
+    proj   : ∀ {Δ Γ}                       → (c : Δ ⊇ Γ) → Δ ⇛ Γ
+    comp   : ∀ {Θ Δ Γ}                     → (δ : Γ ⇛ Δ) → (γ : Θ ⇛ Γ) → Θ ⇛ Δ
+    update : ∀ {x A Δ Γ} {{_ : fresh x Γ}} → (γ : Δ ⇛ Γ) → (M : Δ ⊢ A) → Δ ⇛ [ Γ , x ∷ A ]
+
+apply′ : ∀ {A B Γ} → Γ ⊢ A ⇒ B → Γ ⊢ A → Γ ⊢ B
+apply′ = apply
+
+infixl 7 subst
+infixl 6 apply apply′
+infixl 5 comp
+syntax var {x} {A} i     = v[ x ∷ A ] i
+syntax subst M γ         = M ▸ γ
+syntax lambda {x} {A} M  = λ[ x ∷ A ] M
+syntax apply {A} {B} M N = M ∙⟨ A , B ⟩ N
+syntax apply′ M N        = M ∙ N
+syntax proj c            = π c
+syntax comp δ γ          = δ ∘ γ
+syntax update {x} γ M    = [ γ , x ≔ M ]
