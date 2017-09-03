@@ -9,61 +9,189 @@
      /></head
   ><body
   ><pre
-    ><a name="1" class="Keyword"
+    ><a name="1" class="Comment"
+      >-- A formalised proof of the soundness and completeness of</a
+      ><a name="59"
+      >
+</a
+      ><a name="60" class="Comment"
+      >-- a simply typed lambda-calculus with explicit substitutions</a
+      ><a name="121"
+      >
+</a
+      ><a name="122" class="Comment"
+      >--</a
+      ><a name="124"
+      >
+</a
+      ><a name="125" class="Comment"
+      >-- Catarina Coquand</a
+      ><a name="144"
+      >
+</a
+      ><a name="145" class="Comment"
+      >--</a
+      ><a name="147"
+      >
+</a
+      ><a name="148" class="Comment"
+      >-- Higher-Order and Symbolic Computation, 15, 57-90, 2002</a
+      ><a name="205"
+      >
+</a
+      ><a name="206" class="Comment"
+      >--</a
+      ><a name="208"
+      >
+</a
+      ><a name="209" class="Comment"
+      >-- http://dx.doi.org/10.1023/A:1019964114625</a
+      ><a name="253"
+      >
+
+</a
+      ><a name="255" class="Keyword"
       >module</a
-      ><a name="7"
+      ><a name="261"
       > </a
-      ><a name="8" href="Everything.html#1" class="Module"
+      ><a name="262" href="Everything.html#1" class="Module"
       >Everything</a
-      ><a name="18"
+      ><a name="272"
       > </a
-      ><a name="19" class="Keyword"
+      ><a name="273" class="Keyword"
       >where</a
-      ><a name="24"
+      ><a name="278"
       >
 
 </a
-      ><a name="26" class="Keyword"
+      ><a name="280" class="Comment"
+      >-- 1. Introduction</a
+      ><a name="298"
+      >
+</a
+      ><a name="299" class="Keyword"
       >import</a
-      ><a name="32"
+      ><a name="305"
       > </a
-      ><a name="33" href="Prelude.html#1" class="Module"
-      >Prelude</a
-      ><a name="40"
+      ><a name="306" href="Section1.html#1" class="Module"
+      >Section1</a
+      ><a name="314"
       >
 
 </a
-      ><a name="42" class="Keyword"
-      >import</a
-      ><a name="48"
-      > </a
-      ><a name="49" href="Syntax.html#1" class="Module"
-      >Syntax</a
-      ><a name="55"
+      ><a name="316" class="Comment"
+      >-- 2. The proof editor</a
+      ><a name="338"
       >
 </a
-      ><a name="56" class="Keyword"
-      >import</a
-      ><a name="62"
-      > </a
-      ><a name="63" href="Semantics.html#1" class="Module"
-      >Semantics</a
-      ><a name="72"
+      ><a name="339" class="Comment"
+      >-- NOTE: Not relevant to this formalisation</a
+      ><a name="382"
       >
 
 </a
-      ><a name="74" class="Keyword"
-      >import</a
-      ><a name="80"
-      > </a
-      ><a name="81" href="Convertibility.html#1" class="Module"
-      >Convertibility</a
-      ><a name="95"
+      ><a name="384" class="Comment"
+      >-- 3. The calculus of proof trees</a
+      ><a name="417"
       >
 </a
-      ><a name="96" class="Comment"
-      >-- import Correctness</a
-      ><a name="117"
+      ><a name="418" class="Keyword"
+      >import</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Section3.html#1" class="Module"
+      >Section3</a
+      ><a name="433"
+      >
+
+</a
+      ><a name="435" class="Comment"
+      >-- 4. The semantic model</a
+      ><a name="459"
+      >
+</a
+      ><a name="460" class="Keyword"
+      >import</a
+      ><a name="466"
+      > </a
+      ><a name="467" href="Section4.html#1" class="Module"
+      >Section4</a
+      ><a name="475"
+      >
+
+</a
+      ><a name="477" class="Comment"
+      >-- 5. Normal form</a
+      ><a name="494"
+      >
+</a
+      ><a name="495" class="Keyword"
+      >import</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Section5.html#1" class="Module"
+      >Section5</a
+      ><a name="510"
+      >
+
+</a
+      ><a name="512" class="Comment"
+      >-- 6. Application to terms</a
+      ><a name="538"
+      >
+</a
+      ><a name="539" class="Keyword"
+      >import</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Section6.html#1" class="Module"
+      >Section6</a
+      ><a name="554"
+      >
+
+</a
+      ><a name="556" class="Comment"
+      >-- 7. Correspondence between proof trees and terms</a
+      ><a name="606"
+      >
+</a
+      ><a name="607" class="Keyword"
+      >import</a
+      ><a name="613"
+      > </a
+      ><a name="614" href="Section7.html#1" class="Module"
+      >Section7</a
+      ><a name="622"
+      >
+
+</a
+      ><a name="624" class="Comment"
+      >-- 8. Correctness of conversion between terms</a
+      ><a name="669"
+      >
+</a
+      ><a name="670" class="Keyword"
+      >import</a
+      ><a name="676"
+      > </a
+      ><a name="677" href="Section8.html#1" class="Module"
+      >Section8</a
+      ><a name="685"
+      >
+
+</a
+      ><a name="687" class="Comment"
+      >-- 9. A decision algorithm for terms</a
+      ><a name="723"
+      >
+</a
+      ><a name="724" class="Keyword"
+      >import</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Section9.html#1" class="Module"
+      >Section9</a
+      ><a name="739"
       >
 </a
       ></pre
