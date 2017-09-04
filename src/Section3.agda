@@ -36,8 +36,8 @@ module _ where
   (A ⊃ B) ≟𝒯 ⋆         = no λ ()
   (A ⊃ B) ≟𝒯 (A′ ⊃ B′) with A ≟𝒯 A′ | B ≟𝒯 B′
   …                   | yes refl | yes refl = yes refl
-  …                   | no A≢A′  | _        = no (A≢A′ ∘ inj⊃₁)
-  …                   | _        | no B≢B′  = no (B≢B′ ∘ inj⊃₂)
+  …                   | no A≢A′  | _        = no (λ A → inj⊃₁ A ↯ A≢A′)
+  …                   | _        | no B≢B′  = no (λ B → inj⊃₂ B ↯ B≢B′)
 
 
 -- 3.2. Definition of contexts
@@ -75,7 +75,8 @@ data _∋_∷_ : 𝒞 → Name → 𝒯 → Set where
   zero : ∀ {Γ A x} {{_ : T (fresh x Γ)}} →
            [ Γ , x ∷ A ] ∋ x ∷ A
   suc  : ∀ {Γ A B x y} {{_ : T (fresh y Γ)}} →
-           Γ ∋ x ∷ A → [ Γ , y ∷ B ] ∋ x ∷ A
+           Γ ∋ x ∷ A →
+           [ Γ , y ∷ B ] ∋ x ∷ A
 
 module _ where
   _∌_∷_ : 𝒞 → Name → 𝒯 → Set
@@ -96,16 +97,18 @@ module _ where
 
 infix 3 _⊇_
 data _⊇_ : 𝒞 → 𝒞 → Set where
-  done : ∀ {Γ} → Γ ⊇ []
+  done : ∀ {Γ} →
+           Γ ⊇ []
   weak : ∀ {Γ Δ A x} {{_ : T (fresh x Δ)}} →
-           Γ ⊇ Δ → Γ ∋ x ∷ A → Γ ⊇ [ Δ , x ∷ A ]
+           Γ ⊇ Δ → Γ ∋ x ∷ A →
+           Γ ⊇ [ Δ , x ∷ A ]
 
 -- The following lemmas are easy to prove:
 
 -- Lemma 1.
 ext⊇ : ∀ {Γ Δ} → (∀ {A x} → Δ ∋ x ∷ A → Γ ∋ x ∷ A) → Γ ⊇ Δ
 ext⊇ {Δ = []}            f = done
-ext⊇ {Δ = [ Δ , x ∷ A ]} f = weak (ext⊇ (f ∘ suc)) (f zero)
+ext⊇ {Δ = [ Δ , x ∷ A ]} f = weak (ext⊇ (λ i → f (suc i))) (f zero)
 
 -- Lemma 2.
 module _ where
@@ -125,7 +128,7 @@ refl⊇ = ext⊇ id
 -- Lemma 4.
 module _ where
   _○_ : ∀ {Γ Δ Θ} → Γ ⊇ Δ → Θ ⊇ Γ → Θ ⊇ Δ
-  c ○ c′ = ext⊇ (↑⟨ c′ ⟩ ∘ ↑⟨ c ⟩)
+  c ○ c′ = ext⊇ (λ i → ↑⟨ c′ ⟩ (↑⟨ c ⟩ i))
 
   trans⊇ : ∀ {Γ Δ Θ} → Θ ⊇ Γ → Γ ⊇ Δ → Θ ⊇ Δ
   trans⊇ = flip _○_
@@ -230,7 +233,7 @@ mutual
 -- We use the following notational conventions:
 --
 -- -   `ν x`           for referencing the occurrence `x`, where `x : Γ ∋ x ∷ A`
--- -   `M ▸ γ`         for applying the substitution `γ` to the term `M`
+-- -   `M ▶ γ`         for applying the substitution `γ` to the term `M`
 -- -   `ƛ x M`         for abstracting the occurrence `x` from the term `M`, where `M : [ Γ , x ∷ A ] ⊢ B`
 -- -   `M ∙ N`         for applying the term `M` to the term `N`
 -- -   `π⟨ c ⟩`        for projecting the inclusion `c` as a substitution
@@ -247,13 +250,13 @@ mutual
 -- `c : [ Γ , x ∷ A ] ⊇ Γ`.  In Martin-Löf’s substitution calculus [13, 20] we have as primitives also
 -- thinning rules (i.e., if a term is well-typed in a given context, then it is also well-typed in a
 -- larger context and likewise for substitutions.)  Here, thinning is achieved using `π⟨_⟩`, since if,
--- for example, `M : Γ ⊢ A` and `c : Δ ⊇ Γ`, then `M ▸ π⟨ c ⟩ : Δ ⊢ A`.
+-- for example, `M : Γ ⊢ A` and `c : Δ ⊇ Γ`, then `M ▶ π⟨ c ⟩ : Δ ⊢ A`.
 --
 -- The first version of our work used combinators for the thinning rules, since we wanted it to
 -- be a start for a complete mechanical analysis of Martin-Löf’s substitution calculus [13, 20].
 -- The set of conversion rules we obtained using these combinators suggested the use of `π⟨_⟩`,
 -- which gives fewer conversion rules.  There might be other advantages in using `π⟨_⟩`: if a proof
--- tree is of the form `M ▸ π⟨_⟩` we know which are the possible free variables of the term `M`,
+-- tree is of the form `M ▶ π⟨_⟩` we know which are the possible free variables of the term `M`,
 -- information that might be used in a computation.
 
 module _ where
@@ -319,21 +322,26 @@ mutual
                M ≅ M′ → γ ≅ₛ γ′ →
                M ▶ γ ≅ M′ ▶ γ′
 
-    conv≅₁ : ∀ {Γ Δ A B x} {{_ : T (fresh x Γ)}}
-               {M : [ Γ , x ∷ A ] ⊢ B} {γ : Δ ⋙ Γ} {N : Δ ⊢ A} →
+    conv≅₁ : ∀ {Γ Δ A B x} {{_ : T (fresh x Γ)}} →
+               (M : [ Γ , x ∷ A ] ⊢ B) (γ : Δ ⋙ Γ) (N : Δ ⊢ A) →
                (ƛ x M ▶ γ) ∙ N ≅ M ▶ [ γ , x ≔ N ]
-    conv≅₂ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}}
-               {M : Γ ⊢ A ⊃ B} {c : [ Γ , x ∷ A ] ⊇ Γ} →
+    conv≅₂ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} →
+               (M : Γ ⊢ A ⊃ B) (c : [ Γ , x ∷ A ] ⊇ Γ) →
                M ≅ ƛ x ((M ▶ π⟨ c ⟩) ∙ ν x zero)
-    conv≅₃ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} {γ : Δ ⋙ Γ} {M : Δ ⊢ A} →
+    conv≅₃ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} →
+               (γ : Δ ⋙ Γ) (M : Δ ⊢ A) →
                ν x zero ▶ [ γ , x ≔ M ] ≅ M
-    conv≅₄ : ∀ {Γ Δ A x} {c : Δ ⊇ Γ} {i : Γ ∋ x ∷ A} {j : Δ ∋ x ∷ A} →
+    conv≅₄ : ∀ {Γ Δ A x} →
+               (i : Γ ∋ x ∷ A) (c : Δ ⊇ Γ) (j : Δ ∋ x ∷ A) →
                ν x i ▶ π⟨ c ⟩ ≅ ν x j
-    conv≅₅ : ∀ {Γ A} {M : Γ ⊢ A} {c : Γ ⊇ Γ} →
+    conv≅₅ : ∀ {Γ A} →
+               (M : Γ ⊢ A) (c : Γ ⊇ Γ) →
                M ▶ π⟨ c ⟩ ≅ M
-    conv≅₆ : ∀ {Γ Δ A B} {M : Γ ⊢ A ⊃ B} {N : Γ ⊢ A} {γ : Δ ⋙ Γ} →
+    conv≅₆ : ∀ {Γ Δ A B} →
+               (M : Γ ⊢ A ⊃ B) (N : Γ ⊢ A) (γ : Δ ⋙ Γ) →
                (M ∙ N) ▶ γ ≅ (M ▶ γ) ∙ (N ▶ γ)
-    conv≅₇ : ∀ {Γ Δ Θ A} {M : Γ ⊢ A} {γ : Δ ⋙ Γ} {δ : Θ ⋙ Δ} →
+    conv≅₇ : ∀ {Γ Δ Θ A} →
+               (M : Γ ⊢ A) (γ : Δ ⋙ Γ) (δ : Θ ⋙ Δ) →
                (M ▶ γ) ▶ δ ≅ M ▶ (γ ● δ)
 
   infix 3 _≅ₛ_
@@ -354,22 +362,26 @@ mutual
                 γ ≅ₛ γ′ → M ≅ M′ →
                 [ γ , x ≔ M ] ≅ₛ [ γ′ , x ≔ M′ ]
 
-    conv≅ₛ₁ : ∀ {Γ Δ Θ Ω} {γ : Δ ⋙ Γ} {δ : Θ ⋙ Δ} {θ : Ω ⋙ Θ} →
+    conv≅ₛ₁ : ∀ {Γ Δ Θ Ω} →
+                (γ : Δ ⋙ Γ) (δ : Θ ⋙ Δ) (θ : Ω ⋙ Θ) →
                 (γ ● δ) ● θ ≅ₛ γ ● (δ ● θ)
-    conv≅ₛ₂ : ∀ {Γ Δ Θ A x} {{_ : T (fresh x Γ)}}
-                {γ : Δ ⋙ Γ} {M : Δ ⊢ A} {δ : Θ ⋙ Δ} →
+    conv≅ₛ₂ : ∀ {Γ Δ Θ A x} {{_ : T (fresh x Γ)}} →
+                (γ : Δ ⋙ Γ) (M : Δ ⊢ A) (δ : Θ ⋙ Δ) →
                 [ γ , x ≔ M ] ● δ ≅ₛ [ γ ● δ , x ≔ M ▶ δ ]
-    conv≅ₛ₃ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}}
-                {c : [ Γ , x ∷ A ] ⊇ Γ} {γ : Δ ⋙ Γ} {M : Δ ⊢ A} →
+    conv≅ₛ₃ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} →
+                (c : [ Γ , x ∷ A ] ⊇ Γ) (γ : Δ ⋙ Γ) (M : Δ ⊢ A) →
                 π⟨ c ⟩ ● [ γ , x ≔ M ] ≅ₛ γ
-    conv≅ₛ₄ : ∀ {Γ Δ Θ} {c : Θ ⊇ Γ} {c′ : Δ ⊇ Γ} {c″ : Θ ⊇ Δ} →
+    conv≅ₛ₄ : ∀ {Γ Δ Θ} →
+                (c : Θ ⊇ Γ) (c′ : Δ ⊇ Γ) (c″ : Θ ⊇ Δ) →
                 π⟨ c′ ⟩ ● π⟨ c″ ⟩ ≅ₛ π⟨ c ⟩
-    conv≅ₛ₅ : ∀ {Γ Δ} {c : Δ ⊇ Δ} {γ : Δ ⋙ Γ} →
+    conv≅ₛ₅ : ∀ {Γ Δ} →
+                (γ : Δ ⋙ Γ) (c : Δ ⊇ Δ) →
                 γ ● π⟨ c ⟩ ≅ₛ γ
-    conv≅ₛ₆ : ∀ {Γ} {c : Γ ⊇ []} {γ : Γ ⋙ []} →
+    conv≅ₛ₆ : ∀ {Γ} →
+                (γ : Γ ⋙ []) (c : Γ ⊇ []) →
                 γ ≅ₛ π⟨ c ⟩
-    conv≅ₛ₇ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} {c : [ Γ , x ∷ A ] ⊇ Γ}
-                {γ : Δ ⋙ [ Γ , x ∷ A ]} {i : [ Γ , x ∷ A ] ∋ x ∷ A} →
+    conv≅ₛ₇ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} →
+                (γ : Δ ⋙ [ Γ , x ∷ A ]) (c : [ Γ , x ∷ A ] ⊇ Γ) (i : [ Γ , x ∷ A ] ∋ x ∷ A) →
                 γ ≅ₛ [ π⟨ c ⟩ ● γ , x ≔ ν x i ▶ γ ]
 
 -- The first two `conv≅` rules correspond to the ordinary β- and η-rules, the next three define the effect
