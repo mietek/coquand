@@ -7,94 +7,129 @@ open import Section4 public
 
 -- 5. Normal form
 -- ==============
+--
+-- As we have seen above it is not necessary to know that `nf` actually gives a proof tree in
+-- η-normal form for the results above.  This is however the case.  We can mutually inductively
+-- define when a proof tree is in long η-normal form, `enf`, and in applicative normal form, `anf`.  (…)
 
 mutual
-  data ENF : ∀ {Γ A} → Γ ⊢ A → Set where
-    enf-ƛ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} →
-              (M : [ Γ , x ∷ A ] ⊢ B) → ENF M →
-              ENF (ƛ x M)
-    enf-a : ∀ {Γ} →
-              (M : Γ ⊢ •) → ANF M →
-              ENF M
+  data enf : ∀ {Γ A} → Γ ⊢ A → Set where
+    ƛ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} →
+          {M : [ Γ , x ∷ A ] ⊢ B} → enf M →
+          enf (ƛ x M)
+    α : ∀ {Γ} →
+          {M : Γ ⊢ •} → anf M →
+          enf M
 
-  data ANF : ∀ {Γ A} → Γ ⊢ A → Set where
-    anf-ν : ∀ {Γ A x} →
-              (i : Γ ∋ x ∷ A) →
-              ANF (ν x i)
-    anf-∙ : ∀ {Γ A B} →
-              (M : Γ ⊢ A ⊃ B) → ANF M → (N : Γ ⊢ A) → ENF N →
-              ANF (M ∙ N)
+  data anf : ∀ {Γ A} → Γ ⊢ A → Set where
+    ν   : ∀ {Γ A} →
+            (x : Name) (i : Γ ∋ x ∷ A) →
+            anf (ν x i)
+    _∙_ : ∀ {Γ A B} →
+            {M : Γ ⊢ A ⊃ B} → anf M → {N : Γ ⊢ A} → enf N →
+            anf (M ∙ N)
 
-data NF : ∀ {Γ A} → Γ ⊩ A → Set where
-  nf-• : ∀ {Γ} →
-           (s : Γ ⊩ •) → (∀ {Δ} → (c : Δ ⊇ Γ) → ANF (s ⟦g⟧⟨ c ⟩)) →
-           NF s
-  nf-⊃ : ∀ {Γ A B} →
-           (s : Γ ⊩ A ⊃ B) → (∀ {Δ} → (c : Δ ⊇ Γ) (t : Δ ⊩ A) → NF t → NF (s ⟦∙⟧⟨ c ⟩ t)) →
-           NF s
+-- We prove that `nf M` is in long η-normal form.  For this we define a Kripke logical
+-- predicate, `𝒩`, such that `𝒩 ⟦ M ⟧` and if `𝒩 a`, then `enf (reify a)`.
 
--- TODO: Remove
--- NF : ∀ {A Γ} → Γ ⊩ A → Set
--- NF {•}     {Γ} s = ∀ {Δ} → (c : Δ ⊇ Γ) → anf (⟦ung⟧ s c)
--- NF {A ⊃ B} {Γ} s = ∀ {Δ} → (c : Δ ⊇ Γ) (t : Δ ⊩ A) → NF t → NF (⟦app⟧ s c t)
+data 𝒩 : ∀ {Γ A} → Γ ⊩ A → Set where
+  𝓃• : ∀ {Γ} →
+         (f : Γ ⊩ •) → (∀ {Δ} → (c : Δ ⊇ Γ) → anf (f ⟦g⟧⟨ c ⟩)) →
+         𝒩 f
+  𝓃⊃ : ∀ {Γ A B} →
+         (f : Γ ⊩ A ⊃ B) → (∀ {Δ} → (c : Δ ⊇ Γ) → {a : Δ ⊩ A} → 𝒩 a → 𝒩 (f ⟦∙⟧⟨ c ⟩ a)) →
+         𝒩 f
 
-NF⋆ : ∀ {Δ Γ} → Δ ⊩⋆ Γ → Set
-NF⋆ []            = ⊤
-NF⋆ [ ρ , x ≔ s ] = NF⋆ ρ × NF s
+-- For base type we intuitively define `𝒩 f` to hold if `anf f`.
+--
+-- If `f : Γ ⊩ A ⊃ B`, then `𝒩 f` is defined to hold if `𝒩 (f ∙ a)` holds for all `a : Γ ⊩ A`
+-- such that `𝒩 a`.
+--
+-- We also define `𝒩⋆ ρ`, `ρ : Γ ⊩⋆ Δ`, to hold if every value, `a`, in `ρ` has the property `𝒩 a`.
 
-postulate
-  aux₅₀₁ : ∀ {Γ Δ A} → (c : Δ ⊇ Γ) (s : Γ ⊩ A) → NF s →
-             NF (↑⟨ c ⟩ s)
+data 𝒩⋆ : ∀ {Γ Δ} → Δ ⊩⋆ Γ → Set where
+  𝓃⋆[] : ∀ {Δ} →
+           𝒩⋆ ([] {w = Δ})
+  𝓃⋆≔  : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} →
+           {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ → {a : Δ ⊩ A} → 𝒩 a →
+           𝒩⋆ [ ρ , x ≔ a ]
 
-postulate
-  aux₅₀₂ : ∀ {Γ Δ A x} → (ρ : Δ ⊩⋆ Γ) → NF⋆ ρ → (i : Γ ∋ x ∷ A) →
-             NF (lookup ρ i)
-
-postulate
-  aux₅₀₃ : ∀ {Γ Δ Θ} → (c : Θ ⊇ Δ) (ρ : Δ ⊩⋆ Γ) → NF⋆ ρ →
-             NF⋆ (↑⟨ c ⟩ ρ)
+-- We prove the following lemmas which are used to prove Lemma 10.
 
 postulate
-  aux₅₀₄ : ∀ {Γ Δ Θ} → (c : Δ ⊇ Γ) (ρ : Θ ⊩⋆ Δ) → NF⋆ ρ →
-             NF⋆ (↓⟨ c ⟩ ρ)
+  aux₅₀₁⟨_⟩ : ∀ {Γ Δ A} →
+                (c : Δ ⊇ Γ) → {a : Γ ⊩ A} → 𝒩 a →
+                𝒩 (↑⟨ c ⟩ a)
+
+postulate
+  aux₅₀₂ : ∀ {Γ Δ A x} →
+             {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ → (i : Γ ∋ x ∷ A) →
+             𝒩 (lookup ρ i)
+
+postulate
+  aux₅₀₃⟨_⟩ : ∀ {Γ Δ Θ} →
+                (c : Θ ⊇ Δ) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
+                𝒩⋆ (↑⟨ c ⟩ ρ)
+
+postulate
+  aux₅₀₄⟨_⟩ : ∀ {Γ Δ Θ} →
+                (c : Γ ⊇ Θ) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
+                𝒩⋆ (↓⟨ c ⟩ ρ)
+
+-- The lemma is proved together with a corresponding lemma for substitutions:
 
 -- Lemma 10.
 mutual
   postulate
-    lem₁₀ : ∀ {Γ Δ A} → (M : Γ ⊢ A) (ρ : Δ ⊩⋆ Γ) → NF⋆ ρ →
-              NF (⟦ M ⟧ ρ)
+    lem₁₀ : ∀ {Γ Δ A} →
+              (M : Γ ⊢ A) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
+              𝒩 (⟦ M ⟧ ρ)
 
   postulate
-    lem₁₀⋆ : ∀ {Γ Δ Θ} → (γ : Δ ⋙ Γ) (ρ : Θ ⊩⋆ Δ) → NF⋆ ρ →
-               NF⋆ (⟦ γ ⟧ₛ ρ)
+    lem₁₀ₛ : ∀ {Γ Δ Θ} →
+               (γ : Γ ⋙ Θ) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
+               𝒩⋆ (⟦ γ ⟧ₛ ρ)
+
+-- The main lemma is that for all values, `a`, such that `𝒩 a`, `reify a` returns a proof tree in
+-- η-normal form, which is intuitively proved together with a proof that for all proof trees in
+-- applicative normal form we can find a value, `a`, such that `𝒩 a`.  (…)
 
 -- Lemma 11.
 mutual
   postulate
-    lem₁₁ : ∀ {Γ A} → (s : Γ ⊩ A) → NF s →
-              ENF (reify s)
+    lem₁₁ : ∀ {Γ A} →
+              {a : Γ ⊩ A} → 𝒩 a →
+              enf (reify a)
 
   postulate
-    lem₁₁⋆ : ∀ {Γ A} → (f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) →
-               (h : ∀ {Δ} → (c : Δ ⊇ Γ) → ANF (f c)) →
-               NF (val f)
+    lem₁₁ₛ : ∀ {Γ A} →
+               (f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) → (h : ∀ {Δ} → (c : Δ ⊇ Γ) → anf (f c)) →
+               𝒩 (val f)
 
-NF-ν : ∀ {x A Γ} → (i : Γ ∋ x ∷ A) → NF (val-ν i)
-NF-ν {x} i = lem₁₁⋆ (λ c → ν x (↑⟨ c ⟩ i))
-                    (λ c → anf-ν (↑⟨ c ⟩ i))
+-- The proofs are by induction on the types.
+--
+-- It is straightforward to prove that `𝒩⋆ proj⟨ c ⟩⊩⋆` and then by Lemma 11 and Lemma 10 we get
+-- that `nf M` is in long η-normal form. (…)
 
-projNF⋆⟨_⟩ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → NF⋆ proj⟨ c ⟩⊩⋆
-projNF⋆⟨ done ⟩     = tt
-projNF⋆⟨ weak c i ⟩ = projNF⋆⟨ c ⟩ , NF-ν i
+𝒩-ν : ∀ {x A Γ} → (i : Γ ∋ x ∷ A) → 𝒩 (val-ν i)
+𝒩-ν {x} i = lem₁₁ₛ (λ c → ν x (↑⟨ c ⟩ i))
+                   (λ c → ν x (↑⟨ c ⟩ i))
 
-reflNF⋆ : ∀ {Γ} → NF⋆ (refl⊩⋆ {Γ})
-reflNF⋆ = projNF⋆⟨ refl⊇ ⟩
+proj⟨_⟩𝒩⋆ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → 𝒩⋆ proj⟨ c ⟩⊩⋆
+proj⟨ done ⟩𝒩⋆     = 𝓃⋆[]
+proj⟨ weak c i ⟩𝒩⋆ = 𝓃⋆≔ proj⟨ c ⟩𝒩⋆ (𝒩-ν i)
+
+refl𝒩⋆ : ∀ {Γ} → 𝒩⋆ (refl⊩⋆ {Γ})
+refl𝒩⋆ = proj⟨ refl⊇ ⟩𝒩⋆
 
 -- Theorem 7.
-thm₇ : ∀ {Γ A} → (M : Γ ⊢ A) → ENF (nf M)
-thm₇ M = lem₁₁ (⟦ M ⟧ refl⊩⋆) (lem₁₀ M refl⊩⋆ reflNF⋆)
+thm₇ : ∀ {Γ A} → (M : Γ ⊢ A) → enf (nf M)
+thm₇ M = lem₁₁ (lem₁₀ M refl𝒩⋆)
 
--- TODO:
--- “We can also use the results above to prove that if λ(x : A).M ≅ λ(y : A).N, then
--- M(x = z) ≅ N(y = z) where z is a fresh variable.  Hence we have that λ is one-to-one up to
--- α-conversion.”
+-- Hence a proof tree is convertible with its normal form.
+--
+-- We can also use the results above to prove that if `ƛ(x : A).M ≅ ƛ(y : A).N`, then
+-- `M(x = z) ≅ N(y = z)` where `z` is a fresh variable.  Hence we have that `ƛ` is one-to-one up to
+-- α-conversion.
+
+-- TODO: What to do about the above paragraph?
