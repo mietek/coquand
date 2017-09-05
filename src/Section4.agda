@@ -504,10 +504,6 @@ postulate
 --
 -- The functions `reify` and `val` are both defined by induction on the type:
 
--- TODO: Remove
--- ν↑⟨_⟩ : ∀ {Γ Δ A} → Δ ⊇ Γ → (x : Name) → Γ ∋ x ∷ A → Δ ⊢ A
--- ν↑⟨ c ⟩ x i = ν x (↑⟨ c ⟩ i)
-
 mutual
   reify : ∀ {A Γ} → Γ ⊩ A → Γ ⊢ A
   reify {•}     {Γ} f = f ⟦g⟧⟨ refl⊇ ⟩
@@ -845,17 +841,18 @@ mutual
 
 -- Theorem 5.
 thm₅ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → nf M ≡ nf M′ → M ≅ M′
-thm₅ M M′ p = begin
-                M
-              ≅⟨ thm₂ M ⟩
-                nf M
-              ≡⟨ p ⟩
-                nf M′
-              ≅⟨ sym≅ (thm₂ M′) ⟩
-                M′
-              ∎
-              where
-                open ≅-Reasoning
+thm₅ M M′ p =
+  begin
+    M
+  ≅⟨ thm₂ M ⟩
+    nf M
+  ≡⟨ p ⟩
+    nf M′
+  ≅⟨ sym≅ (thm₂ M′) ⟩
+    M′
+  ∎
+  where
+    open ≅-Reasoning
 
 -- The decision algorithm is also complete since by Theorem 4 and the hypothesis, `M ≅ M′`, we get
 -- `Eq (⟦ M ⟧ refl⊩⋆) (⟦ N ⟧ refl⊩⋆)` and by Corollary 1 we get `nf M ≡ nf N`.
