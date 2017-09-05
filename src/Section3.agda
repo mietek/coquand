@@ -65,7 +65,7 @@ mutual
   fresh x []            = true
   fresh x [ Γ , y ∷ A ] = and (x ≠ y) (fresh x Γ)
 
--- We use Γ, Δ and Θ for contexts.
+-- We use `Γ`, `Δ` and `Θ` for contexts.
 --
 -- The predicate `Γ ∋ x ∷ A` is true when a name with its type occurs in a context.
 --
@@ -106,9 +106,9 @@ data _⊇_ : 𝒞 → 𝒞 → Set where
 -- The following lemmas are easy to prove:
 
 -- Lemma 1.
-ext⊇ : ∀ {Γ Δ} → (∀ {A x} → Δ ∋ x ∷ A → Γ ∋ x ∷ A) → Γ ⊇ Δ
-ext⊇ {Δ = []}            f = done
-ext⊇ {Δ = [ Δ , x ∷ A ]} f = weak (ext⊇ (λ i → f (suc i))) (f zero)
+ext⊇ : ∀ {Δ Γ} → (∀ {A x} → Δ ∋ x ∷ A → Γ ∋ x ∷ A) → Γ ⊇ Δ
+ext⊇ {[]}            f = done
+ext⊇ {[ Δ , x ∷ A ]} f = weak (ext⊇ (λ i → f (suc i))) (f zero)
 
 -- Lemma 2.
 module _ where
@@ -312,13 +312,13 @@ mutual
                M ≅ M′ → M′ ≅ M″ →
                M ≅ M″
 
-    congƛ  : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} {M M′ : [ Γ , x ∷ A ] ⊢ B} →
+    cong≅ƛ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} {M M′ : [ Γ , x ∷ A ] ⊢ B} →
                M ≅ M′ →
                ƛ x M ≅ ƛ x M′
-    cong∙  : ∀ {Γ A B} {M M′ : Γ ⊢ A ⊃ B} {N N′ : Γ ⊢ A} →
+    cong≅∙ : ∀ {Γ A B} {M M′ : Γ ⊢ A ⊃ B} {N N′ : Γ ⊢ A} →
                M ≅ M′ → N ≅ N′ →
                M ∙ N ≅ M′ ∙ N′
-    cong▶  : ∀ {Γ Δ A} {M M′ : Γ ⊢ A} {γ γ′ : Δ ⋙ Γ} →
+    cong≅▶ : ∀ {Γ Δ A} {M M′ : Γ ⊢ A} {γ γ′ : Δ ⋙ Γ} →
                M ≅ M′ → γ ≅ₛ γ′ →
                M ▶ γ ≅ M′ ▶ γ′
 
@@ -355,10 +355,10 @@ mutual
                 γ ≅ₛ γ′ → γ′ ≅ₛ γ″ →
                 γ ≅ₛ γ″
 
-    cong●   : ∀ {Γ Δ Θ} {γ γ′ : Δ ⋙ Γ} {δ δ′ : Θ ⋙ Δ} →
+    cong≅ₛ● : ∀ {Γ Δ Θ} {γ γ′ : Δ ⋙ Γ} {δ δ′ : Θ ⋙ Δ} →
                 γ ≅ₛ γ′ → δ ≅ₛ δ′ →
                 γ ● δ ≅ₛ γ′ ● δ′
-    cong≔   : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} {γ γ′ : Δ ⋙ Γ} {M M′ : Δ ⊢ A} →
+    cong≅ₛ≔ : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}} {γ γ′ : Δ ⋙ Γ} {M M′ : Δ ⊢ A} →
                 γ ≅ₛ γ′ → M ≅ M′ →
                 [ γ , x ≔ M ] ≅ₛ [ γ′ , x ≔ M′ ]
 
@@ -403,7 +403,7 @@ module _ where
 
     infixr 2 _≅⟨_⟩_
     _≅⟨_⟩_ : ∀ {Γ A} (M {M′ M″} : Γ ⊢ A) → M ≅ M′ → M′ ≅ M″ → M ≅ M″
-    M ≅⟨ p ⟩ q = trans≅ p q
+    M ≅⟨ p ⟩ p′ = trans≅ p p′
 
     infixr 2 _≡⟨⟩_
     _≡⟨⟩_ : ∀ {Γ A} (M {M′} : Γ ⊢ A) → M ≅ M′ → M ≅ M′
@@ -411,7 +411,7 @@ module _ where
 
     infixr 2 _≡⟨_⟩_
     _≡⟨_⟩_ : ∀ {Γ A} (M {M′ M″} : Γ ⊢ A) → M ≡ M′ → M′ ≅ M″ → M ≅ M″
-    M ≡⟨ p ⟩ q = trans≅ (≡→≅ p) q
+    M ≡⟨ p ⟩ p′ = trans≅ (≡→≅ p) p′
 
     infix 3 _∎
     _∎ : ∀ {Γ A} (M : Γ ⊢ A) → M ≅ M
@@ -431,7 +431,7 @@ module _ where
 
     infixr 2 _≅ₛ⟨_⟩_
     _≅ₛ⟨_⟩_ : ∀ {Γ Δ} (γ {γ′ γ″} : Δ ⋙ Γ) → γ ≅ₛ γ′ → γ′ ≅ₛ γ″ → γ ≅ₛ γ″
-    γ ≅ₛ⟨ p ⟩ q = trans≅ₛ p q
+    γ ≅ₛ⟨ p ⟩ p′ = trans≅ₛ p p′
 
     infixr 2 _≡⟨⟩_
     _≡⟨⟩_ : ∀ {Γ Δ} (γ {γ′} : Δ ⋙ Γ) → γ ≅ₛ γ′ → γ ≅ₛ γ′
@@ -439,7 +439,7 @@ module _ where
 
     infixr 2 _≡⟨_⟩_
     _≡⟨_⟩_ : ∀ {Γ Δ} (γ {γ′ γ″} : Δ ⋙ Γ) → γ ≡ γ′ → γ′ ≅ₛ γ″ → γ ≅ₛ γ″
-    γ ≡⟨ p ⟩ q = trans≅ₛ (≡→≅ₛ p) q
+    γ ≡⟨ p ⟩ p′ = trans≅ₛ (≡→≅ₛ p) p′
 
     infix 3 _∎
     _∎ : ∀ {Γ Δ} (γ : Δ ⋙ Γ) → γ ≅ₛ γ
