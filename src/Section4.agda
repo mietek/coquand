@@ -728,10 +728,10 @@ mutual
 -- `M ≅ M ▶ π⟨ c ⟩` for `c : Γ ⊇ Γ` we get by transitivity of conversion of `_≅_` that `M ≅ nf M`.
 
 postulate
-  projCV⋆⟨_⟩ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆
+  proj⟨_⟩CV⋆ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆
 
 reflCV⋆ : ∀ {Γ} → CV⋆ π⟨ refl⊇ ⟩ (refl⊩⋆ {Γ})
-reflCV⋆ = projCV⋆⟨ refl⊇ ⟩
+reflCV⋆ = proj⟨ refl⊇ ⟩CV⋆
 
 postulate
   aux₄₆₉⟨_⟩ : ∀ {Γ A} →
