@@ -18,10 +18,12 @@ open import Section1 public
 
 infixr 7 _⊃_
 data 𝒯 : Set where
-  ⋆   : 𝒯
+  •   : 𝒯
   _⊃_ : 𝒯 → 𝒯 → 𝒯
 
--- Types are denoted by A, B.  (…)  We write `A ⊃ B` for the function type.
+-- Types are denoted by `A`, `B`.  (…)
+--
+-- We write `•` for the base type and `A ⊃ B` for the function type.
 
 module _ where
   inj⊃₁ : ∀ {A A′ B B′} → A ⊃ B ≡ A′ ⊃ B′ → A ≡ A′
@@ -31,9 +33,9 @@ module _ where
   inj⊃₂ refl = refl
 
   _≟𝒯_ : (A A′ : 𝒯) → Dec (A ≡ A′)
-  ⋆       ≟𝒯 ⋆         = yes refl
-  ⋆       ≟𝒯 (A′ ⊃ B′) = no λ ()
-  (A ⊃ B) ≟𝒯 ⋆         = no λ ()
+  •       ≟𝒯 •         = yes refl
+  •       ≟𝒯 (A′ ⊃ B′) = no λ ()
+  (A ⊃ B) ≟𝒯 •         = no λ ()
   (A ⊃ B) ≟𝒯 (A′ ⊃ B′) with A ≟𝒯 A′ | B ≟𝒯 B′
   …                   | yes refl | yes refl = yes refl
   …                   | no A≢A′  | _        = no (λ A → inj⊃₁ A ↯ A≢A′)
