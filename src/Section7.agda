@@ -7,13 +7,13 @@ open import Section6 public
 -- ===============================================
 
 mutual
-  ⌊_⌋ : ∀ {Γ A} → Γ ⊢ A → Tm
+  ⌊_⌋ : ∀ {Γ A} → Γ ⊢ A → 𝑇
   ⌊ ν x i ⌋ = ν x
   ⌊ ƛ x M ⌋ = ƛ x ⌊ M ⌋
   ⌊ M ∙ N ⌋ = ⌊ M ⌋ ∙ ⌊ N ⌋
   ⌊ M ▶ γ ⌋ = ⌊ M ⌋ ▶ ⌊ γ ⌋ₛ
 
-  ⌊_⌋ₛ : ∀ {Γ Γ′} → Γ′ ⋙ Γ → Sub
+  ⌊_⌋ₛ : ∀ {Γ Γ′} → Γ′ ⋙ Γ → 𝑆
   ⌊ π⟨ c ⟩ ⌋ₛ        = []
   ⌊ γ ● γ′ ⌋ₛ        = ⌊ γ ⌋ₛ ● ⌊ γ′ ⌋ₛ
   ⌊ [ γ , x ≔ M ] ⌋ₛ = [ ⌊ γ ⌋ₛ , x ≔ ⌊ M ⌋ ]
@@ -27,13 +27,13 @@ mutual
   lem₁₂ (M ▶ γ) = lem₁₂ M ▶ lem₁₂ₛ γ
 
   lem₁₂ₛ : ∀ {Γ Γ′} → (γ : Γ′ ⋙ Γ) → Γ′ ⋙ ⌊ γ ⌋ₛ ∷ Γ
-  lem₁₂ₛ (π⟨ c ⟩)        = ↑⟨ c ⟩ refl
+  lem₁₂ₛ (π⟨ c ⟩)        = ↑⟨ c ⟩ refl⋙∷
   lem₁₂ₛ (γ ● γ′)        = lem₁₂ₛ γ ● lem₁₂ₛ γ′
   lem₁₂ₛ ([ γ , x ≔ M ]) = [ lem₁₂ₛ γ , x ≔ lem₁₂ M ]
 
 mutual
   infix 3 _DecoratesTo_
-  data _DecoratesTo_ : ∀ {Γ A} → Tm → Γ ⊢ A → Set where
+  data _DecoratesTo_ : ∀ {Γ A} → 𝑇 → Γ ⊢ A → Set where
     ν    : ∀ {Γ A} →
              (x : Name) (i : Γ ∋ x ∷ A) →
              ν x DecoratesTo ν x i
@@ -51,7 +51,7 @@ mutual
              t DecoratesTo M ▶ π⟨ c ⟩
 
   infix 3 _DecoratesToₛ_
-  data _DecoratesToₛ_ : ∀ {Γ Γ′} → Sub → Γ′ ⋙ Γ → Set where
+  data _DecoratesToₛ_ : ∀ {Γ Γ′} → 𝑆 → Γ′ ⋙ Γ → Set where
     π⟨_⟩    : ∀ {Γ Γ′} →
                 (c : Γ′ ⊇ Γ) →
                 [] DecoratesToₛ π⟨ c ⟩
@@ -127,17 +127,17 @@ postulate
 -- --------------
 
 mutual
-  data WHNF : Tm → Set where
+  data WHNF : 𝑇 → Set where
     whnf-λ : ∀ {t x} → WHNF t → WHNF (ƛ x t)
     whnf-a : ∀ {t} → WHANF t → WHNF t
 
-  data WHANF : Tm → Set where
+  data WHANF : 𝑇 → Set where
     whanf-ν : ∀ {x} → WHANF (ν x)
     whanf-∙ : ∀ {t u} → WHANF t → WHNF u → WHANF (t ∙ u)
 
 mutual
   infix 3 _⇢_
-  data _⇢_ : Tm → Tm → Set where
+  data _⇢_ : 𝑇 → 𝑇 → Set where
     red₁ : ∀ {s t u x} →
              (ƛ x t ▶ s) ∙ u ⇢ t ▶ [ s , x ≔ u ]
     red₂ : ∀ {t t′ u} →
@@ -158,7 +158,7 @@ mutual
              (t ▶ s) ▶ s′ ⇢ t ▶ (s ● s′)
 
   infix 3 _⇢ₛ_
-  data _⇢ₛ_ : Sub → Sub → Set where
+  data _⇢ₛ_ : 𝑆 → 𝑆 → Set where
     redₛ₁ : ∀ {s s′ t x} →
               [ s , x ≔ t ] ● s′ ⇢ₛ [ s ● s′ , x ≔ t ▶ s′ ]
     redₛ₂ : ∀ {s s′ s″} →
@@ -167,7 +167,7 @@ mutual
               [] ● s ⇢ₛ s
 
 infix 3 _⇒_
-data _⇒_ : Tm → Tm → Set where
+data _⇒_ : 𝑇 → 𝑇 → Set where
   eval₁ : ∀ {t} {{_ : WHNF t}} →
             t ⇒ t
   eval₂ : ∀ {t t′ t″} →
@@ -176,13 +176,13 @@ data _⇒_ : Tm → Tm → Set where
 
 mutual
   infix 3 _⊢_⇣_∷_
-  data _⊢_⇣_∷_ : 𝒞 → Tm → Tm → 𝒯 → Set where
+  data _⊢_⇣_∷_ : 𝒞 → 𝑇 → 𝑇 → 𝒯 → Set where
     red₁ : ∀ {Γ t t″} →
-             Σ Tm (λ t′ → t ⇒ t′ × Γ ⊢ t′ ⇣ₛ t″ ∷ •) →
+             Σ 𝑇 (λ t′ → t ⇒ t′ × Γ ⊢ t′ ⇣ₛ t″ ∷ •) →
              Γ ⊢ t ⇣ t″ ∷ •
     -- TODO
   infix 3 _⊢_⇣ₛ_∷_
-  data _⊢_⇣ₛ_∷_ : 𝒞 → Tm → Tm → 𝒯 → Set where
+  data _⊢_⇣ₛ_∷_ : 𝒞 → 𝑇 → 𝑇 → 𝒯 → Set where
 
 
 -- 7.2. Equivalence between proof trees and terms
