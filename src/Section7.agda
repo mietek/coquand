@@ -98,23 +98,23 @@ lem₁₅ D = case lem₁₄ D of λ { (M , refl) → M , lem₁₃ M }
 -- Lemma 16.
 mutual
   postulate
-    lem₁₆ : ∀ {Γ A t} {M M′ : Γ ⊢ A} {{_ : ENF M}} {{_ : ENF M′}} →
+    lem₁₆ : ∀ {Γ A t} {M M′ : Γ ⊢ A} {{_ : enf M}} {{_ : enf M′}} →
               t DecoratesTo M → t DecoratesTo M′ →
               M ≡ M′
 
   postulate
-    lem₁₆′ : ∀ {Γ A A′ t} {M : Γ ⊢ A} {N : Γ ⊢ A′} {{_ : ANF M}} {{_ : ANF N}} →
+    lem₁₆′ : ∀ {Γ A A′ t} {M : Γ ⊢ A} {N : Γ ⊢ A′} {{_ : anf M}} {{_ : anf N}} →
                t DecoratesTo M → t DecoratesTo N →
                A ≡ A′
 
 -- TODO: Uh oh. Heterogeneous equality?
 --  postulate
---    lem₁₆″ : ∀ {Γ A A′ t} {M : Γ ⊢ A} {M′ : Γ ⊢ A′} {{_ : ANF M}} {{_ : ANF M′}} →
+--    lem₁₆″ : ∀ {Γ A A′ t} {M : Γ ⊢ A} {M′ : Γ ⊢ A′} {{_ : anf M}} {{_ : anf M′}} →
 --               t DecoratesTo M → t DecoratesTo M′ →
 --               M ≡ M′
 
   postulate
-    lem₁₆″ : ∀ {Γ A t} {M M′ : Γ ⊢ A} {{_ : ANF M}} {{_ : ANF M′}} →
+    lem₁₆″ : ∀ {Γ A t} {M M′ : Γ ⊢ A} {{_ : anf M}} {{_ : anf M′}} →
                t DecoratesTo M → t DecoratesTo M′ →
                M ≡ M′
 
