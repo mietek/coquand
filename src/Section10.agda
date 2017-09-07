@@ -42,60 +42,89 @@ open import Section9 public
 -- References
 -- ----------
 --
--- 1. Abadi, M., Cardelli, L., Curien, P.-L., and Lévy, J.-J.  Explicit substitutions.  Journal of Functional
---    Programming, 1(4) (1991) 375–416.
+-- 1.  Abadi, M., Cardelli, L., Curien, P.-L., and Lévy, J.-J.
+--     Explicit substitutions.
+--     Journal of Functional Programming, 1(4) (1991) 375–416.
 --
--- 2. Berger, U.  Program extraction from normalization proofs.  In Proceedings of TLCA’93, LNCS, Vol. 664,
---    Springer Verlag, Berlin, 1993, pp. 91–106.
+-- 2.  Berger, U.
+--     Program extraction from normalization proofs.
+--     In Proceedings of TLCA’93, LNCS, Vol. 664, Springer Verlag, Berlin, 1993, pp. 91–106.
 --
--- 3. Berger, U. and Schwichtenberg, H.  An inverse of the evaluation functional for typed λ-calculus.  In
---    Proceedings of the 6th Annual IEEE Symposium on Logic in Computer Science, Amsterdam, 1991, pp. 203–211.
+-- 3.  Berger, U. and Schwichtenberg, H.
+--     An inverse of the evaluation functional for typed λ-calculus.
+--     In Proceedings of the 6th Annual IEEE Symposium on Logic in Comp. Sci., Amsterdam, 1991, pp. 203–211.
 --
--- 4. Coquand, Th.  Pattern matching with dependent types.  In Proceedings of the 1992 Workshop on Types for Proofs--    and Programs, B. Nordström, K. Petersson, and G. Plotkin (Eds.).  Dept. of Computing Science, Chalmers
---    Univ. of Technology and Göteborg University.  Available at (…), pp. 66–79.
+-- 4.  Coquand, Th.
+--     Pattern matching with dependent types.
+--     In Proceedings of the 1992 Workshop on Types for Proofs and Programs, B. Nordström, K. Petersson, and
+--     G. Plotkin (Eds.).  Dept. of Comp. Sci. Chalmers Univ. of Technology and Göteborg Univ.
+--     Available at (…), pp. 66–79.
 --
--- 5. Coquand, Th. and Dybjer, P.  Intuitionistic model constructions and normalisation proofs.  Math. Structures
---    Comput. Sci., 7(1) (1997) 75–94.
+-- 5.  Coquand, Th. and Dybjer, P.
+--     Intuitionistic model constructions and normalisation proofs.
+--     Math. Structures Comp. Sci., 7(1) (1997) 75–94.
 --
--- 6. Coquand, Th. and Gallier, J.  A proof of strong normalization for the theory of constructions using a
---    Kripke-like interpretation.  In Proceedings of the First Workshop in Logical Frameworks, G. Huet and G.
---    Plotkin (Eds.).  Available at (…), pp. 479–497.
+-- 6.  Coquand, Th. and Gallier, J.
+--     A proof of strong normalization for the theory of constructions using a Kripke-like interpretation.
+--     In Proceedings of the First Workshop in Logical Frameworks, G. Huet and G. Plotkin (Eds.).
+--     Available at (…), pp. 479–497.
 --
--- 7. Coquand, Th., Nordström, B., Smith, J., and von Sydow, B.  Type theory and programming.  EATCS, 52 (1994)
---    203–228.
+-- 7.  Coquand, Th., Nordström, B., Smith, J., and von Sydow, B.
+--     Type theory and programming.
+--     EATCS, 52 (1994) 203–228.
 --
--- 8. Curien, P.-L.  An abstract framework for environment machines.  Theoretical Computer Science, 82 (1991)
---    389–402.
+-- 8.  Curien, P.-L.
+--     An abstract framework for environment machines.
+--     Theoretical Comp. Sci., 82 (1991) 389–402.
 --
--- 9. Friedman, H.  Equality between functionals.  In Logic Colloquium, Symposium on Logic, held at Boston,
---    1972–1973, LNCS, Vol. 453, Springer-Verlag, Berlin, 1975, pp. 22–37.
+-- 9.  Friedman, H.
+--     Equality between functionals.
+--     In Logic Colloquium, Symposium on Logic, held at Boston, 1972–1973, LNCS, Vol. 453,
+--     Springer-Verlag, Berlin, 1975, pp. 22–37.
 --
--- 10. Gandy, R.O.  On the axiom of extensionality—Part I.  The Journal of symbolic logic, 21 (1956) 36–48.
+-- 10. Gandy, R.O.
+--     On the axiom of extensionality—Part I.
+--     The Journal of symbolic logic, 21 (1956) 36–48.
 --
--- 11. Kripke S.A.  Semantical analysis of intuitionistic logic I.  In Formal Systems and Recursive Functions, J.N.
---     Crossley and M.A.E. Dummet (Eds.).  North-Holland, Amsterdam, 1965, pp. 92–130.
+-- 11. Kripke S.A.
+--     Semantical analysis of intuitionistic logic I.
+--     In Formal Systems and Recursive Functions, J.N. Crossley and M.A.E. Dummet (Eds.).
+--     North-Holland, Amsterdam, 1965, pp. 92–130.
 --
--- 12. Magnusson, L. and Nordström, B.  The ALF proof editor and its proof engine.  In Types for Proofs and
---     Programs, LNCS, Vol. 806, Springer-Verlag, Berlin, 1994, pp. 213–237.
+-- 12. Magnusson, L. and Nordström, B.
+--     The ALF proof editor and its proof engine.
+--     In Types for Proofs and Programs, LNCS, Vol. 806, Springer-Verlag, Berlin, 1994, pp. 213–237.
 --
--- 13. Martin-Löf, P.  Substitution calculus.  Handwritten notes, Göteborg, 1992.
+-- 13. Martin-Löf, P.
+--     Substitution calculus.
+--     Handwritten notes, Göteborg, 1992.
 --
--- 14. Mitchell, J.C.  Type systems for programming languages.  In Handbook of Theoretical Computer Science,
---     Volume B: Formal Models and Semantics, J. van Leeuwen (Ed.).  Elsevier and MIT Press, Amsterdam, 1990,
---     pp. 365–458.
+-- 14. Mitchell, J.C.
+--     Type systems for programming languages.
+--     In Handbook of Theoretical Comp. Sci., Volume B: Formal Models and Semantics, J. van Leeuwen (Ed.).
+--     Elsevier and MIT Press, Amsterdam, 1990, pp. 365–458.
 --
--- 15. Mitchell, J.C. and Moggi, E.  Kripke-style models for typed lambda calculus.  Annals for Pure and Applied
---     Logic, 51 (1991) 99–124.
+-- 15. Mitchell, J.C. and Moggi, E.
+--     Kripke-style models for typed lambda calculus.
+--     Annals for Pure and Applied Logic, 51 (1991) 99–124.
 --
--- 16. Nordström, B., Petersson, K., and Smith, J.  Programming in Martin-Löf’s Type THeory. An Introduction.
+-- 16. Nordström, B., Petersson, K., and Smith, J.
+--     Programming in Martin-Löf’s Type THeory. An Introduction.
 --     Oxford University Press, Oxford, UK, 1990.
 --
--- 17. Scott, D.S.  Relating theories lambda calculus.  In To H.B. Curry: Essays on Combinatory Logic, Lambda
---     Calculus, and Formalism.  Academic Press, New York, 1980, pp. 403–450.
+-- 17. Scott, D.S.
+--     Relating theories lambda calculus.
+--     In To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus, and Formalism.
+--     Academic Press, New York, 1980, pp. 403–450.
 --
--- 18. Statman, R.  Logical relation and the typed λ-calculus.  Information and Control, 65 (1985) 85–97.
+-- 18. Statman, R.
+--     Logical relation and the typed λ-calculus.
+--     Information and Control, 65 (1985) 85–97.
 --
--- 19. Streicher, T.  Semantics of Type Theory.  Birkhäuser, Basel, 1991.
+-- 19. Streicher, T.
+--     Semantics of Type Theory.
+--     Birkhäuser, Basel, 1991.
 --
--- 20. Tasistro, A.  Formulation of Martin-Löf’s theory of types with explicit substitutions.  Licentiate thesis,
---     Department of Computing Science, Chalmers Univ. of Technology and University of Göteborg, 1993.
+-- 20. Tasistro, A.
+--     Formulation of Martin-Löf’s theory of types with explicit substitutions.
+--     Licentiate thesis, Dept. of Comp. Sci. Chalmers Univ. of Technology and Göteborg Univ., 1993.
