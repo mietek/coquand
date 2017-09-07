@@ -424,20 +424,22 @@ module _ {{_ : Model}} where
                   (c : Γ ⊇ Γ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
                   Eq⋆ (↓⟨ c ⟩ ρ) ρ
 
-  postulate
-    aux₄₂₅⟨_⟩ : ∀ {Γ w} →
-                  (c : w ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
-                  Eq⋆ (↑⟨ c ⟩ ρ) ρ
+  aux₄₂₅⟨_⟩ : ∀ {Γ w} →
+                (c : w ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
+                Eq⋆ (↑⟨ c ⟩ ρ) ρ
+  aux₄₂₅⟨ c ⟩ 𝓊⋆[]       = eq⋆[]
+  aux₄₂₅⟨ c ⟩ (𝓊⋆≔ u⋆ u) = eq⋆≔ (aux₄₂₅⟨ c ⟩ u⋆) (aux₄₁₁⟨ c ⟩ u)
 
   postulate
     aux₄₂₆ : ∀ {Γ Δ Θ w} →
                (c : Δ ⊇ Γ) (c′ : Θ ⊇ Δ) (c″ : Θ ⊇ Γ) → {ρ : w ⊩⋆ Θ} → 𝒰⋆ ρ →
                Eq⋆ (↓⟨ c ⟩ (↓⟨ c′ ⟩ ρ)) (↓⟨ c″ ⟩ ρ)
 
-  postulate
-    aux₄₂₇ : ∀ {Γ w w′ w″} →
-               (c : w′ ⊒ w) (c′ : w″ ⊒ w′) (c″ : w″ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
-               Eq⋆ (↑⟨ c′ ⟩ (↑⟨ c ⟩ ρ)) (↑⟨ c″ ⟩ ρ)
+  aux₄₂₇ : ∀ {Γ w w′ w″} →
+             (c : w′ ⊒ w) (c′ : w″ ⊒ w′) (c″ : w″ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
+             Eq⋆ (↑⟨ c′ ⟩ (↑⟨ c ⟩ ρ)) (↑⟨ c″ ⟩ ρ)
+  aux₄₂₇ c c′ c″ 𝓊⋆[]       = eq⋆[]
+  aux₄₂₇ c c′ c″ (𝓊⋆≔ u⋆ u) = eq⋆≔ (aux₄₂₇ c c′ c″ u⋆) (aux₄₁₂ c c′ c″ u)
 
   postulate
     aux₄₂₈ : ∀ {Γ Δ w w′} →
