@@ -14,8 +14,8 @@ open import Section4 public
 
 mutual
   data enf : ∀ {Γ A} → Γ ⊢ A → Set where
-    ƛ : ∀ {Γ A B x} {{_ : T (fresh x Γ)}} →
-          {M : [ Γ , x ∷ A ] ⊢ B} → enf M →
+    ƛ : ∀ {Γ A B}
+          (x : Name) {{_ : T (fresh x Γ)}} → {M : [ Γ , x ∷ A ] ⊢ B} → enf M →
           enf (ƛ x M)
     α : ∀ {Γ} →
           {M : Γ ⊢ •} → anf M →

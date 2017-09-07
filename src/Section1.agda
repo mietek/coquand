@@ -48,13 +48,11 @@ module Section1 where
 --
 -- -   Because we know that convertible proof trees have the same semantics, it remains to
 --     show that all proof trees that erase to a given well-typed term are convertible.  We use an
---     argument due to Streicher [19]: we first prove that if `(nf M) ⁻` and `(nf N) ⁻` are the same,
+--     argument due to Streicher [19]: we first prove that if `nf M ⁻` and `nf N ⁻` are the same,
 --     then `M ≅ N`.  Secondly, we prove that if a proof tree `M` erases to a well-typed term `t`,
---     then `t ⇓ (nf M) ⁻`.  Now, if two proof trees `M` and `N` erase to the same well-typed term
---     `t`, then `t ⇓ (nf M) ⁻` and `t ⇓ (nf N) ⁻`.  Since the reduction is deterministic we have that
---     `(nf M) ⁻` and `(nf N) ⁻` are the same, and hence `M ≅ N`.
---
---     TODO: Verify the syntax in the above paragraph.
+--     then `t ⇓ nf M ⁻`.  Now, if two proof trees `M` and `N` erase to the same well-typed term
+--     `t`, then `t ⇓ nf M ⁻` and `t ⇓ nf N ⁻`.  Since the reduction is deterministic we have that
+--     `nf M ⁻` and `nf N ⁻` are the same, and hence `M ≅ N`.
 --
 -- -   We prove that the convertibility relation on proof trees is sound and complete, and give
 --     a decision algorithm for checking convertibility of two well-typed terms.

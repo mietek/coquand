@@ -9,39 +9,37 @@ open import Section5 public
 -- In practice we may not want to work with proof trees but rather well-typed terms.  As an
 -- application of the results above we show how to give semantics to a formulation of Martin-
 -- Löf’s substitution calculus [13, 20] in the simply typed setting.  In this calculus we have a
--- set of untyped terms, `𝑇`, and we define when a term in `𝑇` is well-typed and when two terms
+-- set of untyped terms, `𝕋`, and we define when a term in `𝕋` is well-typed and when two terms
 -- of a given type are convertible with each other.
 --
 -- In order to give semantics to untyped terms, we first define an erasure function that
 -- translates a proof tree `M` to an untyped term, denoted `M ⁻`.  The main theorem is then to prove
 -- that if two proof trees `M, N` erase to the same term, `M ⁻ ≡ N ⁻`, then `M ≅ N`; it follows that
--- `M` and `N` have the same semantics.  For this we first prove that `(nf M) ⁻ ≡ (nf N) ⁻` implies
+-- `M` and `N` have the same semantics.  For this we first prove that `nf M ⁻ ≡ nf N ⁻` implies
 -- `M ≅ N`.  We also define a reduction on the untyped terms `Γ ⊢ t₁ ⇓ t₂ ∷ A` that is deterministic
--- (i.e., if `Γ ⊢ t ⇓ t₁ ∷ A` and `Γ ⊢ t ⇓ t₂ ∷ A`, then `t₁ ≡ t₂`) such that `Γ ⊢ M ⁻ ⇓ (nf M) ⁻ ∷ A`.
--- We then prove that if a proof tree `M` erases to a well-typed term `t`, then `t ⇓ (nf M) ⁻`.  Now,
--- if two proof trees `M` and `N` erase to the same well-typed term `t`, then `t ⇓ (nf M) ⁻` and
--- `t ⇓ (nf N) ⁻`.  Since the reduction is deterministic we have that `(nf M) ⁻` and `(nf N) ⁻` are the
+-- (i.e., if `Γ ⊢ t ⇓ t₁ ∷ A` and `Γ ⊢ t ⇓ t₂ ∷ A`, then `t₁ ≡ t₂`) such that `Γ ⊢ M ⁻ ⇓ nf M ⁻ ∷ A`.
+-- We then prove that if a proof tree `M` erases to a well-typed term `t`, then `t ⇓ nf M ⁻`.  Now,
+-- if two proof trees `M` and `N` erase to the same well-typed term `t`, then `t ⇓ nf M ⁻` and
+-- `t ⇓ nf N ⁻`.  Since the reduction is deterministic we have that `nf M ⁻` and `nf N ⁻` are the
 -- same, and hence `M ≅ N`.  The idea of this proof comes from Streicher [19] (chapter IV).
---
--- TODO: Verify the syntax in the above paragraph.
 
 
 -- 6.1. Definition of terms
 -- ------------------------
 --
--- We mutually define the set of terms, `𝑇 : Set`, and substitutions, `𝑆 : Set`.  (…)
+-- We mutually define the set of terms, `𝕋 : Set`, and substitutions, `𝕊 : Set`.  (…)
 
 mutual
-  data 𝑇 : Set where
-    ν   : Name → 𝑇
-    ƛ   : Name → 𝑇 → 𝑇
-    _∙_ : 𝑇 → 𝑇 → 𝑇
-    _▶_ : 𝑇 → 𝑆 → 𝑇
+  data 𝕋 : Set where
+    ν   : Name → 𝕋
+    ƛ   : Name → 𝕋 → 𝕋
+    _∙_ : 𝕋 → 𝕋 → 𝕋
+    _▶_ : 𝕋 → 𝕊 → 𝕋
 
-  data 𝑆 : Set where
-    []      : 𝑆
-    [_,_≔_] : 𝑆 → Name → 𝑇 → 𝑆
-    _●_     : 𝑆 → 𝑆 → 𝑆
+  data 𝕊 : Set where
+    []      : 𝕊
+    [_,_≔_] : 𝕊 → Name → 𝕋 → 𝕊
+    _●_     : 𝕊 → 𝕊 → 𝕊
 
 
 -- 6.2. Typing rules
@@ -51,7 +49,7 @@ mutual
 
 mutual
   infix 3 _⊢_∷_
-  data _⊢_∷_ : 𝒞 → 𝑇 → 𝒯 → Set where
+  data _⊢_∷_ : 𝒞 → 𝕋 → 𝒯 → Set where
     ↑⟨_⟩⊢∷ : ∀ {Γ Δ A t} →
                 Γ ⊇ Δ → Δ ⊢ t ∷ A →
                 Γ ⊢ t ∷ A
@@ -69,7 +67,7 @@ mutual
                 Γ ⊢ t ▶ s ∷ A
 
   infix 3 _⋙_∷_
-  data _⋙_∷_ : 𝒞 → 𝑆 → 𝒞 → Set where
+  data _⋙_∷_ : 𝒞 → 𝕊 → 𝒞 → Set where
     ↑⟨_⟩⋙∷ : ∀ {Γ Δ Θ s} →
                 Θ ⊇ Γ → Γ ⋙ s ∷ Δ →
                 Θ ⋙ s ∷ Δ
@@ -105,7 +103,7 @@ module _ where
 
 mutual
   infix 3 _⊢_≊_∷_
-  data _⊢_≊_∷_ : 𝒞 → 𝑇 → 𝑇 → 𝒯 → Set where
+  data _⊢_≊_∷_ : 𝒞 → 𝕋 → 𝕋 → 𝒯 → Set where
     refl≊  : ∀ {Γ A t} →
                Γ ⊢ t ≊ t ∷ A
     sym≊   : ∀ {Γ A t t′} →
@@ -150,7 +148,7 @@ mutual
                Γ₂ ⋙ s₁ ∷ Γ₃ → Γ₁ ⋙ s₂ ∷ Γ₂ → Γ₃ ⊢ t ∷ A →
                Γ₁ ⊢ (t ▶ s₁) ▶ s₂ ≊ t ▶ (s₁ ● s₂) ∷ A
 
-  data _⋙_≊ₛ_∷_ : 𝒞 → 𝑆 → 𝑆 → 𝒞 → Set where
+  data _⋙_≊ₛ_∷_ : 𝒞 → 𝕊 → 𝕊 → 𝒞 → Set where
     refl≊ₛ  : ∀ {Γ Δ s} →
                 Δ ⋙ s ≊ₛ s ∷ Γ
     sym≊ₛ   : ∀ {Γ Δ s s′} →
