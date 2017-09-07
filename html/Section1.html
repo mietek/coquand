@@ -260,1400 +260,1390 @@
       >
 </a
       ><a name="3254" class="Comment"
-      >--     argument due to Streicher [19]: we first prove that if `(nf M) &#8315;` and `(nf N) &#8315;` are the same,</a
-      ><a name="3355"
+      >--     argument due to Streicher [19]: we first prove that if `nf M &#8315;` and `nf N &#8315;` are the same,</a
+      ><a name="3351"
       >
 </a
-      ><a name="3356" class="Comment"
+      ><a name="3352" class="Comment"
       >--     then `M &#8773; N`.  Secondly, we prove that if a proof tree `M` erases to a well-typed term `t`,</a
-      ><a name="3454"
+      ><a name="3450"
       >
 </a
-      ><a name="3455" class="Comment"
-      >--     then `t &#8659; (nf M) &#8315;`.  Now, if two proof trees `M` and `N` erase to the same well-typed term</a
-      ><a name="3553"
+      ><a name="3451" class="Comment"
+      >--     then `t &#8659; nf M &#8315;`.  Now, if two proof trees `M` and `N` erase to the same well-typed term</a
+      ><a name="3547"
       >
 </a
-      ><a name="3554" class="Comment"
-      >--     `t`, then `t &#8659; (nf M) &#8315;` and `t &#8659; (nf N) &#8315;`.  Since the reduction is deterministic we have that</a
-      ><a name="3656"
+      ><a name="3548" class="Comment"
+      >--     `t`, then `t &#8659; nf M &#8315;` and `t &#8659; nf N &#8315;`.  Since the reduction is deterministic we have that</a
+      ><a name="3646"
       >
 </a
-      ><a name="3657" class="Comment"
-      >--     `(nf M) &#8315;` and `(nf N) &#8315;` are the same, and hence `M &#8773; N`.</a
-      ><a name="3722"
+      ><a name="3647" class="Comment"
+      >--     `nf M &#8315;` and `nf N &#8315;` are the same, and hence `M &#8773; N`.</a
+      ><a name="3708"
       >
 </a
-      ><a name="3723" class="Comment"
+      ><a name="3709" class="Comment"
       >--</a
-      ><a name="3725"
+      ><a name="3711"
       >
 </a
-      ><a name="3726" class="Comment"
-      >--     TODO: Verify the syntax in the above paragraph.</a
-      ><a name="3780"
-      >
-</a
-      ><a name="3781" class="Comment"
-      >--</a
-      ><a name="3783"
-      >
-</a
-      ><a name="3784" class="Comment"
+      ><a name="3712" class="Comment"
       >-- -   We prove that the convertibility relation on proof trees is sound and complete, and give</a
-      ><a name="3879"
+      ><a name="3807"
       >
 </a
-      ><a name="3880" class="Comment"
+      ><a name="3808" class="Comment"
       >--     a decision algorithm for checking convertibility of two well-typed terms.</a
-      ><a name="3960"
+      ><a name="3888"
       >
 </a
-      ><a name="3961" class="Comment"
+      ><a name="3889" class="Comment"
       >--</a
-      ><a name="3963"
+      ><a name="3891"
       >
 </a
-      ><a name="3964" class="Comment"
+      ><a name="3892" class="Comment"
       >-- (&#8230;)</a
-      ><a name="3970"
+      ><a name="3898"
       >
 
 
 </a
-      ><a name="3973" class="Keyword"
+      ><a name="3901" class="Keyword"
       >open</a
-      ><a name="3977"
+      ><a name="3905"
       > </a
-      ><a name="3978" class="Keyword"
+      ><a name="3906" class="Keyword"
       >import</a
-      ><a name="3984"
+      ><a name="3912"
       > </a
-      ><a name="3985" href="Agda.Builtin.FromString.html#1" class="Module"
+      ><a name="3913" href="Agda.Builtin.FromString.html#1" class="Module"
       >Agda.Builtin.FromString</a
-      ><a name="4008"
+      ><a name="3936"
       > </a
-      ><a name="4009" class="Keyword"
+      ><a name="3937" class="Keyword"
       >public</a
-      ><a name="4015"
+      ><a name="3943"
       >
   </a
-      ><a name="4018" class="Keyword"
+      ><a name="3946" class="Keyword"
       >using</a
+      ><a name="3951"
+      > </a
+      ><a name="3952" class="Symbol"
+      >(</a
+      ><a name="3953" href="Agda.Builtin.FromString.html#135" class="Record"
+      >IsString</a
+      ><a name="3961"
+      > </a
+      ><a name="3962" class="Symbol"
+      >;</a
+      ><a name="3963"
+      > </a
+      ><a name="3964" href="Agda.Builtin.FromString.html#225" class="Field"
+      >fromString</a
+      ><a name="3974" class="Symbol"
+      >)</a
+      ><a name="3975"
+      >
+
+</a
+      ><a name="3977" class="Keyword"
+      >open</a
+      ><a name="3981"
+      > </a
+      ><a name="3982" class="Keyword"
+      >import</a
+      ><a name="3988"
+      > </a
+      ><a name="3989" href="Data.Bool.html#1" class="Module"
+      >Data.Bool</a
+      ><a name="3998"
+      > </a
+      ><a name="3999" class="Keyword"
+      >public</a
+      ><a name="4005"
+      >
+  </a
+      ><a name="4008" class="Keyword"
+      >using</a
+      ><a name="4013"
+      > </a
+      ><a name="4014" class="Symbol"
+      >(</a
+      ><a name="4015" href="Agda.Builtin.Bool.html#67" class="Datatype"
+      >Bool</a
+      ><a name="4019"
+      > </a
+      ><a name="4020" class="Symbol"
+      >;</a
+      ><a name="4021"
+      > </a
+      ><a name="4022" href="Data.Bool.Base.html#791" class="Function"
+      >T</a
       ><a name="4023"
       > </a
       ><a name="4024" class="Symbol"
-      >(</a
-      ><a name="4025" href="Agda.Builtin.FromString.html#135" class="Record"
-      >IsString</a
-      ><a name="4033"
-      > </a
-      ><a name="4034" class="Symbol"
       >;</a
-      ><a name="4035"
+      ><a name="4025"
       > </a
-      ><a name="4036" href="Agda.Builtin.FromString.html#225" class="Field"
-      >fromString</a
-      ><a name="4046" class="Symbol"
+      ><a name="4026" href="Agda.Builtin.Bool.html#92" class="InductiveConstructor"
+      >true</a
+      ><a name="4030"
+      > </a
+      ><a name="4031" class="Symbol"
+      >;</a
+      ><a name="4032"
+      > </a
+      ><a name="4033" href="Agda.Builtin.Bool.html#86" class="InductiveConstructor"
+      >false</a
+      ><a name="4038"
+      > </a
+      ><a name="4039" class="Symbol"
+      >;</a
+      ><a name="4040"
+      > </a
+      ><a name="4041" href="Data.Bool.Base.html#657" class="Function"
+      >not</a
+      ><a name="4044" class="Symbol"
       >)</a
-      ><a name="4047"
+      ><a name="4045"
+      >
+  </a
+      ><a name="4048" class="Keyword"
+      >renaming</a
+      ><a name="4056"
+      > </a
+      ><a name="4057" class="Symbol"
+      >(</a
+      ><a name="4058" href="Data.Bool.Base.html#939" class="Function Operator"
+      >_&#8743;_</a
+      ><a name="4061"
+      > </a
+      ><a name="4062" class="Symbol"
+      >to</a
+      ><a name="4064"
+      > </a
+      ><a name="4065" href="Data.Bool.Base.html#939" class="Function Operator"
+      >and</a
+      ><a name="4068" class="Symbol"
+      >)</a
+      ><a name="4069"
       >
 
 </a
-      ><a name="4049" class="Keyword"
-      >open</a
-      ><a name="4053"
-      > </a
-      ><a name="4054" class="Keyword"
-      >import</a
-      ><a name="4060"
-      > </a
-      ><a name="4061" href="Data.Bool.html#1" class="Module"
-      >Data.Bool</a
-      ><a name="4070"
-      > </a
       ><a name="4071" class="Keyword"
-      >public</a
-      ><a name="4077"
-      >
-  </a
-      ><a name="4080" class="Keyword"
-      >using</a
-      ><a name="4085"
+      >open</a
+      ><a name="4075"
       > </a
-      ><a name="4086" class="Symbol"
-      >(</a
-      ><a name="4087" href="Agda.Builtin.Bool.html#67" class="Datatype"
-      >Bool</a
-      ><a name="4091"
+      ><a name="4076" class="Keyword"
+      >import</a
+      ><a name="4082"
       > </a
-      ><a name="4092" class="Symbol"
-      >;</a
-      ><a name="4093"
-      > </a
-      ><a name="4094" href="Data.Bool.Base.html#791" class="Function"
-      >T</a
+      ><a name="4083" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
       ><a name="4095"
       > </a
-      ><a name="4096" class="Symbol"
-      >;</a
-      ><a name="4097"
-      > </a
-      ><a name="4098" href="Agda.Builtin.Bool.html#92" class="InductiveConstructor"
-      >true</a
+      ><a name="4096" class="Keyword"
+      >public</a
       ><a name="4102"
-      > </a
-      ><a name="4103" class="Symbol"
-      >;</a
-      ><a name="4104"
-      > </a
-      ><a name="4105" href="Agda.Builtin.Bool.html#86" class="InductiveConstructor"
-      >false</a
+      >
+  </a
+      ><a name="4105" class="Keyword"
+      >using</a
       ><a name="4110"
       > </a
       ><a name="4111" class="Symbol"
-      >;</a
-      ><a name="4112"
-      > </a
-      ><a name="4113" href="Data.Bool.Base.html#657" class="Function"
-      >not</a
-      ><a name="4116" class="Symbol"
-      >)</a
-      ><a name="4117"
-      >
-  </a
-      ><a name="4120" class="Keyword"
-      >renaming</a
-      ><a name="4128"
-      > </a
-      ><a name="4129" class="Symbol"
       >(</a
-      ><a name="4130" href="Data.Bool.Base.html#939" class="Function Operator"
-      >_&#8743;_</a
-      ><a name="4133"
+      ><a name="4112" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="4113"
       > </a
-      ><a name="4134" class="Symbol"
-      >to</a
-      ><a name="4136"
+      ><a name="4114" class="Symbol"
+      >;</a
+      ><a name="4115"
       > </a
-      ><a name="4137" href="Data.Bool.Base.html#939" class="Function Operator"
-      >and</a
-      ><a name="4140" class="Symbol"
+      ><a name="4116" href="Data.Product.html#509" class="InductiveConstructor Operator"
+      >_,_</a
+      ><a name="4119"
+      > </a
+      ><a name="4120" class="Symbol"
+      >;</a
+      ><a name="4121"
+      > </a
+      ><a name="4122" href="Data.Product.html#1073" class="Function Operator"
+      >_&#215;_</a
+      ><a name="4125" class="Symbol"
       >)</a
-      ><a name="4141"
+      ><a name="4126"
       >
 
 </a
-      ><a name="4143" class="Keyword"
+      ><a name="4128" class="Keyword"
       >open</a
-      ><a name="4147"
+      ><a name="4132"
       > </a
-      ><a name="4148" class="Keyword"
+      ><a name="4133" class="Keyword"
       >import</a
-      ><a name="4154"
+      ><a name="4139"
       > </a
-      ><a name="4155" href="Data.Product.html#1" class="Module"
-      >Data.Product</a
+      ><a name="4140" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="4149"
+      > </a
+      ><a name="4150" class="Keyword"
+      >public</a
+      ><a name="4156"
+      >
+  </a
+      ><a name="4159" class="Keyword"
+      >using</a
+      ><a name="4164"
+      > </a
+      ><a name="4165" class="Symbol"
+      >(</a
+      ><a name="4166" href="Agda.Builtin.Unit.html#69" class="Record"
+      >&#8868;</a
       ><a name="4167"
       > </a
-      ><a name="4168" class="Keyword"
-      >public</a
-      ><a name="4174"
+      ><a name="4168" class="Symbol"
+      >;</a
+      ><a name="4169"
+      > </a
+      ><a name="4170" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
+      >tt</a
+      ><a name="4172" class="Symbol"
+      >)</a
+      ><a name="4173"
       >
-  </a
-      ><a name="4177" class="Keyword"
-      >using</a
-      ><a name="4182"
+
+</a
+      ><a name="4175" class="Keyword"
+      >import</a
+      ><a name="4181"
       > </a
-      ><a name="4183" class="Symbol"
-      >(</a
-      ><a name="4184" href="Data.Product.html#439" class="Record"
-      >&#931;</a
-      ><a name="4185"
-      > </a
-      ><a name="4186" class="Symbol"
-      >;</a
-      ><a name="4187"
-      > </a
-      ><a name="4188" href="Data.Product.html#509" class="InductiveConstructor Operator"
-      >_,_</a
-      ><a name="4191"
-      > </a
-      ><a name="4192" class="Symbol"
-      >;</a
+      ><a name="4182" href="Data.String.html#1" class="Module"
+      >Data.String</a
       ><a name="4193"
       > </a
-      ><a name="4194" href="Data.Product.html#1073" class="Function Operator"
-      >_&#215;_</a
-      ><a name="4197" class="Symbol"
+      ><a name="4194" class="Symbol"
+      >as</a
+      ><a name="4196"
+      > </a
+      ><a name="4197" class="Module"
+      >Str</a
+      ><a name="4200"
+      >
+</a
+      ><a name="4201" class="Keyword"
+      >open</a
+      ><a name="4205"
+      > </a
+      ><a name="4206" href="Data.String.html#1" class="Module"
+      >Str</a
+      ><a name="4209"
+      >
+  </a
+      ><a name="4212" class="Keyword"
+      >using</a
+      ><a name="4217"
+      > </a
+      ><a name="4218" class="Symbol"
+      >(</a
+      ><a name="4219" href="Agda.Builtin.String.html#165" class="Postulate"
+      >String</a
+      ><a name="4225" class="Symbol"
       >)</a
-      ><a name="4198"
+      ><a name="4226"
       >
 
 </a
-      ><a name="4200" class="Keyword"
+      ><a name="4228" class="Keyword"
       >open</a
-      ><a name="4204"
+      ><a name="4232"
       > </a
-      ><a name="4205" class="Keyword"
+      ><a name="4233" class="Keyword"
       >import</a
-      ><a name="4211"
-      > </a
-      ><a name="4212" href="Data.Unit.html#1" class="Module"
-      >Data.Unit</a
-      ><a name="4221"
-      > </a
-      ><a name="4222" class="Keyword"
-      >public</a
-      ><a name="4228"
-      >
-  </a
-      ><a name="4231" class="Keyword"
-      >using</a
-      ><a name="4236"
-      > </a
-      ><a name="4237" class="Symbol"
-      >(</a
-      ><a name="4238" href="Agda.Builtin.Unit.html#69" class="Record"
-      >&#8868;</a
       ><a name="4239"
       > </a
-      ><a name="4240" class="Symbol"
-      >;</a
-      ><a name="4241"
+      ><a name="4240" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="4248"
       > </a
-      ><a name="4242" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor"
-      >tt</a
-      ><a name="4244" class="Symbol"
-      >)</a
-      ><a name="4245"
+      ><a name="4249" class="Keyword"
+      >public</a
+      ><a name="4255"
       >
-
-</a
-      ><a name="4247" class="Keyword"
-      >import</a
-      ><a name="4253"
+  </a
+      ><a name="4258" class="Keyword"
+      >using</a
+      ><a name="4263"
       > </a
-      ><a name="4254" href="Data.String.html#1" class="Module"
-      >Data.String</a
-      ><a name="4265"
-      > </a
-      ><a name="4266" class="Symbol"
-      >as</a
+      ><a name="4264" class="Symbol"
+      >(</a
+      ><a name="4265" href="Function.html#713" class="Function Operator"
+      >_&#8728;_</a
       ><a name="4268"
       > </a
-      ><a name="4269" class="Module"
-      >Str</a
-      ><a name="4272"
-      >
-</a
-      ><a name="4273" class="Keyword"
-      >open</a
-      ><a name="4277"
+      ><a name="4269" class="Symbol"
+      >;</a
+      ><a name="4270"
       > </a
-      ><a name="4278" href="Data.String.html#1" class="Module"
-      >Str</a
+      ><a name="4271" href="Function.html#2761" class="Function Operator"
+      >case_of_</a
+      ><a name="4279"
+      > </a
+      ><a name="4280" class="Symbol"
+      >;</a
       ><a name="4281"
-      >
-  </a
-      ><a name="4284" class="Keyword"
-      >using</a
-      ><a name="4289"
       > </a
-      ><a name="4290" class="Symbol"
-      >(</a
-      ><a name="4291" href="Agda.Builtin.String.html#165" class="Postulate"
-      >String</a
-      ><a name="4297" class="Symbol"
+      ><a name="4282" href="Function.html#1480" class="Function"
+      >flip</a
+      ><a name="4286"
+      > </a
+      ><a name="4287" class="Symbol"
+      >;</a
+      ><a name="4288"
+      > </a
+      ><a name="4289" href="Function.html#1012" class="Function"
+      >id</a
+      ><a name="4291" class="Symbol"
       >)</a
-      ><a name="4298"
+      ><a name="4292"
       >
 
 </a
-      ><a name="4300" class="Keyword"
+      ><a name="4294" class="Keyword"
       >open</a
-      ><a name="4304"
+      ><a name="4298"
       > </a
-      ><a name="4305" class="Keyword"
+      ><a name="4299" class="Keyword"
       >import</a
-      ><a name="4311"
+      ><a name="4305"
       > </a
-      ><a name="4312" href="Function.html#1" class="Module"
-      >Function</a
-      ><a name="4320"
+      ><a name="4306" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="4343"
       > </a
-      ><a name="4321" class="Keyword"
+      ><a name="4344" class="Keyword"
       >public</a
-      ><a name="4327"
+      ><a name="4350"
       >
   </a
-      ><a name="4330" class="Keyword"
+      ><a name="4353" class="Keyword"
       >using</a
-      ><a name="4335"
-      > </a
-      ><a name="4336" class="Symbol"
-      >(</a
-      ><a name="4337" href="Function.html#713" class="Function Operator"
-      >_&#8728;_</a
-      ><a name="4340"
-      > </a
-      ><a name="4341" class="Symbol"
-      >;</a
-      ><a name="4342"
-      > </a
-      ><a name="4343" href="Function.html#2761" class="Function Operator"
-      >case_of_</a
-      ><a name="4351"
-      > </a
-      ><a name="4352" class="Symbol"
-      >;</a
-      ><a name="4353"
-      > </a
-      ><a name="4354" href="Function.html#1480" class="Function"
-      >flip</a
       ><a name="4358"
       > </a
       ><a name="4359" class="Symbol"
-      >;</a
-      ><a name="4360"
+      >(</a
+      ><a name="4360" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="4363"
       > </a
-      ><a name="4361" href="Function.html#1012" class="Function"
-      >id</a
-      ><a name="4363" class="Symbol"
+      ><a name="4364" class="Symbol"
+      >;</a
+      ><a name="4365"
+      > </a
+      ><a name="4366" href="Relation.Binary.Core.html#4493" class="Function Operator"
+      >_&#8802;_</a
+      ><a name="4369"
+      > </a
+      ><a name="4370" class="Symbol"
+      >;</a
+      ><a name="4371"
+      > </a
+      ><a name="4372" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
+      >refl</a
+      ><a name="4376"
+      > </a
+      ><a name="4377" class="Symbol"
+      >;</a
+      ><a name="4378"
+      > </a
+      ><a name="4379" href="Relation.Binary.PropositionalEquality.html#1036" class="Function"
+      >cong</a
+      ><a name="4383"
+      > </a
+      ><a name="4384" class="Symbol"
+      >;</a
+      ><a name="4385"
+      > </a
+      ><a name="4386" href="Relation.Binary.PropositionalEquality.Core.html#565" class="Function"
+      >sym</a
+      ><a name="4389"
+      > </a
+      ><a name="4390" class="Symbol"
+      >;</a
+      ><a name="4391"
+      > </a
+      ><a name="4392" href="Relation.Binary.PropositionalEquality.Core.html#632" class="Function"
+      >trans</a
+      ><a name="4397" class="Symbol"
       >)</a
-      ><a name="4364"
+      ><a name="4398"
+      >
+  </a
+      ><a name="4401" class="Keyword"
+      >renaming</a
+      ><a name="4409"
+      > </a
+      ><a name="4410" class="Symbol"
+      >(</a
+      ><a name="4411" href="Relation.Binary.PropositionalEquality.html#1274" class="Function"
+      >cong&#8322;</a
+      ><a name="4416"
+      > </a
+      ><a name="4417" class="Symbol"
+      >to</a
+      ><a name="4419"
+      > </a
+      ><a name="4420" href="Relation.Binary.PropositionalEquality.html#1274" class="Function"
+      >cong&#178;</a
+      ><a name="4425" class="Symbol"
+      >)</a
+      ><a name="4426"
       >
 
 </a
-      ><a name="4366" class="Keyword"
+      ><a name="4428" class="Keyword"
       >open</a
-      ><a name="4370"
+      ><a name="4432"
       > </a
-      ><a name="4371" class="Keyword"
+      ><a name="4433" class="Keyword"
       >import</a
-      ><a name="4377"
+      ><a name="4439"
       > </a
-      ><a name="4378" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
-      >Relation.Binary.PropositionalEquality</a
-      ><a name="4415"
+      ><a name="4440" href="Relation.Nullary.html#1" class="Module"
+      >Relation.Nullary</a
+      ><a name="4456"
       > </a
-      ><a name="4416" class="Keyword"
+      ><a name="4457" class="Keyword"
       >public</a
-      ><a name="4422"
-      >
-  </a
-      ><a name="4425" class="Keyword"
-      >using</a
-      ><a name="4430"
-      > </a
-      ><a name="4431" class="Symbol"
-      >(</a
-      ><a name="4432" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
-      >_&#8801;_</a
-      ><a name="4435"
-      > </a
-      ><a name="4436" class="Symbol"
-      >;</a
-      ><a name="4437"
-      > </a
-      ><a name="4438" href="Relation.Binary.Core.html#4493" class="Function Operator"
-      >_&#8802;_</a
-      ><a name="4441"
-      > </a
-      ><a name="4442" class="Symbol"
-      >;</a
-      ><a name="4443"
-      > </a
-      ><a name="4444" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
-      >refl</a
-      ><a name="4448"
-      > </a
-      ><a name="4449" class="Symbol"
-      >;</a
-      ><a name="4450"
-      > </a
-      ><a name="4451" href="Relation.Binary.PropositionalEquality.html#1036" class="Function"
-      >cong</a
-      ><a name="4455"
-      > </a
-      ><a name="4456" class="Symbol"
-      >;</a
-      ><a name="4457"
-      > </a
-      ><a name="4458" href="Relation.Binary.PropositionalEquality.Core.html#565" class="Function"
-      >sym</a
-      ><a name="4461"
-      > </a
-      ><a name="4462" class="Symbol"
-      >;</a
       ><a name="4463"
-      > </a
-      ><a name="4464" href="Relation.Binary.PropositionalEquality.Core.html#632" class="Function"
-      >trans</a
-      ><a name="4469" class="Symbol"
-      >)</a
-      ><a name="4470"
       >
   </a
-      ><a name="4473" class="Keyword"
-      >renaming</a
+      ><a name="4466" class="Keyword"
+      >using</a
+      ><a name="4471"
+      > </a
+      ><a name="4472" class="Symbol"
+      >(</a
+      ><a name="4473" href="Relation.Nullary.html#414" class="Function Operator"
+      >&#172;_</a
+      ><a name="4475"
+      > </a
+      ><a name="4476" class="Symbol"
+      >;</a
+      ><a name="4477"
+      > </a
+      ><a name="4478" href="Relation.Nullary.html#484" class="Datatype"
+      >Dec</a
       ><a name="4481"
       > </a
       ><a name="4482" class="Symbol"
-      >(</a
-      ><a name="4483" href="Relation.Binary.PropositionalEquality.html#1274" class="Function"
-      >cong&#8322;</a
-      ><a name="4488"
+      >;</a
+      ><a name="4483"
       > </a
-      ><a name="4489" class="Symbol"
-      >to</a
-      ><a name="4491"
+      ><a name="4484" href="Relation.Nullary.html#520" class="InductiveConstructor"
+      >yes</a
+      ><a name="4487"
       > </a
-      ><a name="4492" href="Relation.Binary.PropositionalEquality.html#1274" class="Function"
-      >cong&#178;</a
-      ><a name="4497" class="Symbol"
+      ><a name="4488" class="Symbol"
+      >;</a
+      ><a name="4489"
+      > </a
+      ><a name="4490" href="Relation.Nullary.html#547" class="InductiveConstructor"
+      >no</a
+      ><a name="4492" class="Symbol"
       >)</a
-      ><a name="4498"
+      ><a name="4493"
       >
 
 </a
-      ><a name="4500" class="Keyword"
-      >open</a
-      ><a name="4504"
-      > </a
-      ><a name="4505" class="Keyword"
+      ><a name="4495" class="Keyword"
       >import</a
-      ><a name="4511"
+      ><a name="4501"
       > </a
-      ><a name="4512" href="Relation.Nullary.html#1" class="Module"
-      >Relation.Nullary</a
+      ><a name="4502" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Relation.Nullary.Decidable</a
       ><a name="4528"
       > </a
-      ><a name="4529" class="Keyword"
-      >public</a
+      ><a name="4529" class="Symbol"
+      >as</a
+      ><a name="4531"
+      > </a
+      ><a name="4532" class="Module"
+      >Dec</a
       ><a name="4535"
       >
-  </a
-      ><a name="4538" class="Keyword"
-      >using</a
-      ><a name="4543"
-      > </a
-      ><a name="4544" class="Symbol"
-      >(</a
-      ><a name="4545" href="Relation.Nullary.html#414" class="Function Operator"
-      >&#172;_</a
-      ><a name="4547"
-      > </a
-      ><a name="4548" class="Symbol"
-      >;</a
-      ><a name="4549"
-      > </a
-      ><a name="4550" href="Relation.Nullary.html#484" class="Datatype"
-      >Dec</a
-      ><a name="4553"
-      > </a
-      ><a name="4554" class="Symbol"
-      >;</a
-      ><a name="4555"
-      > </a
-      ><a name="4556" href="Relation.Nullary.html#520" class="InductiveConstructor"
-      >yes</a
-      ><a name="4559"
-      > </a
-      ><a name="4560" class="Symbol"
-      >;</a
-      ><a name="4561"
-      > </a
-      ><a name="4562" href="Relation.Nullary.html#547" class="InductiveConstructor"
-      >no</a
-      ><a name="4564" class="Symbol"
-      >)</a
-      ><a name="4565"
-      >
 
 </a
-      ><a name="4567" class="Keyword"
-      >import</a
-      ><a name="4573"
-      > </a
-      ><a name="4574" href="Relation.Nullary.Decidable.html#1" class="Module"
-      >Relation.Nullary.Decidable</a
-      ><a name="4600"
-      > </a
-      ><a name="4601" class="Symbol"
-      >as</a
-      ><a name="4603"
-      > </a
-      ><a name="4604" class="Module"
-      >Dec</a
-      ><a name="4607"
-      >
-
-</a
-      ><a name="4609" class="Keyword"
+      ><a name="4537" class="Keyword"
       >open</a
-      ><a name="4613"
+      ><a name="4541"
       > </a
-      ><a name="4614" class="Keyword"
+      ><a name="4542" class="Keyword"
       >import</a
-      ><a name="4620"
+      ><a name="4548"
       > </a
-      ><a name="4621" href="Relation.Nullary.Negation.html#1" class="Module"
+      ><a name="4549" href="Relation.Nullary.Negation.html#1" class="Module"
       >Relation.Nullary.Negation</a
+      ><a name="4574"
+      > </a
+      ><a name="4575" class="Keyword"
+      >public</a
+      ><a name="4581"
+      >
+  </a
+      ><a name="4584" class="Keyword"
+      >renaming</a
+      ><a name="4592"
+      > </a
+      ><a name="4593" class="Symbol"
+      >(</a
+      ><a name="4594" href="Relation.Nullary.Negation.html#587" class="Function"
+      >contradiction</a
+      ><a name="4607"
+      > </a
+      ><a name="4608" class="Symbol"
+      >to</a
+      ><a name="4610"
+      > </a
+      ><a name="4611" href="Relation.Nullary.Negation.html#587" class="Function"
+      >_&#8623;_</a
+      ><a name="4614" class="Symbol"
+      >)</a
+      ><a name="4615"
+      >
+
+
+</a
+      ><a name="4618" class="Keyword"
+      >module</a
+      ><a name="4624"
+      > </a
+      ><a name="4625" href="Section1.html#4625" class="Module"
+      >_</a
+      ><a name="4626"
+      > </a
+      ><a name="4627" class="Keyword"
+      >where</a
+      ><a name="4632"
+      >
+  </a
+      ><a name="4635" class="Keyword"
+      >data</a
+      ><a name="4639"
+      > </a
+      ><a name="4640" href="Section1.html#4640" class="Datatype"
+      >Name</a
+      ><a name="4644"
+      > </a
+      ><a name="4645" class="Symbol"
+      >:</a
       ><a name="4646"
       > </a
-      ><a name="4647" class="Keyword"
-      >public</a
-      ><a name="4653"
-      >
-  </a
-      ><a name="4656" class="Keyword"
-      >renaming</a
-      ><a name="4664"
+      ><a name="4647" class="PrimitiveType"
+      >Set</a
+      ><a name="4650"
       > </a
-      ><a name="4665" class="Symbol"
-      >(</a
-      ><a name="4666" href="Relation.Nullary.Negation.html#587" class="Function"
-      >contradiction</a
-      ><a name="4679"
-      > </a
-      ><a name="4680" class="Symbol"
-      >to</a
-      ><a name="4682"
-      > </a
-      ><a name="4683" href="Relation.Nullary.Negation.html#587" class="Function"
-      >_&#8623;_</a
-      ><a name="4686" class="Symbol"
-      >)</a
-      ><a name="4687"
-      >
-
-
-</a
-      ><a name="4690" class="Keyword"
-      >module</a
-      ><a name="4696"
-      > </a
-      ><a name="4697" href="Section1.html#4697" class="Module"
-      >_</a
-      ><a name="4698"
-      > </a
-      ><a name="4699" class="Keyword"
+      ><a name="4651" class="Keyword"
       >where</a
-      ><a name="4704"
+      ><a name="4656"
       >
-  </a
-      ><a name="4707" class="Keyword"
-      >data</a
-      ><a name="4711"
+    </a
+      ><a name="4661" href="Section1.html#4661" class="InductiveConstructor"
+      >name</a
+      ><a name="4665"
       > </a
-      ><a name="4712" href="Section1.html#4712" class="Datatype"
+      ><a name="4666" class="Symbol"
+      >:</a
+      ><a name="4667"
+      > </a
+      ><a name="4668" href="Agda.Builtin.String.html#165" class="Postulate"
+      >String</a
+      ><a name="4674"
+      > </a
+      ><a name="4675" class="Symbol"
+      >&#8594;</a
+      ><a name="4676"
+      > </a
+      ><a name="4677" href="Section1.html#4640" class="Datatype"
       >Name</a
+      ><a name="4681"
+      >
+
+  </a
+      ><a name="4685" class="Keyword"
+      >module</a
+      ><a name="4691"
+      > </a
+      ><a name="4692" href="Section1.html#4692" class="Module"
+      >_</a
+      ><a name="4693"
+      > </a
+      ><a name="4694" class="Keyword"
+      >where</a
+      ><a name="4699"
+      >
+    </a
+      ><a name="4704" href="Section1.html#4704" class="Function"
+      >inj-name</a
+      ><a name="4712"
+      > </a
+      ><a name="4713" class="Symbol"
+      >:</a
+      ><a name="4714"
+      > </a
+      ><a name="4715" class="Symbol"
+      >&#8704;</a
       ><a name="4716"
       > </a
       ><a name="4717" class="Symbol"
-      >:</a
-      ><a name="4718"
+      >{</a
+      ><a name="4718" href="Section1.html#4718" class="Bound"
+      >s</a
+      ><a name="4719"
       > </a
-      ><a name="4719" class="PrimitiveType"
-      >Set</a
-      ><a name="4722"
+      ><a name="4720" href="Section1.html#4720" class="Bound"
+      >s&#8242;</a
+      ><a name="4722" class="Symbol"
+      >}</a
+      ><a name="4723"
       > </a
-      ><a name="4723" class="Keyword"
-      >where</a
-      ><a name="4728"
-      >
-    </a
-      ><a name="4733" href="Section1.html#4733" class="InductiveConstructor"
+      ><a name="4724" class="Symbol"
+      >&#8594;</a
+      ><a name="4725"
+      > </a
+      ><a name="4726" href="Section1.html#4661" class="InductiveConstructor"
       >name</a
-      ><a name="4737"
+      ><a name="4730"
       > </a
-      ><a name="4738" class="Symbol"
-      >:</a
+      ><a name="4731" href="Section1.html#4718" class="Bound"
+      >s</a
+      ><a name="4732"
+      > </a
+      ><a name="4733" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="4734"
+      > </a
+      ><a name="4735" href="Section1.html#4661" class="InductiveConstructor"
+      >name</a
       ><a name="4739"
       > </a
-      ><a name="4740" href="Agda.Builtin.String.html#165" class="Postulate"
-      >String</a
+      ><a name="4740" href="Section1.html#4720" class="Bound"
+      >s&#8242;</a
+      ><a name="4742"
+      > </a
+      ><a name="4743" class="Symbol"
+      >&#8594;</a
+      ><a name="4744"
+      > </a
+      ><a name="4745" href="Section1.html#4718" class="Bound"
+      >s</a
       ><a name="4746"
       > </a
-      ><a name="4747" class="Symbol"
-      >&#8594;</a
+      ><a name="4747" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
+      >&#8801;</a
       ><a name="4748"
       > </a
-      ><a name="4749" href="Section1.html#4712" class="Datatype"
-      >Name</a
-      ><a name="4753"
-      >
-
-  </a
-      ><a name="4757" class="Keyword"
-      >module</a
-      ><a name="4763"
-      > </a
-      ><a name="4764" href="Section1.html#4764" class="Module"
-      >_</a
-      ><a name="4765"
-      > </a
-      ><a name="4766" class="Keyword"
-      >where</a
-      ><a name="4771"
+      ><a name="4749" href="Section1.html#4720" class="Bound"
+      >s&#8242;</a
+      ><a name="4751"
       >
     </a
-      ><a name="4776" href="Section1.html#4776" class="Function"
+      ><a name="4756" href="Section1.html#4704" class="Function"
       >inj-name</a
-      ><a name="4784"
+      ><a name="4764"
       > </a
-      ><a name="4785" class="Symbol"
+      ><a name="4765" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
+      >refl</a
+      ><a name="4769"
+      > </a
+      ><a name="4770" class="Symbol"
+      >=</a
+      ><a name="4771"
+      > </a
+      ><a name="4772" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
+      >refl</a
+      ><a name="4776"
+      >
+
+    </a
+      ><a name="4782" href="Section1.html#4782" class="Function Operator"
+      >_&#8799;_</a
+      ><a name="4785"
+      > </a
+      ><a name="4786" class="Symbol"
       >:</a
-      ><a name="4786"
+      ><a name="4787"
       > </a
-      ><a name="4787" class="Symbol"
-      >&#8704;</a
-      ><a name="4788"
+      ><a name="4788" class="Symbol"
+      >(</a
+      ><a name="4789" href="Section1.html#4789" class="Bound"
+      >x</a
+      ><a name="4790"
       > </a
-      ><a name="4789" class="Symbol"
-      >{</a
-      ><a name="4790" href="Section1.html#4790" class="Bound"
-      >s</a
-      ><a name="4791"
+      ><a name="4791" href="Section1.html#4791" class="Bound"
+      >x&#8242;</a
+      ><a name="4793"
       > </a
-      ><a name="4792" href="Section1.html#4792" class="Bound"
-      >s&#8242;</a
       ><a name="4794" class="Symbol"
-      >}</a
+      >:</a
       ><a name="4795"
       > </a
-      ><a name="4796" class="Symbol"
+      ><a name="4796" href="Section1.html#4640" class="Datatype"
+      >Name</a
+      ><a name="4800" class="Symbol"
+      >)</a
+      ><a name="4801"
+      > </a
+      ><a name="4802" class="Symbol"
       >&#8594;</a
-      ><a name="4797"
+      ><a name="4803"
       > </a
-      ><a name="4798" href="Section1.html#4733" class="InductiveConstructor"
-      >name</a
-      ><a name="4802"
+      ><a name="4804" href="Relation.Nullary.html#484" class="Datatype"
+      >Dec</a
+      ><a name="4807"
       > </a
-      ><a name="4803" href="Section1.html#4790" class="Bound"
-      >s</a
-      ><a name="4804"
+      ><a name="4808" class="Symbol"
+      >(</a
+      ><a name="4809" href="Section1.html#4789" class="Bound"
+      >x</a
+      ><a name="4810"
       > </a
-      ><a name="4805" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
+      ><a name="4811" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
       >&#8801;</a
-      ><a name="4806"
+      ><a name="4812"
       > </a
-      ><a name="4807" href="Section1.html#4733" class="InductiveConstructor"
-      >name</a
-      ><a name="4811"
-      > </a
-      ><a name="4812" href="Section1.html#4792" class="Bound"
-      >s&#8242;</a
-      ><a name="4814"
-      > </a
+      ><a name="4813" href="Section1.html#4791" class="Bound"
+      >x&#8242;</a
       ><a name="4815" class="Symbol"
-      >&#8594;</a
+      >)</a
       ><a name="4816"
-      > </a
-      ><a name="4817" href="Section1.html#4790" class="Bound"
-      >s</a
-      ><a name="4818"
-      > </a
-      ><a name="4819" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
-      >&#8801;</a
-      ><a name="4820"
-      > </a
-      ><a name="4821" href="Section1.html#4792" class="Bound"
-      >s&#8242;</a
-      ><a name="4823"
       >
     </a
-      ><a name="4828" href="Section1.html#4776" class="Function"
-      >inj-name</a
-      ><a name="4836"
+      ><a name="4821" href="Section1.html#4661" class="InductiveConstructor"
+      >name</a
+      ><a name="4825"
       > </a
-      ><a name="4837" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
-      >refl</a
-      ><a name="4841"
+      ><a name="4826" href="Section1.html#4826" class="Bound"
+      >s</a
+      ><a name="4827"
       > </a
-      ><a name="4842" class="Symbol"
+      ><a name="4828" href="Section1.html#4782" class="Function Operator"
+      >&#8799;</a
+      ><a name="4829"
+      > </a
+      ><a name="4830" href="Section1.html#4661" class="InductiveConstructor"
+      >name</a
+      ><a name="4834"
+      > </a
+      ><a name="4835" href="Section1.html#4835" class="Bound"
+      >s&#8242;</a
+      ><a name="4837"
+      > </a
+      ><a name="4838" class="Symbol"
       >=</a
-      ><a name="4843"
+      ><a name="4839"
       > </a
-      ><a name="4844" href="Agda.Builtin.Equality.html#140" class="InductiveConstructor"
-      >refl</a
+      ><a name="4840" href="Relation.Nullary.Decidable.html#1801" class="Function"
+      >Dec.map&#8242;</a
       ><a name="4848"
+      > </a
+      ><a name="4849" class="Symbol"
+      >(</a
+      ><a name="4850" href="Relation.Binary.PropositionalEquality.html#1036" class="Function"
+      >cong</a
+      ><a name="4854"
+      > </a
+      ><a name="4855" href="Section1.html#4661" class="InductiveConstructor"
+      >name</a
+      ><a name="4859" class="Symbol"
+      >)</a
+      ><a name="4860"
+      > </a
+      ><a name="4861" href="Section1.html#4704" class="Function"
+      >inj-name</a
+      ><a name="4869"
+      > </a
+      ><a name="4870" class="Symbol"
+      >(</a
+      ><a name="4871" href="Section1.html#4826" class="Bound"
+      >s</a
+      ><a name="4872"
+      > </a
+      ><a name="4873" href="Data.String.html#1196" class="Function Operator"
+      >Str.&#8799;</a
+      ><a name="4878"
+      > </a
+      ><a name="4879" href="Section1.html#4835" class="Bound"
+      >s&#8242;</a
+      ><a name="4881" class="Symbol"
+      >)</a
+      ><a name="4882"
       >
 
     </a
-      ><a name="4854" href="Section1.html#4854" class="Function Operator"
-      >_&#8799;_</a
-      ><a name="4857"
+      ><a name="4888" href="Section1.html#4888" class="Function Operator"
+      >_&#8800;_</a
+      ><a name="4891"
       > </a
-      ><a name="4858" class="Symbol"
+      ><a name="4892" class="Symbol"
       >:</a
-      ><a name="4859"
+      ><a name="4893"
       > </a
-      ><a name="4860" class="Symbol"
-      >(</a
-      ><a name="4861" href="Section1.html#4861" class="Bound"
-      >x</a
-      ><a name="4862"
-      > </a
-      ><a name="4863" href="Section1.html#4863" class="Bound"
-      >x&#8242;</a
-      ><a name="4865"
-      > </a
-      ><a name="4866" class="Symbol"
-      >:</a
-      ><a name="4867"
-      > </a
-      ><a name="4868" href="Section1.html#4712" class="Datatype"
+      ><a name="4894" href="Section1.html#4640" class="Datatype"
       >Name</a
-      ><a name="4872" class="Symbol"
-      >)</a
-      ><a name="4873"
+      ><a name="4898"
       > </a
-      ><a name="4874" class="Symbol"
+      ><a name="4899" class="Symbol"
       >&#8594;</a
-      ><a name="4875"
+      ><a name="4900"
       > </a
-      ><a name="4876" href="Relation.Nullary.html#484" class="Datatype"
-      >Dec</a
-      ><a name="4879"
+      ><a name="4901" href="Section1.html#4640" class="Datatype"
+      >Name</a
+      ><a name="4905"
       > </a
-      ><a name="4880" class="Symbol"
-      >(</a
-      ><a name="4881" href="Section1.html#4861" class="Bound"
-      >x</a
-      ><a name="4882"
+      ><a name="4906" class="Symbol"
+      >&#8594;</a
+      ><a name="4907"
       > </a
-      ><a name="4883" href="Agda.Builtin.Equality.html#83" class="Datatype Operator"
-      >&#8801;</a
-      ><a name="4884"
-      > </a
-      ><a name="4885" href="Section1.html#4863" class="Bound"
-      >x&#8242;</a
-      ><a name="4887" class="Symbol"
-      >)</a
-      ><a name="4888"
+      ><a name="4908" href="Agda.Builtin.Bool.html#67" class="Datatype"
+      >Bool</a
+      ><a name="4912"
       >
     </a
-      ><a name="4893" href="Section1.html#4733" class="InductiveConstructor"
-      >name</a
-      ><a name="4897"
+      ><a name="4917" href="Section1.html#4917" class="Bound"
+      >x</a
+      ><a name="4918"
       > </a
-      ><a name="4898" href="Section1.html#4898" class="Bound"
-      >s</a
-      ><a name="4899"
-      > </a
-      ><a name="4900" href="Section1.html#4854" class="Function Operator"
-      >&#8799;</a
-      ><a name="4901"
-      > </a
-      ><a name="4902" href="Section1.html#4733" class="InductiveConstructor"
-      >name</a
-      ><a name="4906"
-      > </a
-      ><a name="4907" href="Section1.html#4907" class="Bound"
-      >s&#8242;</a
-      ><a name="4909"
-      > </a
-      ><a name="4910" class="Symbol"
-      >=</a
-      ><a name="4911"
-      > </a
-      ><a name="4912" href="Relation.Nullary.Decidable.html#1801" class="Function"
-      >Dec.map&#8242;</a
+      ><a name="4919" href="Section1.html#4888" class="Function Operator"
+      >&#8800;</a
       ><a name="4920"
       > </a
-      ><a name="4921" class="Symbol"
-      >(</a
-      ><a name="4922" href="Relation.Binary.PropositionalEquality.html#1036" class="Function"
-      >cong</a
-      ><a name="4926"
-      > </a
-      ><a name="4927" href="Section1.html#4733" class="InductiveConstructor"
-      >name</a
-      ><a name="4931" class="Symbol"
-      >)</a
-      ><a name="4932"
-      > </a
-      ><a name="4933" href="Section1.html#4776" class="Function"
-      >inj-name</a
-      ><a name="4941"
-      > </a
-      ><a name="4942" class="Symbol"
-      >(</a
-      ><a name="4943" href="Section1.html#4898" class="Bound"
-      >s</a
-      ><a name="4944"
-      > </a
-      ><a name="4945" href="Data.String.html#1196" class="Function Operator"
-      >Str.&#8799;</a
-      ><a name="4950"
-      > </a
-      ><a name="4951" href="Section1.html#4907" class="Bound"
-      >s&#8242;</a
-      ><a name="4953" class="Symbol"
-      >)</a
-      ><a name="4954"
-      >
-
-    </a
-      ><a name="4960" href="Section1.html#4960" class="Function Operator"
-      >_&#8800;_</a
-      ><a name="4963"
-      > </a
-      ><a name="4964" class="Symbol"
-      >:</a
-      ><a name="4965"
-      > </a
-      ><a name="4966" href="Section1.html#4712" class="Datatype"
-      >Name</a
-      ><a name="4970"
-      > </a
-      ><a name="4971" class="Symbol"
-      >&#8594;</a
-      ><a name="4972"
-      > </a
-      ><a name="4973" href="Section1.html#4712" class="Datatype"
-      >Name</a
-      ><a name="4977"
-      > </a
-      ><a name="4978" class="Symbol"
-      >&#8594;</a
-      ><a name="4979"
-      > </a
-      ><a name="4980" href="Agda.Builtin.Bool.html#67" class="Datatype"
-      >Bool</a
-      ><a name="4984"
-      >
-    </a
-      ><a name="4989" href="Section1.html#4989" class="Bound"
-      >x</a
-      ><a name="4990"
-      > </a
-      ><a name="4991" href="Section1.html#4960" class="Function Operator"
-      >&#8800;</a
-      ><a name="4992"
-      > </a
-      ><a name="4993" href="Section1.html#4993" class="Bound"
+      ><a name="4921" href="Section1.html#4921" class="Bound"
       >x&#8242;</a
-      ><a name="4995"
+      ><a name="4923"
       > </a
-      ><a name="4996" class="Symbol"
+      ><a name="4924" class="Symbol"
       >=</a
-      ><a name="4997"
+      ><a name="4925"
       > </a
-      ><a name="4998" href="Data.Bool.Base.html#657" class="Function"
+      ><a name="4926" href="Data.Bool.Base.html#657" class="Function"
       >not</a
-      ><a name="5001"
+      ><a name="4929"
       > </a
-      ><a name="5002" class="Symbol"
+      ><a name="4930" class="Symbol"
       >(</a
-      ><a name="5003" href="Relation.Nullary.Decidable.html#822" class="Function Operator"
+      ><a name="4931" href="Relation.Nullary.Decidable.html#822" class="Function Operator"
       >Dec.&#8970;</a
-      ><a name="5008"
+      ><a name="4936"
       > </a
-      ><a name="5009" href="Section1.html#4989" class="Bound"
+      ><a name="4937" href="Section1.html#4917" class="Bound"
       >x</a
-      ><a name="5010"
+      ><a name="4938"
       > </a
-      ><a name="5011" href="Section1.html#4854" class="Function Operator"
+      ><a name="4939" href="Section1.html#4782" class="Function Operator"
       >&#8799;</a
-      ><a name="5012"
+      ><a name="4940"
       > </a
-      ><a name="5013" href="Section1.html#4993" class="Bound"
+      ><a name="4941" href="Section1.html#4921" class="Bound"
       >x&#8242;</a
-      ><a name="5015"
+      ><a name="4943"
       > </a
-      ><a name="5016" href="Relation.Nullary.Decidable.html#822" class="Function Operator"
+      ><a name="4944" href="Relation.Nullary.Decidable.html#822" class="Function Operator"
       >&#8971;</a
-      ><a name="5017" class="Symbol"
+      ><a name="4945" class="Symbol"
       >)</a
-      ><a name="5018"
+      ><a name="4946"
       >
 
   </a
-      ><a name="5022" class="Keyword"
+      ><a name="4950" class="Keyword"
       >instance</a
-      ><a name="5030"
+      ><a name="4958"
       >
     </a
-      ><a name="5035" href="Section1.html#5035" class="Function"
+      ><a name="4963" href="Section1.html#4963" class="Function"
       >str-Name</a
-      ><a name="5043"
+      ><a name="4971"
       > </a
-      ><a name="5044" class="Symbol"
+      ><a name="4972" class="Symbol"
       >:</a
-      ><a name="5045"
+      ><a name="4973"
       > </a
-      ><a name="5046" href="Agda.Builtin.FromString.html#135" class="Record"
+      ><a name="4974" href="Agda.Builtin.FromString.html#135" class="Record"
       >IsString</a
-      ><a name="5054"
+      ><a name="4982"
       > </a
-      ><a name="5055" href="Section1.html#4712" class="Datatype"
+      ><a name="4983" href="Section1.html#4640" class="Datatype"
       >Name</a
-      ><a name="5059"
+      ><a name="4987"
       >
     </a
-      ><a name="5064" href="Section1.html#5035" class="Function"
+      ><a name="4992" href="Section1.html#4963" class="Function"
       >str-Name</a
-      ><a name="5072"
+      ><a name="5000"
       > </a
-      ><a name="5073" class="Symbol"
+      ><a name="5001" class="Symbol"
       >=</a
-      ><a name="5074"
+      ><a name="5002"
       > </a
-      ><a name="5075" class="Keyword"
+      ><a name="5003" class="Keyword"
       >record</a
-      ><a name="5081"
+      ><a name="5009"
       >
       </a
-      ><a name="5088" class="Symbol"
+      ><a name="5016" class="Symbol"
       >{</a
-      ><a name="5089"
+      ><a name="5017"
       > </a
-      ><a name="5090" class="Field"
+      ><a name="5018" class="Field"
       >Constraint</a
-      ><a name="5100"
+      ><a name="5028"
       > </a
-      ><a name="5101" class="Symbol"
+      ><a name="5029" class="Symbol"
       >=</a
-      ><a name="5102"
+      ><a name="5030"
       > </a
-      ><a name="5103" class="Symbol"
+      ><a name="5031" class="Symbol"
       >&#955;</a
-      ><a name="5104"
+      ><a name="5032"
       > </a
-      ><a name="5105" href="Section1.html#5105" class="Bound"
+      ><a name="5033" href="Section1.html#5033" class="Bound"
       >s</a
-      ><a name="5106"
+      ><a name="5034"
       > </a
-      ><a name="5107" class="Symbol"
+      ><a name="5035" class="Symbol"
       >&#8594;</a
-      ><a name="5108"
+      ><a name="5036"
       > </a
-      ><a name="5109" href="Agda.Builtin.Unit.html#69" class="Record"
+      ><a name="5037" href="Agda.Builtin.Unit.html#69" class="Record"
       >&#8868;</a
-      ><a name="5110"
+      ><a name="5038"
       >
       </a
-      ><a name="5117" class="Symbol"
+      ><a name="5045" class="Symbol"
       >;</a
-      ><a name="5118"
+      ><a name="5046"
       > </a
-      ><a name="5119" class="Field"
+      ><a name="5047" class="Field"
       >fromString</a
-      ><a name="5129"
+      ><a name="5057"
       > </a
-      ><a name="5130" class="Symbol"
+      ><a name="5058" class="Symbol"
       >=</a
-      ><a name="5131"
+      ><a name="5059"
       > </a
-      ><a name="5132" class="Symbol"
+      ><a name="5060" class="Symbol"
       >&#955;</a
-      ><a name="5133"
+      ><a name="5061"
       > </a
-      ><a name="5134" href="Section1.html#5134" class="Bound"
+      ><a name="5062" href="Section1.html#5062" class="Bound"
       >s</a
-      ><a name="5135"
+      ><a name="5063"
       > </a
-      ><a name="5136" class="Symbol"
+      ><a name="5064" class="Symbol"
       >&#8594;</a
-      ><a name="5137"
+      ><a name="5065"
       > </a
-      ><a name="5138" href="Section1.html#4733" class="InductiveConstructor"
+      ><a name="5066" href="Section1.html#4661" class="InductiveConstructor"
       >name</a
-      ><a name="5142"
+      ><a name="5070"
       > </a
-      ><a name="5143" href="Section1.html#5134" class="Bound"
+      ><a name="5071" href="Section1.html#5062" class="Bound"
       >s</a
-      ><a name="5144"
+      ><a name="5072"
       >
       </a
-      ><a name="5151" class="Symbol"
+      ><a name="5079" class="Symbol"
       >}</a
-      ><a name="5152"
+      ><a name="5080"
       >
 
 
 </a
-      ><a name="5155" class="Keyword"
+      ><a name="5083" class="Keyword"
       >module</a
-      ><a name="5161"
+      ><a name="5089"
       > </a
-      ><a name="5162" href="Section1.html#5162" class="Module"
+      ><a name="5090" href="Section1.html#5090" class="Module"
       >_</a
-      ><a name="5163"
+      ><a name="5091"
       > </a
-      ><a name="5164" class="Keyword"
+      ><a name="5092" class="Keyword"
       >where</a
-      ><a name="5169"
+      ><a name="5097"
       >
   </a
-      ><a name="5172" class="Keyword"
+      ><a name="5100" class="Keyword"
       >record</a
+      ><a name="5106"
+      > </a
+      ><a name="5107" href="Section1.html#5107" class="Record"
+      >Raiseable</a
+      ><a name="5116"
+      >
+      </a
+      ><a name="5123" class="Symbol"
+      >{</a
+      ><a name="5124" href="Section1.html#5124" class="Bound"
+      >World</a
+      ><a name="5129"
+      > </a
+      ><a name="5130" class="Symbol"
+      >:</a
+      ><a name="5131"
+      > </a
+      ><a name="5132" class="PrimitiveType"
+      >Set</a
+      ><a name="5135" class="Symbol"
+      >}</a
+      ><a name="5136"
+      >
+      </a
+      ><a name="5143" class="Symbol"
+      >(</a
+      ><a name="5144" href="Section1.html#5144" class="Bound Operator"
+      >_&#8873;&#9676;</a
+      ><a name="5147"
+      >  </a
+      ><a name="5149" class="Symbol"
+      >:</a
+      ><a name="5150"
+      > </a
+      ><a name="5151" href="Section1.html#5124" class="Bound"
+      >World</a
+      ><a name="5156"
+      > </a
+      ><a name="5157" class="Symbol"
+      >&#8594;</a
+      ><a name="5158"
+      > </a
+      ><a name="5159" class="PrimitiveType"
+      >Set</a
+      ><a name="5162" class="Symbol"
+      >)</a
+      ><a name="5163"
+      >
+      </a
+      ><a name="5170" class="Symbol"
+      >{</a
+      ><a name="5171" href="Section1.html#5171" class="Bound Operator"
+      >_&#8850;_</a
+      ><a name="5174"
+      >   </a
+      ><a name="5177" class="Symbol"
+      >:</a
       ><a name="5178"
       > </a
-      ><a name="5179" href="Section1.html#5179" class="Record"
-      >Raiseable</a
-      ><a name="5188"
-      >
-      </a
-      ><a name="5195" class="Symbol"
-      >{</a
-      ><a name="5196" href="Section1.html#5196" class="Bound"
+      ><a name="5179" href="Section1.html#5124" class="Bound"
       >World</a
+      ><a name="5184"
+      > </a
+      ><a name="5185" class="Symbol"
+      >&#8594;</a
+      ><a name="5186"
+      > </a
+      ><a name="5187" href="Section1.html#5124" class="Bound"
+      >World</a
+      ><a name="5192"
+      > </a
+      ><a name="5193" class="Symbol"
+      >&#8594;</a
+      ><a name="5194"
+      > </a
+      ><a name="5195" class="PrimitiveType"
+      >Set</a
+      ><a name="5198" class="Symbol"
+      >}</a
+      ><a name="5199"
+      > </a
+      ><a name="5200" class="Symbol"
+      >:</a
       ><a name="5201"
       > </a
-      ><a name="5202" class="Symbol"
-      >:</a
-      ><a name="5203"
-      > </a
-      ><a name="5204" class="PrimitiveType"
-      >Set</a
-      ><a name="5207" class="Symbol"
-      >}</a
-      ><a name="5208"
-      >
-      </a
-      ><a name="5215" class="Symbol"
-      >(</a
-      ><a name="5216" href="Section1.html#5216" class="Bound Operator"
-      >_&#8873;&#9676;</a
-      ><a name="5219"
-      >  </a
-      ><a name="5221" class="Symbol"
-      >:</a
-      ><a name="5222"
-      > </a
-      ><a name="5223" href="Section1.html#5196" class="Bound"
-      >World</a
-      ><a name="5228"
-      > </a
-      ><a name="5229" class="Symbol"
-      >&#8594;</a
-      ><a name="5230"
-      > </a
-      ><a name="5231" class="PrimitiveType"
-      >Set</a
-      ><a name="5234" class="Symbol"
-      >)</a
-      ><a name="5235"
-      >
-      </a
-      ><a name="5242" class="Symbol"
-      >{</a
-      ><a name="5243" href="Section1.html#5243" class="Bound Operator"
-      >_&#8850;_</a
-      ><a name="5246"
-      >   </a
-      ><a name="5249" class="Symbol"
-      >:</a
-      ><a name="5250"
-      > </a
-      ><a name="5251" href="Section1.html#5196" class="Bound"
-      >World</a
-      ><a name="5256"
-      > </a
-      ><a name="5257" class="Symbol"
-      >&#8594;</a
-      ><a name="5258"
-      > </a
-      ><a name="5259" href="Section1.html#5196" class="Bound"
-      >World</a
-      ><a name="5264"
-      > </a
-      ><a name="5265" class="Symbol"
-      >&#8594;</a
-      ><a name="5266"
-      > </a
-      ><a name="5267" class="PrimitiveType"
-      >Set</a
-      ><a name="5270" class="Symbol"
-      >}</a
-      ><a name="5271"
-      > </a
-      ><a name="5272" class="Symbol"
-      >:</a
-      ><a name="5273"
-      > </a
-      ><a name="5274" class="PrimitiveType"
+      ><a name="5202" class="PrimitiveType"
       >Set&#8321;</a
-      ><a name="5278"
+      ><a name="5206"
       > </a
-      ><a name="5279" class="Keyword"
+      ><a name="5207" class="Keyword"
       >where</a
-      ><a name="5284"
+      ><a name="5212"
       >
     </a
-      ><a name="5289" class="Keyword"
+      ><a name="5217" class="Keyword"
       >field</a
-      ><a name="5294"
+      ><a name="5222"
       >
       </a
-      ><a name="5301" href="Section1.html#5301" class="Field Operator"
+      ><a name="5229" href="Section1.html#5229" class="Field Operator"
       >&#8593;&#10216;_&#10217;</a
-      ><a name="5305"
+      ><a name="5233"
       >  </a
-      ><a name="5307" class="Symbol"
+      ><a name="5235" class="Symbol"
       >:</a
-      ><a name="5308"
+      ><a name="5236"
       > </a
-      ><a name="5309" class="Symbol"
+      ><a name="5237" class="Symbol"
       >&#8704;</a
-      ><a name="5310"
+      ><a name="5238"
       > </a
-      ><a name="5311" class="Symbol"
+      ><a name="5239" class="Symbol"
       >{</a
-      ><a name="5312" href="Section1.html#5312" class="Bound"
+      ><a name="5240" href="Section1.html#5240" class="Bound"
       >w</a
-      ><a name="5313"
+      ><a name="5241"
       > </a
-      ><a name="5314" href="Section1.html#5314" class="Bound"
+      ><a name="5242" href="Section1.html#5242" class="Bound"
       >w&#8242;</a
-      ><a name="5316" class="Symbol"
+      ><a name="5244" class="Symbol"
       >}</a
-      ><a name="5317"
+      ><a name="5245"
       > </a
-      ><a name="5318" class="Symbol"
+      ><a name="5246" class="Symbol"
       >&#8594;</a
-      ><a name="5319"
+      ><a name="5247"
       > </a
-      ><a name="5320" href="Section1.html#5314" class="Bound"
+      ><a name="5248" href="Section1.html#5242" class="Bound"
       >w&#8242;</a
-      ><a name="5322"
+      ><a name="5250"
       > </a
-      ><a name="5323" href="Section1.html#5243" class="Bound Operator"
+      ><a name="5251" href="Section1.html#5171" class="Bound Operator"
       >&#8850;</a
-      ><a name="5324"
+      ><a name="5252"
       > </a
-      ><a name="5325" href="Section1.html#5312" class="Bound"
+      ><a name="5253" href="Section1.html#5240" class="Bound"
       >w</a
-      ><a name="5326"
+      ><a name="5254"
       > </a
-      ><a name="5327" class="Symbol"
+      ><a name="5255" class="Symbol"
       >&#8594;</a
-      ><a name="5328"
+      ><a name="5256"
       > </a
-      ><a name="5329" href="Section1.html#5312" class="Bound"
+      ><a name="5257" href="Section1.html#5240" class="Bound"
       >w</a
-      ><a name="5330"
+      ><a name="5258"
       > </a
-      ><a name="5331" href="Section1.html#5216" class="Bound Operator"
+      ><a name="5259" href="Section1.html#5144" class="Bound Operator"
       >&#8873;&#9676;</a
-      ><a name="5333"
+      ><a name="5261"
       > </a
-      ><a name="5334" class="Symbol"
+      ><a name="5262" class="Symbol"
       >&#8594;</a
-      ><a name="5335"
+      ><a name="5263"
       > </a
-      ><a name="5336" href="Section1.html#5314" class="Bound"
+      ><a name="5264" href="Section1.html#5242" class="Bound"
       >w&#8242;</a
-      ><a name="5338"
+      ><a name="5266"
       > </a
-      ><a name="5339" href="Section1.html#5216" class="Bound Operator"
+      ><a name="5267" href="Section1.html#5144" class="Bound Operator"
       >&#8873;&#9676;</a
-      ><a name="5341"
+      ><a name="5269"
       >
   </a
-      ><a name="5344" class="Keyword"
+      ><a name="5272" class="Keyword"
       >open</a
-      ><a name="5348"
+      ><a name="5276"
       > </a
-      ><a name="5349" href="Section1.html#5179" class="Module"
+      ><a name="5277" href="Section1.html#5107" class="Module"
       >Raiseable</a
-      ><a name="5358"
+      ><a name="5286"
       > </a
-      ><a name="5359" class="Symbol"
+      ><a name="5287" class="Symbol"
       >{{&#8230;}}</a
-      ><a name="5364"
+      ><a name="5292"
       > </a
-      ><a name="5365" class="Keyword"
+      ><a name="5293" class="Keyword"
       >public</a
-      ><a name="5371"
+      ><a name="5299"
       >
 
   </a
-      ><a name="5375" class="Keyword"
+      ><a name="5303" class="Keyword"
       >record</a
+      ><a name="5309"
+      > </a
+      ><a name="5310" href="Section1.html#5310" class="Record"
+      >Lowerable</a
+      ><a name="5319"
+      >
+      </a
+      ><a name="5326" class="Symbol"
+      >{</a
+      ><a name="5327" href="Section1.html#5327" class="Bound"
+      >World</a
+      ><a name="5332"
+      > </a
+      ><a name="5333" class="Symbol"
+      >:</a
+      ><a name="5334"
+      > </a
+      ><a name="5335" class="PrimitiveType"
+      >Set</a
+      ><a name="5338" class="Symbol"
+      >}</a
+      ><a name="5339"
+      >
+      </a
+      ><a name="5346" class="Symbol"
+      >(</a
+      ><a name="5347" href="Section1.html#5347" class="Bound Operator"
+      >&#9676;&#8873;_</a
+      ><a name="5350"
+      >  </a
+      ><a name="5352" class="Symbol"
+      >:</a
+      ><a name="5353"
+      > </a
+      ><a name="5354" href="Section1.html#5327" class="Bound"
+      >World</a
+      ><a name="5359"
+      > </a
+      ><a name="5360" class="Symbol"
+      >&#8594;</a
+      ><a name="5361"
+      > </a
+      ><a name="5362" class="PrimitiveType"
+      >Set</a
+      ><a name="5365" class="Symbol"
+      >)</a
+      ><a name="5366"
+      >
+      </a
+      ><a name="5373" class="Symbol"
+      >{</a
+      ><a name="5374" href="Section1.html#5374" class="Bound Operator"
+      >_&#8850;_</a
+      ><a name="5377"
+      >   </a
+      ><a name="5380" class="Symbol"
+      >:</a
       ><a name="5381"
       > </a
-      ><a name="5382" href="Section1.html#5382" class="Record"
-      >Lowerable</a
-      ><a name="5391"
-      >
-      </a
-      ><a name="5398" class="Symbol"
-      >{</a
-      ><a name="5399" href="Section1.html#5399" class="Bound"
+      ><a name="5382" href="Section1.html#5327" class="Bound"
       >World</a
+      ><a name="5387"
+      > </a
+      ><a name="5388" class="Symbol"
+      >&#8594;</a
+      ><a name="5389"
+      > </a
+      ><a name="5390" href="Section1.html#5327" class="Bound"
+      >World</a
+      ><a name="5395"
+      > </a
+      ><a name="5396" class="Symbol"
+      >&#8594;</a
+      ><a name="5397"
+      > </a
+      ><a name="5398" class="PrimitiveType"
+      >Set</a
+      ><a name="5401" class="Symbol"
+      >}</a
+      ><a name="5402"
+      > </a
+      ><a name="5403" class="Symbol"
+      >:</a
       ><a name="5404"
       > </a
-      ><a name="5405" class="Symbol"
-      >:</a
-      ><a name="5406"
-      > </a
-      ><a name="5407" class="PrimitiveType"
-      >Set</a
-      ><a name="5410" class="Symbol"
-      >}</a
-      ><a name="5411"
-      >
-      </a
-      ><a name="5418" class="Symbol"
-      >(</a
-      ><a name="5419" href="Section1.html#5419" class="Bound Operator"
-      >&#9676;&#8873;_</a
-      ><a name="5422"
-      >  </a
-      ><a name="5424" class="Symbol"
-      >:</a
-      ><a name="5425"
-      > </a
-      ><a name="5426" href="Section1.html#5399" class="Bound"
-      >World</a
-      ><a name="5431"
-      > </a
-      ><a name="5432" class="Symbol"
-      >&#8594;</a
-      ><a name="5433"
-      > </a
-      ><a name="5434" class="PrimitiveType"
-      >Set</a
-      ><a name="5437" class="Symbol"
-      >)</a
-      ><a name="5438"
-      >
-      </a
-      ><a name="5445" class="Symbol"
-      >{</a
-      ><a name="5446" href="Section1.html#5446" class="Bound Operator"
-      >_&#8850;_</a
-      ><a name="5449"
-      >   </a
-      ><a name="5452" class="Symbol"
-      >:</a
-      ><a name="5453"
-      > </a
-      ><a name="5454" href="Section1.html#5399" class="Bound"
-      >World</a
-      ><a name="5459"
-      > </a
-      ><a name="5460" class="Symbol"
-      >&#8594;</a
-      ><a name="5461"
-      > </a
-      ><a name="5462" href="Section1.html#5399" class="Bound"
-      >World</a
-      ><a name="5467"
-      > </a
-      ><a name="5468" class="Symbol"
-      >&#8594;</a
-      ><a name="5469"
-      > </a
-      ><a name="5470" class="PrimitiveType"
-      >Set</a
-      ><a name="5473" class="Symbol"
-      >}</a
-      ><a name="5474"
-      > </a
-      ><a name="5475" class="Symbol"
-      >:</a
-      ><a name="5476"
-      > </a
-      ><a name="5477" class="PrimitiveType"
+      ><a name="5405" class="PrimitiveType"
       >Set&#8321;</a
-      ><a name="5481"
+      ><a name="5409"
       > </a
-      ><a name="5482" class="Keyword"
+      ><a name="5410" class="Keyword"
       >where</a
-      ><a name="5487"
+      ><a name="5415"
       >
     </a
-      ><a name="5492" class="Keyword"
+      ><a name="5420" class="Keyword"
       >field</a
-      ><a name="5497"
+      ><a name="5425"
       >
       </a
-      ><a name="5504" href="Section1.html#5504" class="Field Operator"
+      ><a name="5432" href="Section1.html#5432" class="Field Operator"
       >&#8595;&#10216;_&#10217;</a
-      ><a name="5508"
+      ><a name="5436"
       >  </a
-      ><a name="5510" class="Symbol"
+      ><a name="5438" class="Symbol"
       >:</a
-      ><a name="5511"
+      ><a name="5439"
       > </a
-      ><a name="5512" class="Symbol"
+      ><a name="5440" class="Symbol"
       >&#8704;</a
-      ><a name="5513"
+      ><a name="5441"
       > </a
-      ><a name="5514" class="Symbol"
+      ><a name="5442" class="Symbol"
       >{</a
-      ><a name="5515" href="Section1.html#5515" class="Bound"
+      ><a name="5443" href="Section1.html#5443" class="Bound"
       >w</a
-      ><a name="5516"
+      ><a name="5444"
       > </a
-      ><a name="5517" href="Section1.html#5517" class="Bound"
+      ><a name="5445" href="Section1.html#5445" class="Bound"
       >w&#8242;</a
-      ><a name="5519" class="Symbol"
+      ><a name="5447" class="Symbol"
       >}</a
-      ><a name="5520"
+      ><a name="5448"
       > </a
-      ><a name="5521" class="Symbol"
+      ><a name="5449" class="Symbol"
       >&#8594;</a
-      ><a name="5522"
+      ><a name="5450"
       > </a
-      ><a name="5523" href="Section1.html#5517" class="Bound"
+      ><a name="5451" href="Section1.html#5445" class="Bound"
       >w&#8242;</a
-      ><a name="5525"
+      ><a name="5453"
       > </a
-      ><a name="5526" href="Section1.html#5446" class="Bound Operator"
+      ><a name="5454" href="Section1.html#5374" class="Bound Operator"
       >&#8850;</a
-      ><a name="5527"
+      ><a name="5455"
       > </a
-      ><a name="5528" href="Section1.html#5515" class="Bound"
+      ><a name="5456" href="Section1.html#5443" class="Bound"
       >w</a
-      ><a name="5529"
+      ><a name="5457"
       > </a
-      ><a name="5530" class="Symbol"
+      ><a name="5458" class="Symbol"
       >&#8594;</a
-      ><a name="5531"
+      ><a name="5459"
       > </a
-      ><a name="5532" href="Section1.html#5419" class="Bound Operator"
+      ><a name="5460" href="Section1.html#5347" class="Bound Operator"
       >&#9676;&#8873;</a
-      ><a name="5534"
+      ><a name="5462"
       > </a
-      ><a name="5535" href="Section1.html#5517" class="Bound"
+      ><a name="5463" href="Section1.html#5445" class="Bound"
       >w&#8242;</a
-      ><a name="5537"
+      ><a name="5465"
       > </a
-      ><a name="5538" class="Symbol"
+      ><a name="5466" class="Symbol"
       >&#8594;</a
-      ><a name="5539"
+      ><a name="5467"
       > </a
-      ><a name="5540" href="Section1.html#5419" class="Bound Operator"
+      ><a name="5468" href="Section1.html#5347" class="Bound Operator"
       >&#9676;&#8873;</a
-      ><a name="5542"
+      ><a name="5470"
       > </a
-      ><a name="5543" href="Section1.html#5515" class="Bound"
+      ><a name="5471" href="Section1.html#5443" class="Bound"
       >w</a
-      ><a name="5544"
+      ><a name="5472"
       >
   </a
-      ><a name="5547" class="Keyword"
+      ><a name="5475" class="Keyword"
       >open</a
-      ><a name="5551"
+      ><a name="5479"
       > </a
-      ><a name="5552" href="Section1.html#5382" class="Module"
+      ><a name="5480" href="Section1.html#5310" class="Module"
       >Lowerable</a
-      ><a name="5561"
+      ><a name="5489"
       > </a
-      ><a name="5562" class="Symbol"
+      ><a name="5490" class="Symbol"
       >{{&#8230;}}</a
-      ><a name="5567"
+      ><a name="5495"
       > </a
-      ><a name="5568" class="Keyword"
+      ><a name="5496" class="Keyword"
       >public</a
-      ><a name="5574"
+      ><a name="5502"
       >
 </a
       ></pre
