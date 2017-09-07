@@ -35,3 +35,6 @@ import Section8
 
 -- 9. A decision algorithm for terms
 import Section9
+
+-- 10. Conclusions
+import Section10
