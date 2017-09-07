@@ -85,12 +85,12 @@ module _ where
   Γ ∌ x ∷ A = ¬ (Γ ∋ x ∷ A)
 
   fresh→∌ : ∀ {x Γ A} {{_ : T (fresh x Γ)}} → Γ ∌ x ∷ A
-  fresh→∌ {x} {{p}}  zero             with x ≟ x
+  fresh→∌ {x} {{φ}}  zero             with x ≟ x
   fresh→∌ {x} {{()}} zero             | yes refl
-  fresh→∌ {x} {{p}}  zero             | no x≢x   = refl ↯ x≢x
-  fresh→∌ {x} {{p}}  (suc {y = y}  i) with x ≟ y
+  fresh→∌ {x} {{φ}}  zero             | no x≢x   = refl ↯ x≢x
+  fresh→∌ {x} {{φ}}  (suc {y = y}  i) with x ≟ y
   fresh→∌ {x} {{()}} (suc {y = .x} i) | yes refl
-  fresh→∌ {x} {{p}}  (suc {y = y}  i) | no x≢y   = i ↯ fresh→∌
+  fresh→∌ {x} {{φ}}  (suc {y = y}  i) | no x≢y   = i ↯ fresh→∌
 
 -- We also define the relation that describes when a context contains another.
 --
