@@ -1,3 +1,5 @@
+{-# OPTIONS --no-positivity-check #-}
+
 module Section7 where
 
 open import Section6 public
@@ -156,7 +158,7 @@ mutual
 postulate
   cor₂ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → nf M ⁻ ≡ nf M′ ⁻ → M ≅ M′
 
--- By Lemma 16 and Theorem 7 we get `nf N ≡ nf M` and by Theorem 5 we get `M ≅ N`.
+-- Proof: By Lemma 16 and Theorem 7 we get `nf N ≡ nf M` and by Theorem 5 we get `M ≅ N`.
 
 
 -- 7.1. Reduction
@@ -261,9 +263,132 @@ _⊢_⇓_∷_ : 𝒞 → 𝕋 → 𝕋 → 𝒯 → Set
 
 -- 7.2. Equivalence between proof trees and terms
 -- ----------------------------------------------
+--
+-- We can prove that if `M : Γ ⊢ A`, then `Γ ⊢ M ⁻ ⇓ nf M ⁻ ∷ A`.  This we do by defining a
+-- Kripke logical relation, `_ℛ_`.  (…)
+--
+-- When `f : Γ ⊩ •` we intuitively have that `t ℛ f` holds if `Γ ⊢ t ↓ f ⁻`.
+--
+-- When `f : Γ ⊩ A ⊃ B`, then `t ℛ f` holds if for all `t′` and `a : Γ ⊩ A` such that `t′ ℛ a`, we
+-- have that `t ∙ t′ ℛ f ⟦∙⟧ a`.
 
--- TODO: Lemma 17.
+infix 3 _ℛ_
+data _ℛ_ : ∀ {Γ A} → 𝕋 → Γ ⊩ A → Set where
+  𝓇• : ∀ {Δ} →
+         (t : 𝕋) (f : Δ ⊩ •) →
+         (∀ {Γ} →
+            (c : Γ ⊇ Δ) (t′ : 𝕋) → t′ 𝒟 f ⟦g⟧⟨ c ⟩ →
+            Γ ⊢ t ↓ t′ ∷ •) →
+         t ℛ f
+  𝓇⊃ : ∀ {Δ A B} →
+         (t : 𝕋) (f : Δ ⊩ A ⊃ B) →
+         (∀ {Γ} →
+           (c : Γ ⊇ Δ) (a : Γ ⊩ A) (t′ : 𝕋) → Γ ⊢ t′ ∷ A → t′ ℛ a →
+           t ∙ t′ ℛ f ⟦∙⟧⟨ c ⟩ a) →
+         t ℛ f
 
--- TODO: Theorem 8.
+-- For the substitutions we define correspondingly:
 
--- TODO: Corollary 3.
+infix 3 _ℛₛ_
+data _ℛₛ_ : ∀ {Γ Δ} → 𝕊 → Γ ⊩⋆ Δ → Set where
+  𝓇ₛ[] : ∀ {Δ s} →
+           Δ ⋙ s ∷ [] →
+           s ℛₛ ([] {w = Δ})
+  -- NOTE: Mistake in paper?  Changed `v : Δ ⊩ A` to `a : Γ ⊩ A`.
+  rₛ≔  : ∀ {Γ Δ A s x} {{_ : T (fresh x Γ)}} {{_ : T (fresh x Δ)}} →
+           Δ ⋙ s ∷ [ Γ , x ∷ A ] → (ρ : Γ ⊩⋆ Δ) (a : Γ ⊩ A) → s ℛₛ ρ → ν x ▶ s ℛ a →
+           s ℛₛ [ ρ , x ≔ a ]
+
+-- The following lemmas are straightforward to prove:
+
+postulate
+  aux₇₂₁ : ∀ {Γ A t₁ t₂} →
+             (a : Γ ⊩ A) → t₁ ℛ a → t₂ ⟶ t₁ →
+             t₂ ℛ a
+
+postulate
+  aux₇₂₂ : ∀ {Γ Δ s₁ s₂} →
+             (ρ : Γ ⊩⋆ Δ) → Δ ⋙ s₁ ∷ Γ → s₁ ⟶ₛ s₂ → s₂ ℛₛ ρ →
+             s₁ ℛₛ ρ
+
+-- NOTE: Mistake in paper?  Changed `Occur(x, A, Γ)` to `Δ ∋ x ∷ A`.
+postulate
+  aux₇₂₃ : ∀ {Γ Δ A s x} →
+             (ρ : Γ ⊩⋆ Δ) (i : Δ ∋ x ∷ A) → Δ ⋙ s ∷ Γ →
+             ν x ▶ s ℛ lookup ρ i
+
+postulate
+  aux₇₂₄⟨_⟩ : ∀ {Γ Δ A t} →
+                (c : Γ ⊇ Δ) (a : Δ ⊩ A) → t ℛ a →
+                t ℛ ↑⟨ c ⟩ a
+
+-- NOTE: Mistake in paper?  Changed `ρ ∈ Γ ⊩ Δ` to `ρ : Δ ⊩⋆ Γ`.
+postulate
+  aux₇₂₅⟨_⟩ : ∀ {Γ Δ Θ s} →
+                (c : Θ ⊇ Δ) → Δ ⋙ s ∷ Γ → (ρ : Δ ⊩⋆ Γ) → s ℛₛ ρ →
+                s ℛₛ ↑⟨ c ⟩ ρ
+
+-- NOTE: Mistake in paper?  Changed `ρ ∈ Γ ⊩ Δ` to `ρ : Δ ⊩⋆ Γ`.
+postulate
+  aux₇₂₆⟨_⟩ : ∀ {Γ Δ Θ s} →
+                (c : Γ ⊇ Θ) → Δ ⋙ s ∷ Γ → (ρ : Δ ⊩⋆ Γ) → s ℛₛ ρ →
+                s ℛₛ ↓⟨ c ⟩ ρ
+
+postulate
+  aux₇₂₇ : ∀ {Γ Δ A s t x} →
+             Γ ⊢ t ∷ A → Γ ⋙ s ∷ Δ → (ρ : Γ ⊩⋆ Δ) → s ℛₛ ρ →
+             [ s , x ≔ t ] ℛₛ ρ
+
+-- Using these lemmas we can prove by mutual induction on the proof tree of terms and
+-- substitutions that:
+
+-- NOTE: Mistake in paper?  Changed `ρ ∈ Γ ⊩ Δ` to `ρ : Δ ⊩⋆ Γ`.
+postulate
+  aux₇₂₈ : ∀ {Γ Δ A s t} →
+             (M : Γ ⊢ A) (ρ : Δ ⊩⋆ Γ) → Δ ⋙ s ∷ Γ → t 𝒟 M → s ℛₛ ρ →
+             t ▶ s ℛ ⟦ M ⟧ ρ
+
+postulate
+  aux₇₂₉ : ∀ {Γ Δ Θ s₁ s₂} →
+             (γ : Γ ⋙ Θ) (ρ : Δ ⊩⋆ Γ) → Δ ⋙ s₂ ∷ Γ → s₁ 𝒟ₛ γ → s₂ ℛₛ ρ →
+             s₂ ● s₁ ℛₛ ⟦ γ ⟧ₛ ρ
+
+-- We also show, intuitively, that if `t ℛ a`, `a : Γ ⊩ A`, then `Γ ⊢ t ↓ reify a ⁻ ∷ A`
+-- together with a corresponding lemma for `val`:
+
+-- Lemma 17.
+mutual
+  postulate
+    lem₁₇ : ∀ {Γ A t₀ t₁} →
+              Γ ⊢ t₀ ∷ A → (a : Γ ⊩ A) → t₀ ℛ a → t₁ 𝒟 reify a →
+              Γ ⊢ t₀ ↓ t₁ ∷ A
+
+  -- NOTE: Mistake in paper?  Changed `t ℛ val(f)` to `t₀ ℛ val f`.
+  postulate
+    aux₇₂₁₀ : ∀ {Γ A t₀} →
+                Γ ⊢ t₀ ∷ A → whanf t₀ →
+                (f : ∀ {Δ} → (c : Δ ⊇ Γ) → Δ ⊢ A) →
+                (∀ {Δ} → (c : Δ ⊇ Γ) → Δ ⊢ t₀ ↓ₛ f c ⁻ ∷ A) →
+                t₀ ℛ val f
+
+-- The proof that the translation of proof trees reduces to the translation of its normal form
+-- follows directly:
+
+-- Theorem 8.
+postulate
+  thm₈ : ∀ {Γ A t} →
+           (M : Γ ⊢ A) → t 𝒟 M →
+           Γ ⊢ t ⇓ nf M ⁻ ∷ A
+
+-- As a consequence we get that if two proof trees are decorations of the same term, then they
+-- are convertible with each other:
+
+-- Corollary 3.
+postulate
+  cor₃ : ∀ {Γ A t} →
+           (M N : Γ ⊢ A) → t 𝒟 M → t 𝒟 N →
+           M ≅ N
+
+-- Proof: By Theorem 8 we get that `Γ ⊢ t ⇓ nf M ⁻ ∷ A` and `Γ ⊢ t ⇓ nf N ⁻ ∷ A`.  Since
+-- the reduction is deterministic we get `nf M ⁻ ≡ nf N ⁻` and by Corollary 2 we get that
+-- `M ≅ N`.
