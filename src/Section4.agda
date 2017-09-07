@@ -623,7 +623,7 @@ cor₁ M M′ = thm₁
 -- 4.6. Completeness of the conversion rules for proof trees
 -- ---------------------------------------------------------
 --
--- In order to prove that the set of conversion rules is cimplete, i.e.,
+-- In order to prove that the set of conversion rules is complete, i.e.,
 -- `Eq (⟦ M ⟧ refl⊩⋆) (⟦ M′ ⟧ refl⊩⋆)` implies `M ≅ M′`, we must first prove Theorem 2: `M ≅ nf M`.
 --
 -- To prove the theorem we define a Kripke logical relation [15, 18]
