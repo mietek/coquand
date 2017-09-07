@@ -51,17 +51,413 @@
       >-- =================================</a
       ><a name="127"
       >
-
 </a
-      ><a name="129" class="Comment"
-      >-- TODO: Theorem 11.</a
-      ><a name="149"
+      ><a name="128" class="Comment"
+      >--</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >-- The reduction defined above can be used for deciding if two well-typed terms are convertible</a
+      ><a name="226"
+      >
+</a
+      ><a name="227" class="Comment"
+      >-- with each other or not: reduce the terms and check if the results are equal.  This algorithm</a
+      ><a name="322"
+      >
+</a
+      ><a name="323" class="Comment"
+      >-- is implicit in Martin-L&#246;f&#8217;s notes [13].</a
+      ><a name="365"
+      >
+</a
+      ><a name="366" class="Comment"
+      >--</a
+      ><a name="368"
+      >
+</a
+      ><a name="369" class="Comment"
+      >-- The decision algorithm is complete:</a
+      ><a name="407"
       >
 
 </a
-      ><a name="151" class="Comment"
-      >-- TODO: Theorem 12.</a
-      ><a name="171"
+      ><a name="409" class="Comment"
+      >-- Theorem 11.</a
+      ><a name="423"
+      >
+</a
+      ><a name="424" class="Keyword"
+      >postulate</a
+      ><a name="433"
+      >
+  </a
+      ><a name="436" href="Section9.html#436" class="Postulate"
+      >thm&#8321;&#8321;</a
+      ><a name="441"
+      > </a
+      ><a name="442" class="Symbol"
+      >:</a
+      ><a name="443"
+      > </a
+      ><a name="444" class="Symbol"
+      >&#8704;</a
+      ><a name="445"
+      > </a
+      ><a name="446" class="Symbol"
+      >{</a
+      ><a name="447" href="Section9.html#447" class="Bound"
+      >&#915;</a
+      ><a name="448"
+      > </a
+      ><a name="449" href="Section9.html#449" class="Bound"
+      >A</a
+      ><a name="450"
+      > </a
+      ><a name="451" href="Section9.html#451" class="Bound"
+      >t&#8320;</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Section9.html#454" class="Bound"
+      >t&#8321;</a
+      ><a name="456" class="Symbol"
+      >}</a
+      ><a name="457"
+      > </a
+      ><a name="458" class="Symbol"
+      >&#8594;</a
+      ><a name="459"
+      >
+            </a
+      ><a name="472" href="Section9.html#447" class="Bound"
+      >&#915;</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Section6.html#3674" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Section9.html#451" class="Bound"
+      >t&#8320;</a
+      ><a name="478"
+      > </a
+      ><a name="479" href="Section6.html#3674" class="Datatype Operator"
+      >&#8778;</a
+      ><a name="480"
+      > </a
+      ><a name="481" href="Section9.html#454" class="Bound"
+      >t&#8321;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="Section6.html#3674" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="485"
+      > </a
+      ><a name="486" href="Section9.html#449" class="Bound"
+      >A</a
+      ><a name="487"
+      > </a
+      ><a name="488" class="Symbol"
+      >&#8594;</a
+      ><a name="489"
+      >
+            </a
+      ><a name="502" href="Data.Product.html#439" class="Record"
+      >&#931;</a
+      ><a name="503"
+      > </a
+      ><a name="504" href="Section6.html#1682" class="Datatype"
+      >&#120139;</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Symbol"
+      >(&#955;</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Section9.html#509" class="Bound"
+      >t</a
+      ><a name="510"
+      > </a
+      ><a name="511" class="Symbol"
+      >&#8594;</a
+      ><a name="512"
+      > </a
+      ><a name="513" href="Section9.html#447" class="Bound"
+      >&#915;</a
+      ><a name="514"
+      > </a
+      ><a name="515" href="Section7.html#8295" class="Function Operator"
+      >&#8866;</a
+      ><a name="516"
+      > </a
+      ><a name="517" href="Section9.html#451" class="Bound"
+      >t&#8320;</a
+      ><a name="519"
+      > </a
+      ><a name="520" href="Section7.html#8295" class="Function Operator"
+      >&#8659;</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Section9.html#509" class="Bound"
+      >t</a
+      ><a name="523"
+      > </a
+      ><a name="524" href="Section7.html#8295" class="Function Operator"
+      >&#8759;</a
+      ><a name="525"
+      > </a
+      ><a name="526" href="Section9.html#449" class="Bound"
+      >A</a
+      ><a name="527"
+      > </a
+      ><a name="528" href="Data.Product.html#1073" class="Function Operator"
+      >&#215;</a
+      ><a name="529"
+      > </a
+      ><a name="530" href="Section9.html#447" class="Bound"
+      >&#915;</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Section7.html#8295" class="Function Operator"
+      >&#8866;</a
+      ><a name="533"
+      > </a
+      ><a name="534" href="Section9.html#454" class="Bound"
+      >t&#8321;</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Section7.html#8295" class="Function Operator"
+      >&#8659;</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Section9.html#509" class="Bound"
+      >t</a
+      ><a name="540"
+      > </a
+      ><a name="541" href="Section7.html#8295" class="Function Operator"
+      >&#8759;</a
+      ><a name="542"
+      > </a
+      ><a name="543" href="Section9.html#449" class="Bound"
+      >A</a
+      ><a name="544" class="Symbol"
+      >)</a
+      ><a name="545"
+      >
+
+</a
+      ><a name="547" class="Comment"
+      >-- Proof:  By Lemma 14 and Lemma 12 we know that there exist proof trees `M, N` such</a
+      ><a name="631"
+      >
+</a
+      ><a name="632" class="Comment"
+      >-- that `t&#8320;` is equal to `M &#8315;` and `t&#8321;` is equal to `N &#8315;`.  By Theorem 9 we get that `M &#8773; N`.  We can</a
+      ><a name="733"
+      >
+</a
+      ><a name="734" class="Comment"
+      >-- choose `nf M &#8315;` for `t` since, by Lemma 8, `&#915; &#8866; M &#8315; &#8659; nf M &#8315; &#8759; A`, `&#915; &#8866; N &#8315; &#8659; nf N &#8315; &#8759; A`</a
+      ><a name="826"
+      >
+</a
+      ><a name="827" class="Comment"
+      >-- and by Theorem 6 we have `nf M &#8801; nf N` and hence that `nf M &#8315;` and `nf N &#8315;` are the</a
+      ><a name="913"
+      >
+</a
+      ><a name="914" class="Comment"
+      >-- same.</a
+      ><a name="922"
+      >
+</a
+      ><a name="923" class="Comment"
+      >--</a
+      ><a name="925"
+      >
+</a
+      ><a name="926" class="Comment"
+      >-- This decision algorithm is correct, i.e.,</a
+      ><a name="970"
+      >
+
+</a
+      ><a name="972" class="Comment"
+      >-- Theorem 12.</a
+      ><a name="986"
+      >
+</a
+      ><a name="987" class="Keyword"
+      >postulate</a
+      ><a name="996"
+      >
+  </a
+      ><a name="999" href="Section9.html#999" class="Postulate"
+      >thm&#8321;&#8322;</a
+      ><a name="1004"
+      > </a
+      ><a name="1005" class="Symbol"
+      >:</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" class="Symbol"
+      >&#8704;</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" class="Symbol"
+      >{</a
+      ><a name="1010" href="Section9.html#1010" class="Bound"
+      >&#915;</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" href="Section9.html#1012" class="Bound"
+      >A</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Section9.html#1014" class="Bound"
+      >t</a
+      ><a name="1015" class="Symbol"
+      >}</a
+      ><a name="1016"
+      > </a
+      ><a name="1017" class="Symbol"
+      >&#8594;</a
+      ><a name="1018"
+      >
+            </a
+      ><a name="1031" class="Symbol"
+      >(</a
+      ><a name="1032" href="Section9.html#1032" class="Bound"
+      >M</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Section9.html#1034" class="Bound"
+      >N</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" class="Symbol"
+      >:</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Section9.html#1010" class="Bound"
+      >&#915;</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" href="Section3.html#7036" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" href="Section9.html#1012" class="Bound"
+      >A</a
+      ><a name="1043" class="Symbol"
+      >)</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" class="Symbol"
+      >&#8594;</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Section9.html#1010" class="Bound"
+      >&#915;</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Section7.html#8295" class="Function Operator"
+      >&#8866;</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Section9.html#1032" class="Bound"
+      >M</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Section7.html#411" class="Function Operator"
+      >&#8315;</a
+      ><a name="1054"
+      > </a
+      ><a name="1055" href="Section7.html#8295" class="Function Operator"
+      >&#8659;</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" href="Section9.html#1014" class="Bound"
+      >t</a
+      ><a name="1058"
+      > </a
+      ><a name="1059" href="Section7.html#8295" class="Function Operator"
+      >&#8759;</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Section9.html#1012" class="Bound"
+      >A</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" class="Symbol"
+      >&#8594;</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" href="Section9.html#1010" class="Bound"
+      >&#915;</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" href="Section7.html#8295" class="Function Operator"
+      >&#8866;</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" href="Section9.html#1034" class="Bound"
+      >N</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" href="Section7.html#411" class="Function Operator"
+      >&#8315;</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Section7.html#8295" class="Function Operator"
+      >&#8659;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Section9.html#1014" class="Bound"
+      >t</a
+      ><a name="1076"
+      > </a
+      ><a name="1077" href="Section7.html#8295" class="Function Operator"
+      >&#8759;</a
+      ><a name="1078"
+      > </a
+      ><a name="1079" href="Section9.html#1012" class="Bound"
+      >A</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" class="Symbol"
+      >&#8594;</a
+      ><a name="1082"
+      >
+            </a
+      ><a name="1095" href="Section9.html#1032" class="Bound"
+      >M</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" href="Section3.html#11134" class="Datatype Operator"
+      >&#8773;</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Section9.html#1034" class="Bound"
+      >N</a
+      ><a name="1100"
+      >
+
+</a
+      ><a name="1102" class="Comment"
+      >-- Proof:  We have `nf M &#8315; &#8801; nf N &#8315;` since, by Lemma 8, `&#915; &#8866; M &#8315; &#8659; nf M &#8315; &#8759; A`</a
+      ><a name="1180"
+      >
+</a
+      ><a name="1181" class="Comment"
+      >-- and `&#915; &#8866; N &#8315; &#8659; nf N &#8315; &#8759; A` and the reduction is deterministic.  By Corollary 2 we get</a
+      ><a name="1269"
+      >
+</a
+      ><a name="1270" class="Comment"
+      >-- `M &#8773; N`.</a
+      ><a name="1281"
       >
 </a
       ></pre

@@ -51,17 +51,330 @@
       >-- ==========================================</a
       ><a name="145"
       >
-
 </a
-      ><a name="147" class="Comment"
-      >-- TODO: Theorem 9.</a
-      ><a name="166"
+      ><a name="146" class="Comment"
+      >--</a
+      ><a name="148"
+      >
+</a
+      ><a name="149" class="Comment"
+      >-- The conversion rules for terms are sound:</a
+      ><a name="193"
       >
 
 </a
-      ><a name="168" class="Comment"
-      >-- TODO: Theorem 10.</a
-      ><a name="188"
+      ><a name="195" class="Comment"
+      >-- Theorem 9.</a
+      ><a name="208"
+      >
+</a
+      ><a name="209" class="Keyword"
+      >postulate</a
+      ><a name="218"
+      >
+  </a
+      ><a name="221" href="Section8.html#221" class="Postulate"
+      >thm&#8329;</a
+      ><a name="225"
+      > </a
+      ><a name="226" class="Symbol"
+      >:</a
+      ><a name="227"
+      > </a
+      ><a name="228" class="Symbol"
+      >&#8704;</a
+      ><a name="229"
+      > </a
+      ><a name="230" class="Symbol"
+      >{</a
+      ><a name="231" href="Section8.html#231" class="Bound"
+      >&#915;</a
+      ><a name="232"
+      > </a
+      ><a name="233" href="Section8.html#233" class="Bound"
+      >A</a
+      ><a name="234"
+      > </a
+      ><a name="235" href="Section8.html#235" class="Bound"
+      >t&#8320;</a
+      ><a name="237"
+      > </a
+      ><a name="238" href="Section8.html#238" class="Bound"
+      >t&#8321;</a
+      ><a name="240" class="Symbol"
+      >}</a
+      ><a name="241"
+      > </a
+      ><a name="242" class="Symbol"
+      >&#8594;</a
+      ><a name="243"
+      >
+           </a
+      ><a name="255" class="Symbol"
+      >(</a
+      ><a name="256" href="Section8.html#256" class="Bound"
+      >M</a
+      ><a name="257"
+      > </a
+      ><a name="258" href="Section8.html#258" class="Bound"
+      >N</a
+      ><a name="259"
+      > </a
+      ><a name="260" class="Symbol"
+      >:</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Section8.html#231" class="Bound"
+      >&#915;</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Section3.html#7036" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="265"
+      > </a
+      ><a name="266" href="Section8.html#233" class="Bound"
+      >A</a
+      ><a name="267" class="Symbol"
+      >)</a
+      ><a name="268"
+      > </a
+      ><a name="269" class="Symbol"
+      >&#8594;</a
+      ><a name="270"
+      > </a
+      ><a name="271" href="Section8.html#235" class="Bound"
+      >t&#8320;</a
+      ><a name="273"
+      > </a
+      ><a name="274" href="Section7.html#1665" class="Datatype Operator"
+      >&#119967;</a
+      ><a name="275"
+      > </a
+      ><a name="276" href="Section8.html#256" class="Bound"
+      >M</a
+      ><a name="277"
+      > </a
+      ><a name="278" class="Symbol"
+      >&#8594;</a
+      ><a name="279"
+      > </a
+      ><a name="280" href="Section8.html#238" class="Bound"
+      >t&#8321;</a
+      ><a name="282"
+      > </a
+      ><a name="283" href="Section7.html#1665" class="Datatype Operator"
+      >&#119967;</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Section8.html#258" class="Bound"
+      >N</a
+      ><a name="286"
+      > </a
+      ><a name="287" class="Symbol"
+      >&#8594;</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Section8.html#231" class="Bound"
+      >&#915;</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Section6.html#3674" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Section8.html#235" class="Bound"
+      >t&#8320;</a
+      ><a name="295"
+      > </a
+      ><a name="296" href="Section6.html#3674" class="Datatype Operator"
+      >&#8778;</a
+      ><a name="297"
+      > </a
+      ><a name="298" href="Section8.html#238" class="Bound"
+      >t&#8321;</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Section6.html#3674" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Section8.html#233" class="Bound"
+      >A</a
+      ><a name="304"
+      > </a
+      ><a name="305" class="Symbol"
+      >&#8594;</a
+      ><a name="306"
+      >
+           </a
+      ><a name="318" href="Section8.html#256" class="Bound"
+      >M</a
+      ><a name="319"
+      > </a
+      ><a name="320" href="Section3.html#11134" class="Datatype Operator"
+      >&#8773;</a
+      ><a name="321"
+      > </a
+      ><a name="322" href="Section8.html#258" class="Bound"
+      >N</a
+      ><a name="323"
+      >
+
+</a
+      ><a name="325" class="Comment"
+      >-- Proof: The proof is by induction on the proof of `&#915; &#8866; t&#8320; &#8778; t&#8321; &#8759; A`.  We illustrate the proof</a
+      ><a name="420"
+      >
+</a
+      ><a name="421" class="Comment"
+      >-- with the reflexivity case.  In this case we have that `t&#8320;` and `t&#8321;` are the same, hence by Corollary 3</a
+      ><a name="526"
+      >
+</a
+      ><a name="527" class="Comment"
+      >-- we get `M &#8773; N`.</a
+      ><a name="545"
+      >
+</a
+      ><a name="546" class="Comment"
+      >--</a
+      ><a name="548"
+      >
+</a
+      ><a name="549" class="Comment"
+      >-- To prove that the conversion rules are complete</a
+      ><a name="599"
+      >
+</a
+      ><a name="600" class="Comment"
+      >-- is straightforward by induction on the proof of `M &#8773; N`.</a
+      ><a name="659"
+      >
+
+</a
+      ><a name="661" class="Comment"
+      >-- Theorem 10.</a
+      ><a name="675"
+      >
+</a
+      ><a name="676" class="Keyword"
+      >postulate</a
+      ><a name="685"
+      >
+  </a
+      ><a name="688" href="Section8.html#688" class="Postulate"
+      >thm&#8321;&#8320;</a
+      ><a name="693"
+      > </a
+      ><a name="694" class="Symbol"
+      >:</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Symbol"
+      >&#8704;</a
+      ><a name="697"
+      > </a
+      ><a name="698" class="Symbol"
+      >{</a
+      ><a name="699" href="Section8.html#699" class="Bound"
+      >&#915;</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Section8.html#701" class="Bound"
+      >A</a
+      ><a name="702" class="Symbol"
+      >}</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >&#8594;</a
+      ><a name="705"
+      >
+            </a
+      ><a name="718" class="Symbol"
+      >(</a
+      ><a name="719" href="Section8.html#719" class="Bound"
+      >M</a
+      ><a name="720"
+      > </a
+      ><a name="721" href="Section8.html#721" class="Bound"
+      >N</a
+      ><a name="722"
+      > </a
+      ><a name="723" class="Symbol"
+      >:</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Section8.html#699" class="Bound"
+      >&#915;</a
+      ><a name="726"
+      > </a
+      ><a name="727" href="Section3.html#7036" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="728"
+      > </a
+      ><a name="729" href="Section8.html#701" class="Bound"
+      >A</a
+      ><a name="730" class="Symbol"
+      >)</a
+      ><a name="731"
+      > </a
+      ><a name="732" class="Symbol"
+      >&#8594;</a
+      ><a name="733"
+      > </a
+      ><a name="734" href="Section8.html#719" class="Bound"
+      >M</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Section3.html#11134" class="Datatype Operator"
+      >&#8773;</a
+      ><a name="737"
+      > </a
+      ><a name="738" href="Section8.html#721" class="Bound"
+      >N</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >&#8594;</a
+      ><a name="741"
+      >
+            </a
+      ><a name="754" href="Section8.html#699" class="Bound"
+      >&#915;</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Section6.html#3674" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="757"
+      > </a
+      ><a name="758" href="Section8.html#719" class="Bound"
+      >M</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Section7.html#411" class="Function Operator"
+      >&#8315;</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Section6.html#3674" class="Datatype Operator"
+      >&#8778;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Section8.html#721" class="Bound"
+      >N</a
+      ><a name="765"
+      > </a
+      ><a name="766" href="Section7.html#411" class="Function Operator"
+      >&#8315;</a
+      ><a name="767"
+      > </a
+      ><a name="768" href="Section6.html#3674" class="Datatype Operator"
+      >&#8759;</a
+      ><a name="769"
+      > </a
+      ><a name="770" href="Section8.html#701" class="Bound"
+      >A</a
+      ><a name="771"
       >
 </a
       ></pre
