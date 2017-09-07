@@ -653,7 +653,7 @@ data CV : ∀ {Γ A} → Γ ⊢ A → Γ ⊩ A → Set where
 
 data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
   cv[] : ∀ {Γ} →
-           (γ : Γ ⋙ []) →
+           {γ : Γ ⋙ []} →
            CV⋆ γ []
   cv≔  : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}}
            {γ : Δ ⋙ [ Γ , x ∷ A ]} {c : [ Γ , x ∷ A ] ⊇ Γ} {ρ : Δ ⊩⋆ Γ} {a : Δ ⊩ A} →
@@ -662,15 +662,17 @@ data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
 
 -- In order to prove Lemma 8 below we need to prove the following properties about `CV`:
 
-postulate
-  aux₄₆₁ : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
-             M ≅ M′ → CV M′ a →
-             CV M a
+aux₄₆₁ : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
+           M ≅ M′ → CV M′ a →
+           CV M a
+aux₄₆₁ M≅M′ (cv• h) = cv• (λ c     → trans≅ (cong≅▶ M≅M′ refl≅ₛ) (h c))
+aux₄₆₁ M≅M′ (cv⊃ h) = cv⊃ (λ c cv′ → aux₄₆₁ (cong≅∙ (cong≅▶ M≅M′ refl≅ₛ) refl≅) (h c cv′))
 
-postulate
-  aux₄₆₂ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-             γ ≅ₛ γ′ → CV⋆ γ′ ρ →
-             CV⋆ γ ρ
+aux₄₆₂ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+           γ ≅ₛ γ′ → CV⋆ γ′ ρ →
+           CV⋆ γ ρ
+aux₄₆₂ γ≅ₛγ′ cv[]         = cv[]
+aux₄₆₂ γ≅ₛγ′ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆) (aux₄₆₁ (cong≅▶ refl≅ γ≅ₛγ′) cv)
 
 postulate
   aux₄₆₃⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
