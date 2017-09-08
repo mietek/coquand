@@ -81,7 +81,7 @@ open import Function public
   using (_∘_ ; case_of_ ; flip ; id)
 
 open import Relation.Binary.PropositionalEquality public
-  using (_≡_ ; _≢_ ; refl ; cong ; sym ; trans)
+  using (_≡_ ; _≢_ ; refl ; cong ; subst ; sym ; trans)
   renaming (cong₂ to cong²)
 
 open import Relation.Nullary public

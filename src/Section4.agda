@@ -404,10 +404,14 @@ module _ {{_ : Model}} where
 -- say that it doesn’t matter in which order we lift and project the substitution:
 
 module _ {{_ : Model}} where
-  postulate
-    aux₄₂₁⟨_⟩ : ∀ {Γ Δ A w x} →
-                  (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) (j : Δ ∋ x ∷ A) →
-                  Eq (lookup ρ i) (lookup (↓⟨ c ⟩ ρ) j)
+  aux₄₂₁⟨_⟩ : ∀ {Γ Δ A w x} →
+                (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) (j : Δ ∋ x ∷ A) →
+                Eq (lookup ρ i) (lookup (↓⟨ c ⟩ ρ) j)
+  aux₄₂₁⟨ done ⟩      u⋆ i ()
+  aux₄₂₁⟨ weak c i′ ⟩ u⋆ i zero    = subst (λ i′ → Eq (lookup _ i) (lookup _ i′))
+                                           (uniq∋ i i′)
+                                           (congEqlookup (reflEq⋆ u⋆) i)
+  aux₄₂₁⟨ weak c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
 
   postulate
     aux₄₂₂⟨_⟩ : ∀ {Γ A w w′ x} →
