@@ -413,10 +413,12 @@ module _ {{_ : Model}} where
                                            (congEqlookup (reflEq⋆ u⋆) i)
   aux₄₂₁⟨ weak c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
 
-  postulate
-    aux₄₂₂⟨_⟩ : ∀ {Γ A w w′ x} →
-                  (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
-                  Eq (↑⟨ c ⟩ (lookup ρ i)) (lookup (↑⟨ c ⟩ ρ) i)
+  aux₄₂₂⟨_⟩ : ∀ {Γ A w w′ x} →
+                (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
+                Eq (↑⟨ c ⟩ (lookup ρ i)) (lookup (↑⟨ c ⟩ ρ) i)
+  aux₄₂₂⟨ c ⟩ 𝓊⋆[]       ()
+  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) zero    = congEq↑⟨ c ⟩ (reflEq u)
+  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) (suc i) = aux₄₂₂⟨ c ⟩ u⋆ i
 
   postulate
     aux₄₂₃ : ∀ {Γ Δ A w x} {{_ : T (fresh x Γ)}} {{_ : T (fresh x Δ)}} →
@@ -434,10 +436,12 @@ module _ {{_ : Model}} where
   aux₄₂₅⟨ c ⟩ 𝓊⋆[]       = eq⋆[]
   aux₄₂₅⟨ c ⟩ (𝓊⋆≔ u⋆ u) = eq⋆≔ (aux₄₂₅⟨ c ⟩ u⋆) (aux₄₁₁⟨ c ⟩ u)
 
-  postulate
-    aux₄₂₆ : ∀ {Γ Δ Θ w} →
-               (c : Δ ⊇ Γ) (c′ : Θ ⊇ Δ) (c″ : Θ ⊇ Γ) → {ρ : w ⊩⋆ Θ} → 𝒰⋆ ρ →
-               Eq⋆ (↓⟨ c ⟩ (↓⟨ c′ ⟩ ρ)) (↓⟨ c″ ⟩ ρ)
+  aux₄₂₆ : ∀ {Γ Δ Θ w} →
+             (c : Δ ⊇ Γ) (c′ : Θ ⊇ Δ) (c″ : Θ ⊇ Γ) → {ρ : w ⊩⋆ Θ} → 𝒰⋆ ρ →
+             Eq⋆ (↓⟨ c ⟩ (↓⟨ c′ ⟩ ρ)) (↓⟨ c″ ⟩ ρ)
+  aux₄₂₆ done        c′ done         u⋆ = eq⋆[]
+  aux₄₂₆ (weak c i)  c′ (weak c″ i″) u⋆ = eq⋆≔ (aux₄₂₆ c c′ c″ u⋆)
+                                               (symEq (aux₄₂₁⟨ c′ ⟩ u⋆ i″ i))
 
   aux₄₂₇ : ∀ {Γ w w′ w″} →
              (c : w′ ⊒ w) (c′ : w″ ⊒ w′) (c″ : w″ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
