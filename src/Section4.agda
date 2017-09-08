@@ -685,10 +685,14 @@ aux₄₆₃⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cv′ → aux₄₆₁ (cong≅
                                                       refl≅)
                                               (h (c ○ c′) cv′))
 
-postulate
-  aux₄₆₄ : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} {i : Γ ∋ x ∷ A} →
-             CV⋆ γ ρ →
-             CV (ν x i ▶ γ) (lookup ρ i)
+aux₄₆₄ : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+           CV⋆ γ ρ → (i : Γ ∋ x ∷ A) →
+           CV (ν x i ▶ γ) (lookup ρ i)
+aux₄₆₄ cv[]         ()
+aux₄₆₄ (cv≔ cv⋆ cv) zero    = cv
+aux₄₆₄ (cv≔ cv⋆ cv) (suc i) = aux₄₆₁ (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
+                                             (conv≅₇ _ _ _))
+                                     (aux₄₆₄ cv⋆ i)
 
 aux₄₆₅⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
               (c : Θ ⊇ Δ) → CV⋆ γ ρ →
@@ -697,10 +701,17 @@ aux₄₆₅⟨ c ⟩ cv[]         = cv[]
 aux₄₆₅⟨ c ⟩ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (aux₄₆₅⟨ c ⟩ cv⋆))
                                (aux₄₆₁ (sym≅ (conv≅₇ _ _ _)) (aux₄₆₃⟨ c ⟩ cv))
 
-postulate
-  aux₄₆₆⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-                (c : Γ ⊇ Θ) → CV⋆ γ ρ →
-                CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
+aux₄₆₆⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+              (c : Γ ⊇ Θ) → CV⋆ γ ρ →
+              CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
+aux₄₆₆⟨ done ⟩     cv⋆ = cv[]
+aux₄₆₆⟨ weak c i ⟩ cv⋆ = cv≔ {c = weak⊇}
+                             (aux₄₆₂ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                              (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
+                                     (aux₄₆₆⟨ c ⟩ cv⋆))
+                             (aux₄₆₁ (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                             (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
+                                     (aux₄₆₄ cv⋆ i))
 
 -- Now we are ready to prove that if `γ` and `ρ` are `CV`-related, then `M ▶ γ` and `⟦ M ⟧ ρ` are
 -- `CV`-related.  This lemma corresponds to Tait’s lemma saying that each term is computable
