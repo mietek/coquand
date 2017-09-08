@@ -81,6 +81,19 @@ data _∋_∷_ : 𝒞 → Name → 𝒯 → Set where
            [ Γ , y ∷ B ] ∋ x ∷ A
 
 module _ where
+  injsuc : ∀ {Γ A B x y} {{_ : T (fresh y Γ)}} {i i′ : Γ ∋ x ∷ A} →
+             suc {B = B} {y = y} i ≡ suc i′ → i ≡ i′
+  injsuc refl = refl
+
+  _≟∋_ : ∀ {Γ A x} → (i i′ : Γ ∋ x ∷ A) → Dec (i ≡ i′)
+  zero  ≟∋ zero   = yes refl
+  zero  ≟∋ suc i′ = no (λ ())
+  suc i ≟∋ zero   = no (λ ())
+  suc i ≟∋ suc i′ with i ≟∋ i′
+  …              | yes refl = yes refl
+  …              | no i≢i′  = no (λ p → injsuc p ↯ i≢i′)
+
+module _ where
   _∌_∷_ : 𝒞 → Name → 𝒯 → Set
   Γ ∌ x ∷ A = ¬ (Γ ∋ x ∷ A)
 
@@ -104,6 +117,22 @@ data _⊇_ : 𝒞 → 𝒞 → Set where
   weak : ∀ {Γ Δ A x} {{_ : T (fresh x Δ)}} →
            Γ ⊇ Δ → Γ ∋ x ∷ A →
            Γ ⊇ [ Δ , x ∷ A ]
+
+module _ where
+  injweak₁ : ∀ {Γ Δ A x} {{_ : T (fresh x Δ)}} {c c′ : Γ ⊇ Δ} {i i′ : Γ ∋ x ∷ A} →
+               weak c i ≡ weak c′ i′ → c ≡ c′
+  injweak₁ refl = refl
+
+  injweak₂ : ∀ {Γ Δ A x} {{_ : T (fresh x Δ)}} {c c′ : Γ ⊇ Δ} {i i′ : Γ ∋ x ∷ A} →
+               weak c i ≡ weak c′ i′ → i ≡ i′
+  injweak₂ refl = refl
+
+  _≟⊇_ : ∀ {Γ Δ} → (c c′ : Γ ⊇ Δ) → Dec (c ≡ c′)
+  done     ≟⊇ done       = yes refl
+  weak c i ≟⊇ weak c′ i′ with c ≟⊇ c′ | i ≟∋ i′
+  …                     | yes refl | yes refl = yes refl
+  …                     | no c≢c′  | _        = no (λ p → injweak₁ p ↯ c≢c′)
+  …                     | _        | no i≢i′  = no (λ p → injweak₂ p ↯ i≢i′)
 
 -- The following lemmas are easy to prove:
 
