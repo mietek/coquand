@@ -674,20 +674,28 @@ aux₄₆₂ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
 aux₄₆₂ γ≅ₛγ′ cv[]         = cv[]
 aux₄₆₂ γ≅ₛγ′ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆) (aux₄₆₁ (cong≅▶ refl≅ γ≅ₛγ′) cv)
 
-postulate
-  aux₄₆₃⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
-                (c : Δ ⊇ Γ) → CV M a →
-                CV (M ▶ π⟨ c ⟩) (↑⟨ c ⟩ a)
+aux₄₆₃⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
+              (c : Δ ⊇ Γ) → CV M a →
+              CV (M ▶ π⟨ c ⟩) (↑⟨ c ⟩ a)
+aux₄₆₃⟨ c ⟩ (cv• h) = cv• (λ c′     → trans≅ (trans≅ (conv≅₇ _ _ _)
+                                                      (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+                                              (h (c ○ c′)))
+aux₄₆₃⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cv′ → aux₄₆₁ (cong≅∙ (trans≅ (conv≅₇ _ _ _)
+                                                              (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+                                                      refl≅)
+                                              (h (c ○ c′) cv′))
 
 postulate
   aux₄₆₄ : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} {i : Γ ∋ x ∷ A} →
              CV⋆ γ ρ →
              CV (ν x i ▶ γ) (lookup ρ i)
 
-postulate
-  aux₄₆₅⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-                (c : Θ ⊇ Δ) → CV⋆ γ ρ →
-                CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
+aux₄₆₅⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+              (c : Θ ⊇ Δ) → CV⋆ γ ρ →
+              CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
+aux₄₆₅⟨ c ⟩ cv[]         = cv[]
+aux₄₆₅⟨ c ⟩ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (aux₄₆₅⟨ c ⟩ cv⋆))
+                               (aux₄₆₁ (sym≅ (conv≅₇ _ _ _)) (aux₄₆₃⟨ c ⟩ cv))
 
 postulate
   aux₄₆₆⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
