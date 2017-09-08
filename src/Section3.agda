@@ -38,8 +38,8 @@ module _ where
   (A ⊃ B) ≟𝒯 •         = no λ ()
   (A ⊃ B) ≟𝒯 (A′ ⊃ B′) with A ≟𝒯 A′ | B ≟𝒯 B′
   …                   | yes refl | yes refl = yes refl
-  …                   | no A≢A′  | _        = no (λ A → inj⊃₁ A ↯ A≢A′)
-  …                   | _        | no B≢B′  = no (λ B → inj⊃₂ B ↯ B≢B′)
+  …                   | no A≢A′  | _        = no (λ p → inj⊃₁ p ↯ A≢A′)
+  …                   | _        | no B≢B′  = no (λ p → inj⊃₂ p ↯ B≢B′)
 
 
 -- 3.2. Definition of contexts
