@@ -361,12 +361,12 @@ module _ {{_ : Model}} where
 -- and the result of applying these functions to uniform environments is also uniform.
 
 module _ {{_ : Model}} where
-  congEq⋆lookup : ∀ {Γ A w x} →
-                    {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ → (i : Γ ∋ x ∷ A) →
-                    Eq (lookup ρ i) (lookup ρ′ i)
-  congEq⋆lookup eq⋆[]       ()
-  congEq⋆lookup (eq⋆≔ e⋆ e) zero    = e
-  congEq⋆lookup (eq⋆≔ e⋆ e) (suc i) = congEq⋆lookup e⋆ i
+  congEqlookup : ∀ {Γ A w x} →
+                   {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ → (i : Γ ∋ x ∷ A) →
+                   Eq (lookup ρ i) (lookup ρ′ i)
+  congEqlookup eq⋆[]       ()
+  congEqlookup (eq⋆≔ e⋆ e) zero    = e
+  congEqlookup (eq⋆≔ e⋆ e) (suc i) = congEqlookup e⋆ i
 
   congEq⋆↑⟨_⟩ : ∀ {Γ w w′} →
                   (c : w′ ⊒ w) → {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
@@ -378,14 +378,14 @@ module _ {{_ : Model}} where
                   (c : Γ ⊇ Δ) → {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
                   Eq⋆ (↓⟨ c ⟩ ρ) (↓⟨ c ⟩ ρ′)
   congEq⋆↓⟨ done ⟩     e⋆ = eq⋆[]
-  congEq⋆↓⟨ weak c i ⟩ e⋆ = eq⋆≔ (congEq⋆↓⟨ c ⟩ e⋆) (congEq⋆lookup e⋆ i)
+  congEq⋆↓⟨ weak c i ⟩ e⋆ = eq⋆≔ (congEq⋆↓⟨ c ⟩ e⋆) (congEqlookup e⋆ i)
 
-  cong𝒰⋆lookup : ∀ {Γ A w x} →
-                   {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
-                   𝒰 (lookup ρ i)
-  cong𝒰⋆lookup 𝓊⋆[]       ()
-  cong𝒰⋆lookup (𝓊⋆≔ u⋆ u) zero    = u
-  cong𝒰⋆lookup (𝓊⋆≔ u⋆ u) (suc i) = cong𝒰⋆lookup u⋆ i
+  cong𝒰lookup : ∀ {Γ A w x} →
+                  {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
+                  𝒰 (lookup ρ i)
+  cong𝒰lookup 𝓊⋆[]       ()
+  cong𝒰lookup (𝓊⋆≔ u⋆ u) zero    = u
+  cong𝒰lookup (𝓊⋆≔ u⋆ u) (suc i) = cong𝒰lookup u⋆ i
 
   cong𝒰⋆↑⟨_⟩ : ∀ {Γ w w′} →
                  (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
@@ -397,7 +397,7 @@ module _ {{_ : Model}} where
                  (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
                  𝒰⋆ (↓⟨ c ⟩ ρ)
   cong𝒰⋆↓⟨ done ⟩     u⋆ = 𝓊⋆[]
-  cong𝒰⋆↓⟨ weak c i ⟩ u⋆ = 𝓊⋆≔ (cong𝒰⋆↓⟨ c ⟩ u⋆) (cong𝒰⋆lookup u⋆ i)
+  cong𝒰⋆↓⟨ weak c i ⟩ u⋆ = 𝓊⋆≔ (cong𝒰⋆↓⟨ c ⟩ u⋆) (cong𝒰lookup u⋆ i)
 
 -- We also
 -- need to prove the following properties about `Eq⋆` for semantic environments which basically
@@ -662,56 +662,59 @@ data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
 
 -- In order to prove Lemma 8 below we need to prove the following properties about `CV`:
 
-aux₄₆₁ : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
-           M ≅ M′ → CV M′ a →
-           CV M a
-aux₄₆₁ M≅M′ (cv• h) = cv• (λ c     → trans≅ (cong≅▶ M≅M′ refl≅ₛ) (h c))
-aux₄₆₁ M≅M′ (cv⊃ h) = cv⊃ (λ c cv′ → aux₄₆₁ (cong≅∙ (cong≅▶ M≅M′ refl≅ₛ) refl≅) (h c cv′))
+cong≅CV : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
+            M ≅ M′ → CV M′ a →
+            CV M a
+cong≅CV M≅M′ (cv• h) = cv• (λ c     → trans≅ (cong≅▶ M≅M′ refl≅ₛ)
+                                              (h c))
+cong≅CV M≅M′ (cv⊃ h) = cv⊃ (λ c cv′ → cong≅CV (cong≅∙ (cong≅▶ M≅M′ refl≅ₛ) refl≅)
+                                               (h c cv′))
 
-aux₄₆₂ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-           γ ≅ₛ γ′ → CV⋆ γ′ ρ →
-           CV⋆ γ ρ
-aux₄₆₂ γ≅ₛγ′ cv[]         = cv[]
-aux₄₆₂ γ≅ₛγ′ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆) (aux₄₆₁ (cong≅▶ refl≅ γ≅ₛγ′) cv)
+cong≅ₛCV⋆ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+              γ ≅ₛ γ′ → CV⋆ γ′ ρ →
+              CV⋆ γ ρ
+cong≅ₛCV⋆ γ≅ₛγ′ cv[]         = cv[]
+cong≅ₛCV⋆ γ≅ₛγ′ (cv≔ cv⋆ cv) = cv≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆)
+                                   (cong≅CV (cong≅▶ refl≅ γ≅ₛγ′) cv)
 
-aux₄₆₃⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
-              (c : Δ ⊇ Γ) → CV M a →
-              CV (M ▶ π⟨ c ⟩) (↑⟨ c ⟩ a)
-aux₄₆₃⟨ c ⟩ (cv• h) = cv• (λ c′     → trans≅ (trans≅ (conv≅₇ _ _ _)
-                                                      (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
-                                              (h (c ○ c′)))
-aux₄₆₃⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cv′ → aux₄₆₁ (cong≅∙ (trans≅ (conv≅₇ _ _ _)
-                                                              (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
-                                                      refl≅)
-                                              (h (c ○ c′) cv′))
+congCV↑⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
+               (c : Δ ⊇ Γ) → CV M a →
+               CV (M ▶ π⟨ c ⟩) (↑⟨ c ⟩ a)
+congCV↑⟨ c ⟩ (cv• h) = cv• (λ c′     → trans≅ (trans≅ (conv≅₇ _ _ _)
+                                                       (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+                                               (h (c ○ c′)))
+congCV↑⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cv′ → cong≅CV (cong≅∙ (trans≅ (conv≅₇ _ _ _)
+                                                                (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+                                                        refl≅)
+                                                (h (c ○ c′) cv′))
 
-aux₄₆₄ : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-           CV⋆ γ ρ → (i : Γ ∋ x ∷ A) →
-           CV (ν x i ▶ γ) (lookup ρ i)
-aux₄₆₄ cv[]         ()
-aux₄₆₄ (cv≔ cv⋆ cv) zero    = cv
-aux₄₆₄ (cv≔ cv⋆ cv) (suc i) = aux₄₆₁ (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
-                                             (conv≅₇ _ _ _))
-                                     (aux₄₆₄ cv⋆ i)
+congCVlookup : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+                 CV⋆ γ ρ → (i : Γ ∋ x ∷ A) →
+                 CV (ν x i ▶ γ) (lookup ρ i)
+congCVlookup cv[]         ()
+congCVlookup (cv≔ cv⋆ cv) zero    = cv
+congCVlookup (cv≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
+                                                    (conv≅₇ _ _ _))
+                                            (congCVlookup cv⋆ i)
 
-aux₄₆₅⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-              (c : Θ ⊇ Δ) → CV⋆ γ ρ →
-              CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
-aux₄₆₅⟨ c ⟩ cv[]         = cv[]
-aux₄₆₅⟨ c ⟩ (cv≔ cv⋆ cv) = cv≔ (aux₄₆₂ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (aux₄₆₅⟨ c ⟩ cv⋆))
-                               (aux₄₆₁ (sym≅ (conv≅₇ _ _ _)) (aux₄₆₃⟨ c ⟩ cv))
+congCV⋆↑⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+                (c : Θ ⊇ Δ) → CV⋆ γ ρ →
+                CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
+congCV⋆↑⟨ c ⟩ cv[]         = cv[]
+congCV⋆↑⟨ c ⟩ (cv≔ cv⋆ cv) = cv≔ (cong≅ₛCV⋆ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (congCV⋆↑⟨ c ⟩ cv⋆))
+                                 (cong≅CV (sym≅ (conv≅₇ _ _ _)) (congCV↑⟨ c ⟩ cv))
 
-aux₄₆₆⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-              (c : Γ ⊇ Θ) → CV⋆ γ ρ →
-              CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
-aux₄₆₆⟨ done ⟩     cv⋆ = cv[]
-aux₄₆₆⟨ weak c i ⟩ cv⋆ = cv≔ {c = weak⊇}
-                             (aux₄₆₂ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                              (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
-                                     (aux₄₆₆⟨ c ⟩ cv⋆))
-                             (aux₄₆₁ (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                             (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
-                                     (aux₄₆₄ cv⋆ i))
+congCV⋆↓⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+                (c : Γ ⊇ Θ) → CV⋆ γ ρ →
+                CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
+congCV⋆↓⟨ done ⟩     cv⋆ = cv[]
+congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv≔ {c = weak⊇}
+                               (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                                   (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
+                                          (congCV⋆↓⟨ c ⟩ cv⋆))
+                               (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                                (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
+                                        (congCVlookup cv⋆ i))
 
 -- Now we are ready to prove that if `γ` and `ρ` are `CV`-related, then `M ▶ γ` and `⟦ M ⟧ ρ` are
 -- `CV`-related.  This lemma corresponds to Tait’s lemma saying that each term is computable
