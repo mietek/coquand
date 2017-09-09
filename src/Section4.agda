@@ -146,6 +146,11 @@ module _ {{_ : Model}} where
   reflEq 𝓊•            = eq• (λ c   → refl)
   reflEq (𝓊⊃ h₀ h₁ h₂) = eq⊃ (λ c u → reflEq (h₀ c u))
 
+  -- TODO: Why do we restrict `Eq` so that it is reflexive only for uniform objects?
+  reflEq′ : ∀ {A w} {a : w ⊩ A} → Eq a a
+  reflEq′ {•}     = eq• (λ c   → refl)
+  reflEq′ {A ⊃ B} = eq⊃ (λ c u → reflEq′)
+
   symEq : ∀ {A w} {a a′ : w ⊩ A} → Eq a a′ → Eq a′ a
   symEq {•}     (eq• h) = eq• (λ c   → sym (h c))
   symEq {A ⊃ B} (eq⊃ h) = eq⊃ (λ c u → symEq (h c u))
