@@ -87,7 +87,8 @@ open import Relation.Binary.PropositionalEquality public
 open import Relation.Nullary public
   using (¬_ ; Dec ; yes ; no)
 
-import Relation.Nullary.Decidable as Dec
+import Relation.Nullary.Decidable as Decidable
+open Decidable using (⌊_⌋) public
 
 open import Relation.Nullary.Negation public
   renaming (contradiction to _↯_)
@@ -102,10 +103,10 @@ module _ where
     inj-name refl = refl
 
     _≟_ : (x x′ : Name) → Dec (x ≡ x′)
-    name s ≟ name s′ = Dec.map′ (cong name) inj-name (s Str.≟ s′)
+    name s ≟ name s′ = Decidable.map′ (cong name) inj-name (s Str.≟ s′)
 
     _≠_ : Name → Name → Bool
-    x ≠ x′ = not (Dec.⌊ x ≟ x′ ⌋)
+    x ≠ x′ = not ⌊ x ≟ x′ ⌋
 
   instance
     str-Name : IsString Name
