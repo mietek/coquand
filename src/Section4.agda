@@ -675,13 +675,13 @@ data CV : ∀ {Γ A} → Γ ⊢ A → Γ ⊩ A → Set where
 -- Correspondingly for the environment we define:  (…)
 
 data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
-  cv[] : ∀ {Γ} →
-           {γ : Γ ⋙ []} →
-           CV⋆ γ []
-  cv≔  : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}}
-           {γ : Δ ⋙ [ Γ , x ∷ A ]} {c : [ Γ , x ∷ A ] ⊇ Γ} {ρ : Δ ⊩⋆ Γ} {a : Δ ⊩ A} →
-           CV⋆ (π⟨ c ⟩ ● γ) ρ → CV (ν x zero ▶ γ) a →
-           CV⋆ γ [ ρ , x ≔ a ]
+  cv⋆[] : ∀ {Γ} →
+            {γ : Γ ⋙ []} →
+            CV⋆ γ []
+  cv⋆≔  : ∀ {Γ Δ A x} {{_ : T (fresh x Γ)}}
+            {γ : Δ ⋙ [ Γ , x ∷ A ]} {c : [ Γ , x ∷ A ] ⊇ Γ} {ρ : Δ ⊩⋆ Γ} {a : Δ ⊩ A} →
+            CV⋆ (π⟨ c ⟩ ● γ) ρ → CV (ν x zero ▶ γ) a →
+            CV⋆ γ [ ρ , x ≔ a ]
 
 -- In order to prove Lemma 8 below we need to prove the following properties about `CV`:
 
@@ -696,9 +696,9 @@ cong≅CV M≅M′ (cv⊃ h) = cv⊃ (λ c cv′ → cong≅CV (cong≅∙ (cong
 cong≅ₛCV⋆ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
               γ ≅ₛ γ′ → CV⋆ γ′ ρ →
               CV⋆ γ ρ
-cong≅ₛCV⋆ γ≅ₛγ′ cv[]         = cv[]
-cong≅ₛCV⋆ γ≅ₛγ′ (cv≔ cv⋆ cv) = cv≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆)
-                                   (cong≅CV (cong≅▶ refl≅ γ≅ₛγ′) cv)
+cong≅ₛCV⋆ γ≅ₛγ′ cv⋆[]         = cv⋆[]
+cong≅ₛCV⋆ γ≅ₛγ′ (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆)
+                                     (cong≅CV (cong≅▶ refl≅ γ≅ₛγ′) cv)
 
 congCV↑⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
                (c : Δ ⊇ Γ) → CV M a →
@@ -714,30 +714,30 @@ congCV↑⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cv′ → cong≅CV (cong≅∙ (t
 congCVlookup : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                  CV⋆ γ ρ → (i : Γ ∋ x ∷ A) →
                  CV (ν x i ▶ γ) (lookup ρ i)
-congCVlookup cv[]         ()
-congCVlookup (cv≔ cv⋆ cv) zero    = cv
-congCVlookup (cv≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
+congCVlookup cv⋆[]         ()
+congCVlookup (cv⋆≔ cv⋆ cv) zero    = cv
+congCVlookup (cv⋆≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
                                                     (conv≅₇ _ _ _))
-                                            (congCVlookup cv⋆ i)
+                                             (congCVlookup cv⋆ i)
 
 congCV⋆↑⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                 (c : Θ ⊇ Δ) → CV⋆ γ ρ →
                 CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
-congCV⋆↑⟨ c ⟩ cv[]         = cv[]
-congCV⋆↑⟨ c ⟩ (cv≔ cv⋆ cv) = cv≔ (cong≅ₛCV⋆ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (congCV⋆↑⟨ c ⟩ cv⋆))
-                                 (cong≅CV (sym≅ (conv≅₇ _ _ _)) (congCV↑⟨ c ⟩ cv))
+congCV⋆↑⟨ c ⟩ cv⋆[]         = cv⋆[]
+congCV⋆↑⟨ c ⟩ (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (congCV⋆↑⟨ c ⟩ cv⋆))
+                                   (cong≅CV (sym≅ (conv≅₇ _ _ _)) (congCV↑⟨ c ⟩ cv))
 
 congCV⋆↓⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                 (c : Γ ⊇ Θ) → CV⋆ γ ρ →
                 CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
-congCV⋆↓⟨ done ⟩     cv⋆ = cv[]
-congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv≔ {c = weak⊇}
-                               (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                                   (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
-                                          (congCV⋆↓⟨ c ⟩ cv⋆))
-                               (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                                (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
-                                        (congCVlookup cv⋆ i))
+congCV⋆↓⟨ done ⟩     cv⋆ = cv⋆[]
+congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv⋆≔ {c = weak⊇}
+                                (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                                    (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
+                                           (congCV⋆↓⟨ c ⟩ cv⋆))
+                                (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                                 (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
+                                         (congCVlookup cv⋆ i))
 
 -- Now we are ready to prove that if `γ` and `ρ` are `CV`-related, then `M ▶ γ` and `⟦ M ⟧ ρ` are
 -- `CV`-related.  This lemma corresponds to Tait’s lemma saying that each term is computable
