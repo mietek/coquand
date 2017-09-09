@@ -105,6 +105,16 @@ module _ where
   fresh→∌ {x} {{()}} (suc {y = .x} i) | yes refl
   fresh→∌ {x} {{φ}}  (suc {y = y}  i) | no x≢y   = i ↯ fresh→∌
 
+  freshlem₁ : ∀ {b′} → (x : Name) → ¬ (T (and (x ≠ x) b′))
+  freshlem₁ x p with x ≟ x
+  …            | yes refl = p
+  …            | no x≢x   = refl ↯ x≢x
+
+  freshlem₂ : ∀ {b′} → (x {y} : Name) → T (and (x ≠ y) b′) → T b′
+  freshlem₂ x {y} p with x ≟ y
+  …              | yes refl = elim⊥ p
+  …              | no x≢y   = p
+
 -- We also define the relation that describes when a context contains another.
 --
 -- We use the notational convention `Γ ⊇ Δ` for `Γ` being greater than `Δ`.

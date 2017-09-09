@@ -425,10 +425,16 @@ module _ {{_ : Model}} where
   aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) zero    = congEq↑⟨ c ⟩ (reflEq u)
   aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) (suc i) = aux₄₂₂⟨ c ⟩ u⋆ i
 
-  postulate
-    aux₄₂₃ : ∀ {Γ Δ A w x} {{_ : T (fresh x Γ)}} {{_ : T (fresh x Δ)}} →
-               (c : Γ ⊇ Δ) (c′ : [ Γ , x ∷ A ] ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → {a : w ⊩ A} →
-               Eq⋆ (↓⟨ c′ ⟩ [ ρ , x ≔ a ]) (↓⟨ c ⟩ ρ)
+  aux₄₂₃ : ∀ {Γ Δ A w x} {{_ : T (fresh x Δ)}} {{_ : T (fresh x Γ)}} →
+             (c : Γ ⊇ Δ) (c′ : [ Γ , x ∷ A ] ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → {a : w ⊩ A} →
+             Eq⋆ (↓⟨ c′ ⟩ [ ρ , x ≔ a ]) (↓⟨ c ⟩ ρ)
+  aux₄₂₃               done       done               u⋆ = eq⋆[]
+  aux₄₂₃ {x = x} {{φ}} (weak c i) (weak c′ zero)     u⋆ = elim⊥ (freshlem₁ x φ)
+  aux₄₂₃ {x = x} {{φ}} (weak c i) (weak c′ (suc i′)) u⋆ =
+    subst (λ i′ → Eq⋆ [ _ , _ ≔ lookup _ i′ ] _)
+          (uniq∋ i i′)
+          (eq⋆≔ (aux₄₂₃ {{freshlem₂ x φ}} c c′ u⋆)
+                (reflEq (cong𝒰lookup u⋆ i)))
 
   postulate
     aux₄₂₄⟨_⟩ : ∀ {Γ w} →

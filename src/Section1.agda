@@ -67,6 +67,10 @@ open import Data.Bool public
   using (Bool ; T ; true ; false ; not)
   renaming (_∧_ to and)
 
+open import Data.Empty public
+  using (⊥)
+  renaming (⊥-elim to elim⊥)
+
 open import Data.Product public
   using (Σ ; _,_ ; _×_)
 
