@@ -717,7 +717,7 @@ congCVlookup : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
 congCVlookup cv⋆[]         ()
 congCVlookup (cv⋆≔ cv⋆ cv) zero    = cv
 congCVlookup (cv⋆≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
-                                                    (conv≅₇ _ _ _))
+                                                     (conv≅₇ _ _ _))
                                              (congCVlookup cv⋆ i)
 
 congCV⋆↑⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
@@ -758,8 +758,8 @@ mutual
                                                            (cong≅CV (conv≅₃ _ _) cv′))))
   lem₈ (M ∙ N) cv⋆ = case lem₈ M cv⋆ of
                        λ { (cv⊃ h) → cong≅CV (trans≅ (conv≅₆ _ _ _)
-                                                              (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
-                                                      (h refl⊇ (lem₈ N cv⋆)) }
+                                                      (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
+                                              (h refl⊇ (lem₈ N cv⋆)) }
   lem₈ (M ▶ γ) cv⋆ = cong≅CV (conv≅₇ _ _ _)
                              (lem₈ M (lem₈ₛ γ cv⋆))
 
