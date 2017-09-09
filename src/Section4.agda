@@ -746,15 +746,36 @@ congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv⋆≔ {c = weak⊇}
 
 -- Lemma 8.
 mutual
-  postulate
-    lem₈ : ∀ {Γ Δ A} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-             (M : Γ ⊢ A) → CV⋆ γ ρ →
-             CV (M ▶ γ) (⟦ M ⟧ ρ)
+  lem₈ : ∀ {Γ Δ A} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+           (M : Γ ⊢ A) → CV⋆ γ ρ →
+           CV (M ▶ γ) (⟦ M ⟧ ρ)
+  lem₈ (ν x i) cv⋆ = congCVlookup cv⋆ i
+  lem₈ (ƛ x M) cv⋆ = cv⊃ (λ c cv′ → cong≅CV (trans≅ (cong≅∙ (conv≅₇ _ _ _) refl≅)
+                                                     (conv≅₁ _ _ _))
+                                             (lem₈ M (cv⋆≔ {c = weak⊇}
+                                                           (cong≅ₛCV⋆ (conv≅ₛ₃ _ _ _)
+                                                                      (congCV⋆↑⟨ c ⟩ cv⋆))
+                                                           (cong≅CV (conv≅₃ _ _) cv′))))
+  lem₈ (M ∙ N) cv⋆ = case lem₈ M cv⋆ of
+                       λ { (cv⊃ h) → cong≅CV (trans≅ (conv≅₆ _ _ _)
+                                                              (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
+                                                      (h refl⊇ (lem₈ N cv⋆)) }
+  lem₈ (M ▶ γ) cv⋆ = cong≅CV (conv≅₇ _ _ _)
+                             (lem₈ M (lem₈ₛ γ cv⋆))
 
-  postulate
-    aux₄₆₇ : ∀ {Γ Δ Θ} {γ′ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
-               (γ : Δ ⋙ Γ) → CV⋆ γ′ ρ →
-               CV⋆ (γ ● γ′) (⟦ γ ⟧ₛ ρ)
+  lem₈ₛ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
+            (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
+            CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
+  lem₈ₛ π⟨ c ⟩        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
+  lem₈ₛ (γ ● γ′)      cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
+                                      (lem₈ₛ γ (lem₈ₛ γ′ cv⋆))
+  lem₈ₛ [ γ , x ≔ M ] cv⋆ = cv⋆≔ {c = weak⊇}
+                                 (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                                     (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
+                                            (lem₈ₛ γ cv⋆))
+                                 (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                                  (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
+                                          (lem₈ M cv⋆))
 
 -- Both lemmas are proved by induction on the proof trees using the lemmas above.
 --
