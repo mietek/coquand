@@ -783,15 +783,34 @@ mutual
 
 -- Lemma 9.
 mutual
-  postulate
-    lem₉ : ∀ {Γ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
-             CV M a →
-             M ≅ reify a
+  lem₉ : ∀ {Γ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
+           CV M a →
+           M ≅ reify a
+  lem₉ (cv• h) = trans≅ (sym≅ (conv≅₅ _ _))
+                        (h refl⊇)
+  lem₉ (cv⊃ h) = trans≅ (conv≅₂ _ _)
+                        (cong≅ƛ (lem₉ (h weak⊇ (aux₄₆₈ (λ c → conv≅₄ _ _ _)))))
 
-  postulate
-    aux₄₆₈⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A} →
-                  (c : Δ ⊇ Γ) → M ▶ π⟨ c ⟩ ≅ f c →
-                  CV M (val f)
+  aux₄₆₈ : ∀ {A Γ} {M : Γ ⊢ A} {f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A} →
+             (∀ {Δ} → (c : Δ ⊇ Γ) → M ▶ π⟨ c ⟩ ≅ f c) →
+             CV M (val f)
+  aux₄₆₈ {•}                 h = cv• (λ c                 → h c)
+  aux₄₆₈ {A ⊃ B} {M = M} {f} h = cv⊃ (λ {_} {N} {a} c cv′ → aux₄₆₈ (λ {Δ′} c′ →
+    begin
+      ((M ▶ π⟨ c ⟩) ∙ N) ▶ π⟨ c′ ⟩
+    ≅⟨ conv≅₆ _ _ _ ⟩
+      ((M ▶ π⟨ c ⟩) ▶ π⟨ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
+    ≅⟨ cong≅∙ (conv≅₇ _ _ _) refl≅ ⟩
+      (M ▶ (π⟨ c ⟩ ● π⟨ c′ ⟩)) ∙ (N ▶ π⟨ c′ ⟩)
+    ≅⟨ cong≅∙ (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)) refl≅ ⟩
+      (M ▶ π⟨ c ○ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
+    ≅⟨ cong≅∙ (h (c ○ c′)) refl≅ ⟩
+      f (c ○ c′) ∙ (N ▶ π⟨ c′ ⟩)
+    ≅⟨ cong≅∙ refl≅ (lem₉ (congCV↑⟨ c′ ⟩ cv′)) ⟩
+      f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a)
+    ∎))
+    where
+      open ≅-Reasoning
 
 -- In order to prove Theorem 2 we also prove that `CV π⟨ c ⟩ val-ρ⟨ c ⟩`; then by this, Lemma 8
 -- and Lemma 9 we get that `M ▶ π⟨ c ⟩ ≅ nf M`, where `c : Γ ⊇ Γ`.  Using the conversion rule
