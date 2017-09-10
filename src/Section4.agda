@@ -688,17 +688,17 @@ data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
 cong≅CV : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
             M ≅ M′ → CV M′ a →
             CV M a
-cong≅CV M≅M′ (cv• h) = cv• (λ c     → trans≅ (cong≅▶ M≅M′ refl≅ₛ)
-                                              (h c))
-cong≅CV M≅M′ (cv⊃ h) = cv⊃ (λ c cvₐ → cong≅CV (cong≅∙ (cong≅▶ M≅M′ refl≅ₛ) refl≅)
-                                               (h c cvₐ))
+cong≅CV p (cv• h) = cv• (λ c     → trans≅ (cong≅▶ p refl≅ₛ)
+                                           (h c))
+cong≅CV p (cv⊃ h) = cv⊃ (λ c cvₐ → cong≅CV (cong≅∙ (cong≅▶ p refl≅ₛ) refl≅)
+                                            (h c cvₐ))
 
 cong≅ₛCV⋆ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
               γ ≅ₛ γ′ → CV⋆ γ′ ρ →
               CV⋆ γ ρ
-cong≅ₛCV⋆ γ≅ₛγ′ cv⋆[]         = cv⋆[]
-cong≅ₛCV⋆ γ≅ₛγ′ (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ γ≅ₛγ′) cv⋆)
-                                     (cong≅CV (cong≅▶ refl≅ γ≅ₛγ′) cv)
+cong≅ₛCV⋆ p cv⋆[]         = cv⋆[]
+cong≅ₛCV⋆ p (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ p) cv⋆)
+                                 (cong≅CV (cong≅▶ refl≅ p) cv)
 
 congCV↑⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
                (c : Δ ⊇ Γ) → CV M a →
