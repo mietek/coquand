@@ -38,8 +38,8 @@ module _ where
   (A ⊃ B) ≟𝒯 •         = no λ ()
   (A ⊃ B) ≟𝒯 (A′ ⊃ B′) with A ≟𝒯 A′ | B ≟𝒯 B′
   …                   | yes refl | yes refl = yes refl
+  …                   | yes refl | no B≢B′  = no (λ p → inj⊃₂ p ↯ B≢B′)
   …                   | no A≢A′  | _        = no (λ p → inj⊃₁ p ↯ A≢A′)
-  …                   | _        | no B≢B′  = no (λ p → inj⊃₂ p ↯ B≢B′)
 
 
 -- 3.2. Definition of contexts
@@ -141,8 +141,8 @@ module _ where
   done     ≟⊇ done       = yes refl
   weak c i ≟⊇ weak c′ i′ with c ≟⊇ c′ | i ≟∋ i′
   …                     | yes refl | yes refl = yes refl
+  …                     | yes refl | no i≢i′  = no (λ p → injweak₂ p ↯ i≢i′)
   …                     | no c≢c′  | _        = no (λ p → injweak₁ p ↯ c≢c′)
-  …                     | _        | no i≢i′  = no (λ p → injweak₂ p ↯ i≢i′)
 
 -- The following lemmas are easy to prove:
 
