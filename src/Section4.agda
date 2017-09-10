@@ -316,10 +316,6 @@ module _ {{_ : Model}} where
 -- The equality on semantic environments, `Eq⋆`, is transitive, symmetric, and for uniform
 -- environments also reflexive.
 
--- TODO: Attempting to refine the first cases below results in the following error:
---       An internal error has occurred. Please report this as a bug.
---       Location of the error: src/full/Agda/TypeChecking/Substitute.hs:90
-
 module _ {{_ : Model}} where
   reflEq⋆ : ∀ {Γ w} {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → Eq⋆ ρ ρ
   reflEq⋆ 𝓊⋆[]       = eq⋆[]
