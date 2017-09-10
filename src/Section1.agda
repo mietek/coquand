@@ -72,7 +72,7 @@ open import Data.Empty public
   renaming (⊥-elim to elim⊥)
 
 open import Data.Product public
-  using (Σ ; _,_ ; _×_)
+  using (Σ ; _,_ ; _×_ ; proj₁ ; proj₂)
 
 open import Data.Unit public
   using (⊤ ; tt)
