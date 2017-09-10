@@ -794,25 +794,26 @@ mutual
   aux₄₆₈ : ∀ {A Γ} {M : Γ ⊢ A} {f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A} →
              (∀ {Δ} → (c : Δ ⊇ Γ) → M ▶ π⟨ c ⟩ ≅ f c) →
              CV M (val f)
-  aux₄₆₈ {•}                 h = cv• (λ c                 → h c)
-  aux₄₆₈ {A ⊃ B} {M = M} {f} h = cv⊃ (λ {_} {N} {a} c cv′ → aux₄₆₈ (λ {Δ′} c′ →
-    begin
-      ((M ▶ π⟨ c ⟩) ∙ N) ▶ π⟨ c′ ⟩
-    ≅⟨ conv≅₆ _ _ _ ⟩
-      ((M ▶ π⟨ c ⟩) ▶ π⟨ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
-    ≅⟨ cong≅∙ (conv≅₇ _ _ _) refl≅ ⟩
-      (M ▶ (π⟨ c ⟩ ● π⟨ c′ ⟩)) ∙ (N ▶ π⟨ c′ ⟩)
-    ≅⟨ cong≅∙ (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)) refl≅ ⟩
-      (M ▶ π⟨ c ○ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
-    ≅⟨ cong≅∙ (h (c ○ c′)) refl≅ ⟩
-      f (c ○ c′) ∙ (N ▶ π⟨ c′ ⟩)
-    ≅⟨ cong≅∙ refl≅ (lem₉ (congCV↑⟨ c′ ⟩ cv′)) ⟩
-      f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a)
-    ∎))
-    where
-      open ≅-Reasoning
+  aux₄₆₈ {•}                 h = cv• (λ c → h c)
+  aux₄₆₈ {A ⊃ B} {M = M} {f} h = cv⊃ (λ {_} {N} {a} c cv′ →
+                                       aux₄₆₈ (λ {Δ′} c′ →
+                                         begin
+                                           ((M ▶ π⟨ c ⟩) ∙ N) ▶ π⟨ c′ ⟩
+                                         ≅⟨ conv≅₆ _ _ _ ⟩
+                                           ((M ▶ π⟨ c ⟩) ▶ π⟨ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
+                                         ≅⟨ cong≅∙ (conv≅₇ _ _ _) refl≅ ⟩
+                                           (M ▶ (π⟨ c ⟩ ● π⟨ c′ ⟩)) ∙ (N ▶ π⟨ c′ ⟩)
+                                         ≅⟨ cong≅∙ (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)) refl≅ ⟩
+                                           (M ▶ π⟨ c ○ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
+                                         ≅⟨ cong≅∙ (h (c ○ c′)) refl≅ ⟩
+                                           f (c ○ c′) ∙ (N ▶ π⟨ c′ ⟩)
+                                         ≅⟨ cong≅∙ refl≅ (lem₉ (congCV↑⟨ c′ ⟩ cv′)) ⟩
+                                           f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a)
+                                         ∎))
+                                         where
+                                           open ≅-Reasoning
 
--- In order to prove Theorem 2 we also prove that `CV π⟨ c ⟩ val-ρ⟨ c ⟩`; then by this, Lemma 8
+-- In order to prove Theorem 2 we also prove that `CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆`; then by this, Lemma 8
 -- and Lemma 9 we get that `M ▶ π⟨ c ⟩ ≅ nf M`, where `c : Γ ⊇ Γ`.  Using the conversion rule
 -- `M ≅ M ▶ π⟨ c ⟩` for `c : Γ ⊇ Γ` we get by transitivity of conversion of `_≅_` that `M ≅ nf M`.
 
@@ -930,18 +931,17 @@ mutual
 
 -- Theorem 5.
 thm₅ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → nf M ≡ nf M′ → M ≅ M′
-thm₅ M M′ p =
-  begin
-    M
-  ≅⟨ thm₂ M ⟩
-    nf M
-  ≡⟨ p ⟩
-    nf M′
-  ≅⟨ sym≅ (thm₂ M′) ⟩
-    M′
-  ∎
-  where
-    open ≅-Reasoning
+thm₅ M M′ p = begin
+                M
+              ≅⟨ thm₂ M ⟩
+                nf M
+              ≡⟨ p ⟩
+                nf M′
+              ≅⟨ sym≅ (thm₂ M′) ⟩
+                M′
+              ∎
+              where
+                open ≅-Reasoning
 
 -- The decision algorithm is also complete since by Theorem 4 and the hypothesis, `M ≅ M′`, we get
 -- `Eq (⟦ M ⟧ refl⊩⋆) (⟦ N ⟧ refl⊩⋆)` and by Corollary 1 we get `nf M ≡ nf N`.
