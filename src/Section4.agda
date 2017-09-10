@@ -1002,6 +1002,17 @@ thm₅ M M′ p = begin
 -- The decision algorithm is also complete since by Theorem 4 and the hypothesis, `M ≅ M′`, we get
 -- `Eq (⟦ M ⟧ refl⊩⋆) (⟦ N ⟧ refl⊩⋆)` and by Corollary 1 we get `nf M ≡ nf N`.
 
+-- NOTE: Omission in paper?
+module _ where
+  proj⟨_⟩𝒰⋆ : ∀ {Γ Δ} →
+                (c : Δ ⊇ Γ) →
+                𝒰⋆ proj⟨ c ⟩⊩⋆
+  proj⟨ done ⟩𝒰⋆     = 𝓊⋆[]
+  proj⟨ weak c i ⟩𝒰⋆ = 𝓊⋆≔ proj⟨ c ⟩𝒰⋆ (aux₄₄₃-ν i)
+
+  refl𝒰⋆ : ∀ {Γ} → 𝒰⋆ (refl⊩⋆ {Γ})
+  refl𝒰⋆ = proj⟨ refl⊇ ⟩𝒰⋆
+
 -- Theorem 6.
 thm₆ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → M ≅ M′ → nf M ≡ nf M′
 thm₆ M M′ p = cor₁ M M′ (thm₄ p refl⊩⋆)
