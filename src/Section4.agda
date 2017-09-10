@@ -853,9 +853,19 @@ thm₂ M = trans≅ (sym≅ (conv≅₅ _ _))
 -- It is now easy to prove the completeness theorem:
 
 -- Theorem 3.
-postulate
-  thm₃ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → Eq (⟦ M ⟧ refl⊩⋆) (⟦ M′ ⟧ refl⊩⋆) →
-           M ≅ M′
+thm₃ : ∀ {Γ A} → (M M′ : Γ ⊢ A) → Eq (⟦ M ⟧ refl⊩⋆) (⟦ M′ ⟧ refl⊩⋆) →
+         M ≅ M′
+thm₃ M M′ eq = begin
+                 M
+               ≅⟨ thm₂ M ⟩
+                 nf M
+               ≡⟨ cor₁ M M′ eq ⟩
+                 nf M′
+               ≅⟨ sym≅ (thm₂ M′) ⟩
+                 M′
+               ∎
+               where
+                 open ≅-Reasoning
 
 
 -- 4.7. Completeness of the conversion rules for substitutions
