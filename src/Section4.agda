@@ -886,15 +886,48 @@ nf⋆ : ∀ {Δ Γ} → Δ ⋙ Γ → Δ ⋙ Γ
 nf⋆ γ = reify⋆ (⟦ γ ⟧ₛ refl⊩⋆)
 
 -- The completeness result for substitutions follows in the same way as for proof trees, i.e.,
--- we must prove that `γ ≅ₛ nf γ`.
+-- we must prove that `γ ≅ₛ nf⋆ γ`.
 
-postulate
-  thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
-            γ ≅ₛ nf⋆ γ
+thm₁ₛ : ∀ {Γ Δ} {ρ ρ′ : Δ ⊩⋆ Γ} → Eq⋆ ρ ρ′ → reify⋆ ρ ≡ reify⋆ ρ′
+thm₁ₛ eq⋆[]         = refl
+thm₁ₛ (eq⋆≔ eq⋆ eq) = cong² (λ γ M → [ γ , _ ≔ M ]) (thm₁ₛ eq⋆) (thm₁ eq)
 
-postulate
-  thm₃ₛ : ∀ {Γ Δ} → (γ γ′ : Δ ⋙ Γ) → Eq⋆ (⟦ γ ⟧ₛ refl⊩⋆) (⟦ γ′ ⟧ₛ refl⊩⋆) →
-            γ ≅ₛ γ′
+cor₁ₛ : ∀ {Γ Δ} → (γ γ′ : Δ ⋙ Γ) → Eq⋆ (⟦ γ ⟧ₛ refl⊩⋆) (⟦ γ′ ⟧ₛ refl⊩⋆) →
+          nf⋆ γ ≡ nf⋆ γ′
+cor₁ₛ γ γ′ = thm₁ₛ
+
+lem₉ₛ : ∀ {Γ Δ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+          CV⋆ γ ρ →
+          γ ≅ₛ reify⋆ ρ
+lem₉ₛ cv⋆[]         = conv≅ₛ₆ _ _
+lem₉ₛ (cv⋆≔ cv⋆ cv) = trans≅ₛ (conv≅ₛ₇ _ _ _)
+                              (cong≅ₛ≔ (lem₉ₛ cv⋆) (lem₉ cv))
+
+aux₄₆₉ₛ⟨_⟩ : ∀ {Γ Δ} →
+               (c : Δ ⊇ Δ) (γ : Δ ⋙ Γ) →
+               γ ● π⟨ c ⟩ ≅ₛ nf⋆ γ
+aux₄₆₉ₛ⟨ c ⟩ γ = subst (λ c′ → γ ● π⟨ c ⟩ ≅ₛ reify⋆ (⟦ γ ⟧ₛ proj⟨ c′ ⟩⊩⋆))
+                       (uniq⊇ c refl⊇)
+                       (lem₉ₛ (lem₈ₛ γ proj⟨ c ⟩CV⋆))
+
+thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
+          γ ≅ₛ nf⋆ γ
+thm₂ₛ γ = trans≅ₛ (sym≅ₛ (conv≅ₛ₅ _ _))
+                  (aux₄₆₉ₛ⟨ refl⊇ ⟩ γ)
+
+thm₃ₛ : ∀ {Γ Δ} → (γ γ′ : Δ ⋙ Γ) → Eq⋆ (⟦ γ ⟧ₛ refl⊩⋆) (⟦ γ′ ⟧ₛ refl⊩⋆) →
+          γ ≅ₛ γ′
+thm₃ₛ γ γ′ eq⋆ = begin
+                   γ
+                 ≅ₛ⟨ thm₂ₛ γ ⟩
+                   nf⋆ γ
+                 ≡⟨ cor₁ₛ γ γ′ eq⋆ ⟩
+                   nf⋆ γ′
+                 ≅ₛ⟨ sym≅ₛ (thm₂ₛ γ′) ⟩
+                   γ′
+                 ∎
+                 where
+                   open ≅ₛ-Reasoning
 
 
 -- 4.8. Soundness of the conversion rules
