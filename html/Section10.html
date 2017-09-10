@@ -1,673 +1,132 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-><head
-  ><title
-    >Section10</title
-    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
-     /><meta http-equiv="Content-Style-Type" content="text/css"
-     /><link href="Agda.css" rel="stylesheet" type="text/css"
-     /></head
-  ><body
-  ><pre
-    ><a name="1" class="Keyword"
-      >module</a
-      ><a name="7"
-      > </a
-      ><a name="8" href="Section10.html#1" class="Module"
-      >Section10</a
-      ><a name="17"
-      > </a
-      ><a name="18" class="Keyword"
-      >where</a
-      ><a name="23"
-      >
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Section10</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="Section10.html" class="Module">Section10</a> <a id="18" class="Keyword">where</a>
 
-</a
-      ><a name="25" class="Keyword"
-      >open</a
-      ><a name="29"
-      > </a
-      ><a name="30" class="Keyword"
-      >import</a
-      ><a name="36"
-      > </a
-      ><a name="37" href="Section9.html#1" class="Module"
-      >Section9</a
-      ><a name="45"
-      > </a
-      ><a name="46" class="Keyword"
-      >public</a
-      ><a name="52"
-      >
+<a id="25" class="Keyword">open</a> <a id="30" class="Keyword">import</a> <a id="37" href="Section9.html" class="Module">Section9</a> <a id="46" class="Keyword">public</a>
 
 
-</a
-      ><a name="55" class="Comment"
-      >-- 10. Conclusions</a
-      ><a name="73"
-      >
-</a
-      ><a name="74" class="Comment"
-      >-- ===============</a
-      ><a name="92"
-      >
-</a
-      ><a name="93" class="Comment"
-      >--</a
-      ><a name="95"
-      >
-</a
-      ><a name="96" class="Comment"
-      >-- We have defined a calculus of proof trees for simply typed &#955;-calculus with explicit substitutions</a
-      ><a name="196"
-      >
-</a
-      ><a name="197" class="Comment"
-      >-- and we have proved that this calculus is sound and complete with respect to Kripke</a
-      ><a name="282"
-      >
-</a
-      ><a name="283" class="Comment"
-      >-- models.  A decision algorithm for convertibility based on the technique of &#8220;normalisation by</a
-      ><a name="378"
-      >
-</a
-      ><a name="379" class="Comment"
-      >-- evaluation&#8221; has also been proven correct.</a
-      ><a name="423"
-      >
-</a
-      ><a name="424" class="Comment"
-      >--</a
-      ><a name="426"
-      >
-</a
-      ><a name="427" class="Comment"
-      >-- One application of the results for proof trees is the soundness and completeness for a</a
-      ><a name="516"
-      >
-</a
-      ><a name="517" class="Comment"
-      >-- formulation of an implicitly-typed &#955;-calculus with explicit substitutions.</a
-      ><a name="594"
-      >
-</a
-      ><a name="595" class="Comment"
-      >--</a
-      ><a name="597"
-      >
-</a
-      ><a name="598" class="Comment"
-      >-- An important aspect of this work is that it has been carried out on a machine; actually,</a
-      ><a name="689"
-      >
-</a
-      ><a name="690" class="Comment"
-      >-- the problem was partly chosen because it seemed possible to do the formalization in a nice</a
-      ><a name="783"
-      >
-</a
-      ><a name="784" class="Comment"
-      >-- way using ALF.  It is often emphasised that a proof is machine checked, but this is the very</a
-      ><a name="879"
-      >
-</a
-      ><a name="880" class="Comment"
-      >-- minimum one can ask of a proof system.  Another important aspect is that the system helps</a
-      ><a name="972"
-      >
-</a
-      ><a name="973" class="Comment"
-      >-- you to develop your proof, and I feel that ALF is on the right way: this work was not done</a
-      ><a name="1066"
-      >
-</a
-      ><a name="1067" class="Comment"
-      >-- first by pen and paper and then typed into the machine, but was from the very beginning</a
-      ><a name="1157"
-      >
-</a
-      ><a name="1158" class="Comment"
-      >-- carried out in interaction with the system.</a
-      ><a name="1204"
-      >
-</a
-      ><a name="1205" class="Comment"
-      >--</a
-      ><a name="1207"
-      >
-</a
-      ><a name="1208" class="Comment"
-      >-- NOTE: The above paragraphs apply to Agda, as well.</a
-      ><a name="1261"
-      >
-</a
-      ><a name="1262" class="Comment"
-      >--</a
-      ><a name="1264"
-      >
-</a
-      ><a name="1265" class="Comment"
-      >--</a
-      ><a name="1267"
-      >
-</a
-      ><a name="1268" class="Comment"
-      >-- Appendix</a
-      ><a name="1279"
-      >
-</a
-      ><a name="1280" class="Comment"
-      >-- --------</a
-      ><a name="1291"
-      >
-</a
-      ><a name="1292" class="Comment"
-      >--</a
-      ><a name="1294"
-      >
-</a
-      ><a name="1295" class="Comment"
-      >-- (&#8230;)</a
-      ><a name="1301"
-      >
-</a
-      ><a name="1302" class="Comment"
-      >--</a
-      ><a name="1304"
-      >
-</a
-      ><a name="1305" class="Comment"
-      >--</a
-      ><a name="1307"
-      >
-</a
-      ><a name="1308" class="Comment"
-      >-- Acknowledgement</a
-      ><a name="1326"
-      >
-</a
-      ><a name="1327" class="Comment"
-      >-- ---------------</a
-      ><a name="1345"
-      >
-</a
-      ><a name="1346" class="Comment"
-      >--</a
-      ><a name="1348"
-      >
-</a
-      ><a name="1349" class="Comment"
-      >-- The author wants to thank the editor Olivier Danvy for having had the patience with delays</a
-      ><a name="1442"
-      >
-</a
-      ><a name="1443" class="Comment"
-      >-- and still being supportive.  She is also grateful to Bernd Grobauer for help with improving</a
-      ><a name="1537"
-      >
-</a
-      ><a name="1538" class="Comment"
-      >-- the presentation.  The comments of the anonymous referees have also been very valuable.</a
-      ><a name="1628"
-      >
-</a
-      ><a name="1629" class="Comment"
-      >--</a
-      ><a name="1631"
-      >
-</a
-      ><a name="1632" class="Comment"
-      >--</a
-      ><a name="1634"
-      >
-</a
-      ><a name="1635" class="Comment"
-      >-- References</a
-      ><a name="1648"
-      >
-</a
-      ><a name="1649" class="Comment"
-      >-- ----------</a
-      ><a name="1662"
-      >
-</a
-      ><a name="1663" class="Comment"
-      >--</a
-      ><a name="1665"
-      >
-</a
-      ><a name="1666" class="Comment"
-      >-- 1.  Abadi, M., Cardelli, L., Curien, P.-L., and L&#233;vy, J.-J.</a
-      ><a name="1728"
-      >
-</a
-      ><a name="1729" class="Comment"
-      >--     Explicit substitutions.</a
-      ><a name="1759"
-      >
-</a
-      ><a name="1760" class="Comment"
-      >--     Journal of Functional Programming, 1(4) (1991) 375&#8211;416.</a
-      ><a name="1822"
-      >
-</a
-      ><a name="1823" class="Comment"
-      >--</a
-      ><a name="1825"
-      >
-</a
-      ><a name="1826" class="Comment"
-      >-- 2.  Berger, U.</a
-      ><a name="1843"
-      >
-</a
-      ><a name="1844" class="Comment"
-      >--     Program extraction from normalization proofs.</a
-      ><a name="1896"
-      >
-</a
-      ><a name="1897" class="Comment"
-      >--     In Proceedings of TLCA&#8217;93, LNCS, Vol. 664, Springer Verlag, Berlin, 1993, pp. 91&#8211;106.</a
-      ><a name="1989"
-      >
-</a
-      ><a name="1990" class="Comment"
-      >--</a
-      ><a name="1992"
-      >
-</a
-      ><a name="1993" class="Comment"
-      >-- 3.  Berger, U. and Schwichtenberg, H.</a
-      ><a name="2033"
-      >
-</a
-      ><a name="2034" class="Comment"
-      >--     An inverse of the evaluation functional for typed &#955;-calculus.</a
-      ><a name="2102"
-      >
-</a
-      ><a name="2103" class="Comment"
-      >--     In Proceedings of the 6th Annual IEEE Symposium on Logic in Comp. Sci., Amsterdam, 1991, pp. 203&#8211;211.</a
-      ><a name="2211"
-      >
-</a
-      ><a name="2212" class="Comment"
-      >--</a
-      ><a name="2214"
-      >
-</a
-      ><a name="2215" class="Comment"
-      >-- 4.  Coquand, Th.</a
-      ><a name="2234"
-      >
-</a
-      ><a name="2235" class="Comment"
-      >--     Pattern matching with dependent types.</a
-      ><a name="2280"
-      >
-</a
-      ><a name="2281" class="Comment"
-      >--     In Proceedings of the 1992 Workshop on Types for Proofs and Programs, B. Nordstr&#246;m, K. Petersson, and</a
-      ><a name="2389"
-      >
-</a
-      ><a name="2390" class="Comment"
-      >--     G. Plotkin (Eds.).  Dept. of Comp. Sci. Chalmers Univ. of Technology and G&#246;teborg Univ.</a
-      ><a name="2484"
-      >
-</a
-      ><a name="2485" class="Comment"
-      >--     Available at (&#8230;), pp. 66&#8211;79.</a
-      ><a name="2520"
-      >
-</a
-      ><a name="2521" class="Comment"
-      >--</a
-      ><a name="2523"
-      >
-</a
-      ><a name="2524" class="Comment"
-      >-- 5.  Coquand, Th. and Dybjer, P.</a
-      ><a name="2558"
-      >
-</a
-      ><a name="2559" class="Comment"
-      >--     Intuitionistic model constructions and normalisation proofs.</a
-      ><a name="2626"
-      >
-</a
-      ><a name="2627" class="Comment"
-      >--     Math. Structures Comp. Sci., 7(1) (1997) 75&#8211;94.</a
-      ><a name="2681"
-      >
-</a
-      ><a name="2682" class="Comment"
-      >--</a
-      ><a name="2684"
-      >
-</a
-      ><a name="2685" class="Comment"
-      >-- 6.  Coquand, Th. and Gallier, J.</a
-      ><a name="2720"
-      >
-</a
-      ><a name="2721" class="Comment"
-      >--     A proof of strong normalization for the theory of constructions using a Kripke-like interpretation.</a
-      ><a name="2827"
-      >
-</a
-      ><a name="2828" class="Comment"
-      >--     In Proceedings of the First Workshop in Logical Frameworks, G. Huet and G. Plotkin (Eds.).</a
-      ><a name="2925"
-      >
-</a
-      ><a name="2926" class="Comment"
-      >--     Available at (&#8230;), pp. 479&#8211;497.</a
-      ><a name="2963"
-      >
-</a
-      ><a name="2964" class="Comment"
-      >--</a
-      ><a name="2966"
-      >
-</a
-      ><a name="2967" class="Comment"
-      >-- 7.  Coquand, Th., Nordstr&#246;m, B., Smith, J., and von Sydow, B.</a
-      ><a name="3031"
-      >
-</a
-      ><a name="3032" class="Comment"
-      >--     Type theory and programming.</a
-      ><a name="3067"
-      >
-</a
-      ><a name="3068" class="Comment"
-      >--     EATCS, 52 (1994) 203&#8211;228.</a
-      ><a name="3100"
-      >
-</a
-      ><a name="3101" class="Comment"
-      >--</a
-      ><a name="3103"
-      >
-</a
-      ><a name="3104" class="Comment"
-      >-- 8.  Curien, P.-L.</a
-      ><a name="3124"
-      >
-</a
-      ><a name="3125" class="Comment"
-      >--     An abstract framework for environment machines.</a
-      ><a name="3179"
-      >
-</a
-      ><a name="3180" class="Comment"
-      >--     Theoretical Comp. Sci., 82 (1991) 389&#8211;402.</a
-      ><a name="3229"
-      >
-</a
-      ><a name="3230" class="Comment"
-      >--</a
-      ><a name="3232"
-      >
-</a
-      ><a name="3233" class="Comment"
-      >-- 9.  Friedman, H.</a
-      ><a name="3252"
-      >
-</a
-      ><a name="3253" class="Comment"
-      >--     Equality between functionals.</a
-      ><a name="3289"
-      >
-</a
-      ><a name="3290" class="Comment"
-      >--     In Logic Colloquium, Symposium on Logic, held at Boston, 1972&#8211;1973, LNCS, Vol. 453,</a
-      ><a name="3380"
-      >
-</a
-      ><a name="3381" class="Comment"
-      >--     Springer-Verlag, Berlin, 1975, pp. 22&#8211;37.</a
-      ><a name="3429"
-      >
-</a
-      ><a name="3430" class="Comment"
-      >--</a
-      ><a name="3432"
-      >
-</a
-      ><a name="3433" class="Comment"
-      >-- 10. Gandy, R.O.</a
-      ><a name="3451"
-      >
-</a
-      ><a name="3452" class="Comment"
-      >--     On the axiom of extensionality&#8212;Part I.</a
-      ><a name="3497"
-      >
-</a
-      ><a name="3498" class="Comment"
-      >--     The Journal of symbolic logic, 21 (1956) 36&#8211;48.</a
-      ><a name="3552"
-      >
-</a
-      ><a name="3553" class="Comment"
-      >--</a
-      ><a name="3555"
-      >
-</a
-      ><a name="3556" class="Comment"
-      >-- 11. Kripke S.A.</a
-      ><a name="3574"
-      >
-</a
-      ><a name="3575" class="Comment"
-      >--     Semantical analysis of intuitionistic logic I.</a
-      ><a name="3628"
-      >
-</a
-      ><a name="3629" class="Comment"
-      >--     In Formal Systems and Recursive Functions, J.N. Crossley and M.A.E. Dummet (Eds.).</a
-      ><a name="3718"
-      >
-</a
-      ><a name="3719" class="Comment"
-      >--     North-Holland, Amsterdam, 1965, pp. 92&#8211;130.</a
-      ><a name="3769"
-      >
-</a
-      ><a name="3770" class="Comment"
-      >--</a
-      ><a name="3772"
-      >
-</a
-      ><a name="3773" class="Comment"
-      >-- 12. Magnusson, L. and Nordstr&#246;m, B.</a
-      ><a name="3811"
-      >
-</a
-      ><a name="3812" class="Comment"
-      >--     The ALF proof editor and its proof engine.</a
-      ><a name="3861"
-      >
-</a
-      ><a name="3862" class="Comment"
-      >--     In Types for Proofs and Programs, LNCS, Vol. 806, Springer-Verlag, Berlin, 1994, pp. 213&#8211;237.</a
-      ><a name="3962"
-      >
-</a
-      ><a name="3963" class="Comment"
-      >--</a
-      ><a name="3965"
-      >
-</a
-      ><a name="3966" class="Comment"
-      >-- 13. Martin-L&#246;f, P.</a
-      ><a name="3987"
-      >
-</a
-      ><a name="3988" class="Comment"
-      >--     Substitution calculus.</a
-      ><a name="4017"
-      >
-</a
-      ><a name="4018" class="Comment"
-      >--     Handwritten notes, G&#246;teborg, 1992.</a
-      ><a name="4059"
-      >
-</a
-      ><a name="4060" class="Comment"
-      >--</a
-      ><a name="4062"
-      >
-</a
-      ><a name="4063" class="Comment"
-      >-- 14. Mitchell, J.C.</a
-      ><a name="4084"
-      >
-</a
-      ><a name="4085" class="Comment"
-      >--     Type systems for programming languages.</a
-      ><a name="4131"
-      >
-</a
-      ><a name="4132" class="Comment"
-      >--     In Handbook of Theoretical Comp. Sci., Volume B: Formal Models and Semantics, J. van Leeuwen (Ed.).</a
-      ><a name="4238"
-      >
-</a
-      ><a name="4239" class="Comment"
-      >--     Elsevier and MIT Press, Amsterdam, 1990, pp. 365&#8211;458.</a
-      ><a name="4299"
-      >
-</a
-      ><a name="4300" class="Comment"
-      >--</a
-      ><a name="4302"
-      >
-</a
-      ><a name="4303" class="Comment"
-      >-- 15. Mitchell, J.C. and Moggi, E.</a
-      ><a name="4338"
-      >
-</a
-      ><a name="4339" class="Comment"
-      >--     Kripke-style models for typed lambda calculus.</a
-      ><a name="4392"
-      >
-</a
-      ><a name="4393" class="Comment"
-      >--     Annals for Pure and Applied Logic, 51 (1991) 99&#8211;124.</a
-      ><a name="4452"
-      >
-</a
-      ><a name="4453" class="Comment"
-      >--</a
-      ><a name="4455"
-      >
-</a
-      ><a name="4456" class="Comment"
-      >-- 16. Nordstr&#246;m, B., Petersson, K., and Smith, J.</a
-      ><a name="4506"
-      >
-</a
-      ><a name="4507" class="Comment"
-      >--     Programming in Martin-L&#246;f&#8217;s Type THeory. An Introduction.</a
-      ><a name="4571"
-      >
-</a
-      ><a name="4572" class="Comment"
-      >--     Oxford University Press, Oxford, UK, 1990.</a
-      ><a name="4621"
-      >
-</a
-      ><a name="4622" class="Comment"
-      >--</a
-      ><a name="4624"
-      >
-</a
-      ><a name="4625" class="Comment"
-      >-- 17. Scott, D.S.</a
-      ><a name="4643"
-      >
-</a
-      ><a name="4644" class="Comment"
-      >--     Relating theories lambda calculus.</a
-      ><a name="4685"
-      >
-</a
-      ><a name="4686" class="Comment"
-      >--     In To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus, and Formalism.</a
-      ><a name="4771"
-      >
-</a
-      ><a name="4772" class="Comment"
-      >--     Academic Press, New York, 1980, pp. 403&#8211;450.</a
-      ><a name="4823"
-      >
-</a
-      ><a name="4824" class="Comment"
-      >--</a
-      ><a name="4826"
-      >
-</a
-      ><a name="4827" class="Comment"
-      >-- 18. Statman, R.</a
-      ><a name="4845"
-      >
-</a
-      ><a name="4846" class="Comment"
-      >--     Logical relation and the typed &#955;-calculus.</a
-      ><a name="4895"
-      >
-</a
-      ><a name="4896" class="Comment"
-      >--     Information and Control, 65 (1985) 85&#8211;97.</a
-      ><a name="4944"
-      >
-</a
-      ><a name="4945" class="Comment"
-      >--</a
-      ><a name="4947"
-      >
-</a
-      ><a name="4948" class="Comment"
-      >-- 19. Streicher, T.</a
-      ><a name="4968"
-      >
-</a
-      ><a name="4969" class="Comment"
-      >--     Semantics of Type Theory.</a
-      ><a name="5001"
-      >
-</a
-      ><a name="5002" class="Comment"
-      >--     Birkh&#228;user, Basel, 1991.</a
-      ><a name="5033"
-      >
-</a
-      ><a name="5034" class="Comment"
-      >--</a
-      ><a name="5036"
-      >
-</a
-      ><a name="5037" class="Comment"
-      >-- 20. Tasistro, A.</a
-      ><a name="5056"
-      >
-</a
-      ><a name="5057" class="Comment"
-      >--     Formulation of Martin-L&#246;f&#8217;s theory of types with explicit substitutions.</a
-      ><a name="5136"
-      >
-</a
-      ><a name="5137" class="Comment"
-      >--     Licentiate thesis, Dept. of Comp. Sci. Chalmers Univ. of Technology and G&#246;teborg Univ., 1993.</a
-      ><a name="5237"
-      >
-</a
-      ></pre
-    ></body
-  ></html
->
+<a id="55" class="Comment">-- 10. Conclusions</a>
+<a id="74" class="Comment">-- ===============</a>
+<a id="93" class="Comment">--</a>
+<a id="96" class="Comment">-- We have defined a calculus of proof trees for simply typed λ-calculus with explicit substitutions</a>
+<a id="197" class="Comment">-- and we have proved that this calculus is sound and complete with respect to Kripke</a>
+<a id="283" class="Comment">-- models.  A decision algorithm for convertibility based on the technique of “normalisation by</a>
+<a id="379" class="Comment">-- evaluation” has also been proven correct.</a>
+<a id="424" class="Comment">--</a>
+<a id="427" class="Comment">-- One application of the results for proof trees is the soundness and completeness for a</a>
+<a id="517" class="Comment">-- formulation of an implicitly-typed λ-calculus with explicit substitutions.</a>
+<a id="595" class="Comment">--</a>
+<a id="598" class="Comment">-- An important aspect of this work is that it has been carried out on a machine; actually,</a>
+<a id="690" class="Comment">-- the problem was partly chosen because it seemed possible to do the formalization in a nice</a>
+<a id="784" class="Comment">-- way using ALF.  It is often emphasised that a proof is machine checked, but this is the very</a>
+<a id="880" class="Comment">-- minimum one can ask of a proof system.  Another important aspect is that the system helps</a>
+<a id="973" class="Comment">-- you to develop your proof, and I feel that ALF is on the right way: this work was not done</a>
+<a id="1067" class="Comment">-- first by pen and paper and then typed into the machine, but was from the very beginning</a>
+<a id="1158" class="Comment">-- carried out in interaction with the system.</a>
+<a id="1205" class="Comment">--</a>
+<a id="1208" class="Comment">-- NOTE: The above paragraphs apply to Agda, as well.</a>
+<a id="1262" class="Comment">--</a>
+<a id="1265" class="Comment">--</a>
+<a id="1268" class="Comment">-- Appendix</a>
+<a id="1280" class="Comment">-- --------</a>
+<a id="1292" class="Comment">--</a>
+<a id="1295" class="Comment">-- (…)</a>
+<a id="1302" class="Comment">--</a>
+<a id="1305" class="Comment">--</a>
+<a id="1308" class="Comment">-- Acknowledgement</a>
+<a id="1327" class="Comment">-- ---------------</a>
+<a id="1346" class="Comment">--</a>
+<a id="1349" class="Comment">-- The author wants to thank the editor Olivier Danvy for having had the patience with delays</a>
+<a id="1443" class="Comment">-- and still being supportive.  She is also grateful to Bernd Grobauer for help with improving</a>
+<a id="1538" class="Comment">-- the presentation.  The comments of the anonymous referees have also been very valuable.</a>
+<a id="1629" class="Comment">--</a>
+<a id="1632" class="Comment">--</a>
+<a id="1635" class="Comment">-- References</a>
+<a id="1649" class="Comment">-- ----------</a>
+<a id="1663" class="Comment">--</a>
+<a id="1666" class="Comment">-- 1.  Abadi, M., Cardelli, L., Curien, P.-L., and Lévy, J.-J.</a>
+<a id="1729" class="Comment">--     Explicit substitutions.</a>
+<a id="1760" class="Comment">--     Journal of Functional Programming, 1(4) (1991) 375–416.</a>
+<a id="1823" class="Comment">--</a>
+<a id="1826" class="Comment">-- 2.  Berger, U.</a>
+<a id="1844" class="Comment">--     Program extraction from normalization proofs.</a>
+<a id="1897" class="Comment">--     In Proceedings of TLCA’93, LNCS, Vol. 664, Springer Verlag, Berlin, 1993, pp. 91–106.</a>
+<a id="1990" class="Comment">--</a>
+<a id="1993" class="Comment">-- 3.  Berger, U. and Schwichtenberg, H.</a>
+<a id="2034" class="Comment">--     An inverse of the evaluation functional for typed λ-calculus.</a>
+<a id="2103" class="Comment">--     In Proceedings of the 6th Annual IEEE Symposium on Logic in Comp. Sci., Amsterdam, 1991, pp. 203–211.</a>
+<a id="2212" class="Comment">--</a>
+<a id="2215" class="Comment">-- 4.  Coquand, Th.</a>
+<a id="2235" class="Comment">--     Pattern matching with dependent types.</a>
+<a id="2281" class="Comment">--     In Proceedings of the 1992 Workshop on Types for Proofs and Programs, B. Nordström, K. Petersson, and</a>
+<a id="2390" class="Comment">--     G. Plotkin (Eds.).  Dept. of Comp. Sci. Chalmers Univ. of Technology and Göteborg Univ.</a>
+<a id="2485" class="Comment">--     Available at (…), pp. 66–79.</a>
+<a id="2521" class="Comment">--</a>
+<a id="2524" class="Comment">-- 5.  Coquand, Th. and Dybjer, P.</a>
+<a id="2559" class="Comment">--     Intuitionistic model constructions and normalisation proofs.</a>
+<a id="2627" class="Comment">--     Math. Structures Comp. Sci., 7(1) (1997) 75–94.</a>
+<a id="2682" class="Comment">--</a>
+<a id="2685" class="Comment">-- 6.  Coquand, Th. and Gallier, J.</a>
+<a id="2721" class="Comment">--     A proof of strong normalization for the theory of constructions using a Kripke-like interpretation.</a>
+<a id="2828" class="Comment">--     In Proceedings of the First Workshop in Logical Frameworks, G. Huet and G. Plotkin (Eds.).</a>
+<a id="2926" class="Comment">--     Available at (…), pp. 479–497.</a>
+<a id="2964" class="Comment">--</a>
+<a id="2967" class="Comment">-- 7.  Coquand, Th., Nordström, B., Smith, J., and von Sydow, B.</a>
+<a id="3032" class="Comment">--     Type theory and programming.</a>
+<a id="3068" class="Comment">--     EATCS, 52 (1994) 203–228.</a>
+<a id="3101" class="Comment">--</a>
+<a id="3104" class="Comment">-- 8.  Curien, P.-L.</a>
+<a id="3125" class="Comment">--     An abstract framework for environment machines.</a>
+<a id="3180" class="Comment">--     Theoretical Comp. Sci., 82 (1991) 389–402.</a>
+<a id="3230" class="Comment">--</a>
+<a id="3233" class="Comment">-- 9.  Friedman, H.</a>
+<a id="3253" class="Comment">--     Equality between functionals.</a>
+<a id="3290" class="Comment">--     In Logic Colloquium, Symposium on Logic, held at Boston, 1972–1973, LNCS, Vol. 453,</a>
+<a id="3381" class="Comment">--     Springer-Verlag, Berlin, 1975, pp. 22–37.</a>
+<a id="3430" class="Comment">--</a>
+<a id="3433" class="Comment">-- 10. Gandy, R.O.</a>
+<a id="3452" class="Comment">--     On the axiom of extensionality—Part I.</a>
+<a id="3498" class="Comment">--     The Journal of symbolic logic, 21 (1956) 36–48.</a>
+<a id="3553" class="Comment">--</a>
+<a id="3556" class="Comment">-- 11. Kripke S.A.</a>
+<a id="3575" class="Comment">--     Semantical analysis of intuitionistic logic I.</a>
+<a id="3629" class="Comment">--     In Formal Systems and Recursive Functions, J.N. Crossley and M.A.E. Dummet (Eds.).</a>
+<a id="3719" class="Comment">--     North-Holland, Amsterdam, 1965, pp. 92–130.</a>
+<a id="3770" class="Comment">--</a>
+<a id="3773" class="Comment">-- 12. Magnusson, L. and Nordström, B.</a>
+<a id="3812" class="Comment">--     The ALF proof editor and its proof engine.</a>
+<a id="3862" class="Comment">--     In Types for Proofs and Programs, LNCS, Vol. 806, Springer-Verlag, Berlin, 1994, pp. 213–237.</a>
+<a id="3963" class="Comment">--</a>
+<a id="3966" class="Comment">-- 13. Martin-Löf, P.</a>
+<a id="3988" class="Comment">--     Substitution calculus.</a>
+<a id="4018" class="Comment">--     Handwritten notes, Göteborg, 1992.</a>
+<a id="4060" class="Comment">--</a>
+<a id="4063" class="Comment">-- 14. Mitchell, J.C.</a>
+<a id="4085" class="Comment">--     Type systems for programming languages.</a>
+<a id="4132" class="Comment">--     In Handbook of Theoretical Comp. Sci., Volume B: Formal Models and Semantics, J. van Leeuwen (Ed.).</a>
+<a id="4239" class="Comment">--     Elsevier and MIT Press, Amsterdam, 1990, pp. 365–458.</a>
+<a id="4300" class="Comment">--</a>
+<a id="4303" class="Comment">-- 15. Mitchell, J.C. and Moggi, E.</a>
+<a id="4339" class="Comment">--     Kripke-style models for typed lambda calculus.</a>
+<a id="4393" class="Comment">--     Annals for Pure and Applied Logic, 51 (1991) 99–124.</a>
+<a id="4453" class="Comment">--</a>
+<a id="4456" class="Comment">-- 16. Nordström, B., Petersson, K., and Smith, J.</a>
+<a id="4507" class="Comment">--     Programming in Martin-Löf’s Type THeory. An Introduction.</a>
+<a id="4572" class="Comment">--     Oxford University Press, Oxford, UK, 1990.</a>
+<a id="4622" class="Comment">--</a>
+<a id="4625" class="Comment">-- 17. Scott, D.S.</a>
+<a id="4644" class="Comment">--     Relating theories lambda calculus.</a>
+<a id="4686" class="Comment">--     In To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus, and Formalism.</a>
+<a id="4772" class="Comment">--     Academic Press, New York, 1980, pp. 403–450.</a>
+<a id="4824" class="Comment">--</a>
+<a id="4827" class="Comment">-- 18. Statman, R.</a>
+<a id="4846" class="Comment">--     Logical relation and the typed λ-calculus.</a>
+<a id="4896" class="Comment">--     Information and Control, 65 (1985) 85–97.</a>
+<a id="4945" class="Comment">--</a>
+<a id="4948" class="Comment">-- 19. Streicher, T.</a>
+<a id="4969" class="Comment">--     Semantics of Type Theory.</a>
+<a id="5002" class="Comment">--     Birkhäuser, Basel, 1991.</a>
+<a id="5034" class="Comment">--</a>
+<a id="5037" class="Comment">-- 20. Tasistro, A.</a>
+<a id="5057" class="Comment">--     Formulation of Martin-Löf’s theory of types with explicit substitutions.</a>
+<a id="5137" class="Comment">--     Licentiate thesis, Dept. of Comp. Sci. Chalmers Univ. of Technology and Göteborg Univ., 1993.</a>
+</pre></body></html>

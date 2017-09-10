@@ -1,215 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-><head
-  ><title
-    >Everything</title
-    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
-     /><meta http-equiv="Content-Style-Type" content="text/css"
-     /><link href="Agda.css" rel="stylesheet" type="text/css"
-     /></head
-  ><body
-  ><pre
-    ><a name="1" class="Comment"
-      >-- A formalised proof of the soundness and completeness of</a
-      ><a name="59"
-      >
-</a
-      ><a name="60" class="Comment"
-      >-- a simply typed lambda-calculus with explicit substitutions</a
-      ><a name="121"
-      >
-</a
-      ><a name="122" class="Comment"
-      >--</a
-      ><a name="124"
-      >
-</a
-      ><a name="125" class="Comment"
-      >-- Catarina Coquand</a
-      ><a name="144"
-      >
-</a
-      ><a name="145" class="Comment"
-      >--</a
-      ><a name="147"
-      >
-</a
-      ><a name="148" class="Comment"
-      >-- Higher-Order and Symbolic Computation, 15, 57-90, 2002</a
-      ><a name="205"
-      >
-</a
-      ><a name="206" class="Comment"
-      >--</a
-      ><a name="208"
-      >
-</a
-      ><a name="209" class="Comment"
-      >-- http://dx.doi.org/10.1023/A:1019964114625</a
-      ><a name="253"
-      >
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Everything</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Comment">-- A formalised proof of the soundness and completeness of</a>
+<a id="60" class="Comment">-- a simply typed lambda-calculus with explicit substitutions</a>
+<a id="122" class="Comment">--</a>
+<a id="125" class="Comment">-- Catarina Coquand</a>
+<a id="145" class="Comment">--</a>
+<a id="148" class="Comment">-- Higher-Order and Symbolic Computation, 15, 57-90, 2002</a>
+<a id="206" class="Comment">--</a>
+<a id="209" class="Comment">-- http://dx.doi.org/10.1023/A:1019964114625</a>
 
-</a
-      ><a name="255" class="Keyword"
-      >module</a
-      ><a name="261"
-      > </a
-      ><a name="262" href="Everything.html#1" class="Module"
-      >Everything</a
-      ><a name="272"
-      > </a
-      ><a name="273" class="Keyword"
-      >where</a
-      ><a name="278"
-      >
+<a id="255" class="Keyword">module</a> <a id="262" href="Everything.html" class="Module">Everything</a> <a id="273" class="Keyword">where</a>
 
-</a
-      ><a name="280" class="Comment"
-      >-- 1. Introduction</a
-      ><a name="298"
-      >
-</a
-      ><a name="299" class="Keyword"
-      >import</a
-      ><a name="305"
-      > </a
-      ><a name="306" href="Section1.html#1" class="Module"
-      >Section1</a
-      ><a name="314"
-      >
+<a id="280" class="Comment">-- 1. Introduction</a>
+<a id="299" class="Keyword">import</a> <a id="306" href="Section1.html" class="Module">Section1</a>
 
-</a
-      ><a name="316" class="Comment"
-      >-- 2. The proof editor</a
-      ><a name="338"
-      >
-</a
-      ><a name="339" class="Comment"
-      >-- NOTE: Not relevant to this formalisation</a
-      ><a name="382"
-      >
+<a id="316" class="Comment">-- 2. The proof editor</a>
+<a id="339" class="Comment">-- NOTE: Not relevant to this formalisation</a>
 
-</a
-      ><a name="384" class="Comment"
-      >-- 3. The calculus of proof trees</a
-      ><a name="417"
-      >
-</a
-      ><a name="418" class="Keyword"
-      >import</a
-      ><a name="424"
-      > </a
-      ><a name="425" href="Section3.html#1" class="Module"
-      >Section3</a
-      ><a name="433"
-      >
+<a id="384" class="Comment">-- 3. The calculus of proof trees</a>
+<a id="418" class="Keyword">import</a> <a id="425" href="Section3.html" class="Module">Section3</a>
 
-</a
-      ><a name="435" class="Comment"
-      >-- 4. The semantic model</a
-      ><a name="459"
-      >
-</a
-      ><a name="460" class="Keyword"
-      >import</a
-      ><a name="466"
-      > </a
-      ><a name="467" href="Section4.html#1" class="Module"
-      >Section4</a
-      ><a name="475"
-      >
+<a id="435" class="Comment">-- 4. The semantic model</a>
+<a id="460" class="Keyword">import</a> <a id="467" href="Section4.html" class="Module">Section4</a>
 
-</a
-      ><a name="477" class="Comment"
-      >-- 5. Normal form</a
-      ><a name="494"
-      >
-</a
-      ><a name="495" class="Keyword"
-      >import</a
-      ><a name="501"
-      > </a
-      ><a name="502" href="Section5.html#1" class="Module"
-      >Section5</a
-      ><a name="510"
-      >
+<a id="477" class="Comment">-- 5. Normal form</a>
+<a id="495" class="Keyword">import</a> <a id="502" href="Section5.html" class="Module">Section5</a>
 
-</a
-      ><a name="512" class="Comment"
-      >-- 6. Application to terms</a
-      ><a name="538"
-      >
-</a
-      ><a name="539" class="Keyword"
-      >import</a
-      ><a name="545"
-      > </a
-      ><a name="546" href="Section6.html#1" class="Module"
-      >Section6</a
-      ><a name="554"
-      >
+<a id="512" class="Comment">-- 6. Application to terms</a>
+<a id="539" class="Keyword">import</a> <a id="546" href="Section6.html" class="Module">Section6</a>
 
-</a
-      ><a name="556" class="Comment"
-      >-- 7. Correspondence between proof trees and terms</a
-      ><a name="606"
-      >
-</a
-      ><a name="607" class="Keyword"
-      >import</a
-      ><a name="613"
-      > </a
-      ><a name="614" href="Section7.html#1" class="Module"
-      >Section7</a
-      ><a name="622"
-      >
+<a id="556" class="Comment">-- 7. Correspondence between proof trees and terms</a>
+<a id="607" class="Keyword">import</a> <a id="614" href="Section7.html" class="Module">Section7</a>
 
-</a
-      ><a name="624" class="Comment"
-      >-- 8. Correctness of conversion between terms</a
-      ><a name="669"
-      >
-</a
-      ><a name="670" class="Keyword"
-      >import</a
-      ><a name="676"
-      > </a
-      ><a name="677" href="Section8.html#1" class="Module"
-      >Section8</a
-      ><a name="685"
-      >
+<a id="624" class="Comment">-- 8. Correctness of conversion between terms</a>
+<a id="670" class="Keyword">import</a> <a id="677" href="Section8.html" class="Module">Section8</a>
 
-</a
-      ><a name="687" class="Comment"
-      >-- 9. A decision algorithm for terms</a
-      ><a name="723"
-      >
-</a
-      ><a name="724" class="Keyword"
-      >import</a
-      ><a name="730"
-      > </a
-      ><a name="731" href="Section9.html#1" class="Module"
-      >Section9</a
-      ><a name="739"
-      >
+<a id="687" class="Comment">-- 9. A decision algorithm for terms</a>
+<a id="724" class="Keyword">import</a> <a id="731" href="Section9.html" class="Module">Section9</a>
 
-</a
-      ><a name="741" class="Comment"
-      >-- 10. Conclusions</a
-      ><a name="759"
-      >
-</a
-      ><a name="760" class="Keyword"
-      >import</a
-      ><a name="766"
-      > </a
-      ><a name="767" href="Section10.html#1" class="Module"
-      >Section10</a
-      ><a name="776"
-      >
-</a
-      ></pre
-    ></body
-  ></html
->
+<a id="741" class="Comment">-- 10. Conclusions</a>
+<a id="760" class="Keyword">import</a> <a id="767" href="Section10.html" class="Module">Section10</a>
+</pre></body></html>
