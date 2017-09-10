@@ -180,13 +180,13 @@ module _ {{_ : Model}} where
     _≡⟨⟩_ : ∀ {A w} (a {a′} : w ⊩ A) → Eq a a′ → Eq a a′
     a ≡⟨⟩ eq = eq
 
-    infixr 2 _/_≡⟨_⟩_
-    _/_≡⟨_⟩_ : ∀ {A w} (a {a′ a″} : w ⊩ A) → 𝒰 a → a ≡ a′ → Eq a′ a″ → Eq a a″
-    a / u ≡⟨ eq ⟩ eq′ = transEq (≡→Eq u eq) eq′
+    infixr 2 _≡⟨_∣_⟩_
+    _≡⟨_∣_⟩_ : ∀ {A w} (a {a′ a″} : w ⊩ A) → a ≡ a′ → 𝒰 a → Eq a′ a″ → Eq a a″
+    a ≡⟨ eq ∣ u ⟩ eq′ = transEq (≡→Eq u eq) eq′
 
-    infix 3 _/_∎
-    _/_∎ : ∀ {A w} (a : w ⊩ A) → 𝒰 a → Eq a a
-    a / u ∎ = reflEq u
+    infix 3 _∎⟨_⟩
+    _∎⟨_⟩ : ∀ {A w} (a : w ⊩ A) → 𝒰 a → Eq a a
+    a ∎⟨ u ⟩ = reflEq u
 
 -- Equal uniform values can be substituted in `⟦∙⟧⟨_⟩` and the function `↑⟨_⟩` returns uniform objects
 -- for uniform input and equal results for equal input.
@@ -354,13 +354,13 @@ module _ {{_ : Model}} where
     _≡⟨⟩_ : ∀ {Γ w} (ρ {ρ′} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ ρ′
     ρ ≡⟨⟩ eq⋆ = eq⋆
 
-    infixr 2 _/_≡⟨_⟩_
-    _/_≡⟨_⟩_ : ∀ {Γ w} (ρ {ρ′ ρ″} : w ⊩⋆ Γ) → 𝒰⋆ ρ → ρ ≡ ρ′ → Eq⋆ ρ′ ρ″ → Eq⋆ ρ ρ″
-    ρ / u⋆ ≡⟨ eq⋆ ⟩ eq⋆′ = transEq⋆ (≡→Eq⋆ u⋆ eq⋆) eq⋆′
+    infixr 2 _≡⟨_∣_⟩_
+    _≡⟨_∣_⟩_ : ∀ {Γ w} (ρ {ρ′ ρ″} : w ⊩⋆ Γ) → ρ ≡ ρ′ → 𝒰⋆ ρ → Eq⋆ ρ′ ρ″ → Eq⋆ ρ ρ″
+    ρ ≡⟨ eq⋆ ∣ u⋆ ⟩ eq⋆′ = transEq⋆ (≡→Eq⋆ u⋆ eq⋆) eq⋆′
 
-    infix 3 _/_∎
-    _/_∎ : ∀ {Γ w} (ρ : w ⊩⋆ Γ) → 𝒰⋆ ρ → Eq⋆ ρ ρ
-    ρ / u⋆ ∎ = reflEq⋆ u⋆
+    infix 3 _∎⟨_⟩
+    _∎⟨_⟩ : ∀ {Γ w} (ρ : w ⊩⋆ Γ) → 𝒰⋆ ρ → Eq⋆ ρ ρ
+    ρ ∎⟨ u⋆ ⟩ = reflEq⋆ u⋆
 
 -- We can substitute equal semantic environments in `lookup`, `↑⟨_⟩`, `↓⟨_⟩`
 -- and the result of applying these functions to uniform environments is also uniform.
