@@ -817,21 +817,38 @@ mutual
 -- and Lemma 9 we get that `M ▶ π⟨ c ⟩ ≅ nf M`, where `c : Γ ⊇ Γ`.  Using the conversion rule
 -- `M ≅ M ▶ π⟨ c ⟩` for `c : Γ ⊇ Γ` we get by transitivity of conversion of `_≅_` that `M ≅ nf M`.
 
-postulate
-  proj⟨_⟩CV⋆ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆
+proj⟨_⟩CV⋆ : ∀ {Γ Δ} →
+               (c : Δ ⊇ Γ) →
+               CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆
+proj⟨ done ⟩CV⋆             = cv⋆[]
+proj⟨ weak {x = x} c i ⟩CV⋆ = cv⋆≔ {c = weak⊇}
+                                   (cong≅ₛCV⋆ (conv≅ₛ₄ _ _ _) (proj⟨ c ⟩CV⋆))
+                                   (aux₄₆₈ (λ c′ →
+                                     begin
+                                       (ν x zero ▶ π⟨ weak c i ⟩) ▶ π⟨ c′ ⟩
+                                     ≅⟨ cong≅▶ (conv≅₄ _ _ _) refl≅ₛ ⟩
+                                       ν x i ▶ π⟨ c′ ⟩
+                                     ≅⟨ conv≅₄ _ _ _ ⟩
+                                       ν x (↑⟨ c′ ⟩∋ i)
+                                     ∎))
+                                     where
+                                       open ≅-Reasoning
 
 reflCV⋆ : ∀ {Γ} → CV⋆ π⟨ refl⊇ ⟩ (refl⊩⋆ {Γ})
 reflCV⋆ = proj⟨ refl⊇ ⟩CV⋆
 
-postulate
-  aux₄₆₉⟨_⟩ : ∀ {Γ A} →
-                (c : Γ ⊇ Γ) (M : Γ ⊢ A) →
-                M ▶ π⟨ c ⟩ ≅ nf M
+aux₄₆₉⟨_⟩ : ∀ {Γ A} →
+              (c : Γ ⊇ Γ) (M : Γ ⊢ A) →
+              M ▶ π⟨ c ⟩ ≅ nf M
+aux₄₆₉⟨ c ⟩ M = subst (λ c′ → M ▶ π⟨ c ⟩ ≅ reify (⟦ M ⟧ proj⟨ c′ ⟩⊩⋆))
+                      (uniq⊇ c refl⊇)
+                      (lem₉ (lem₈ M proj⟨ c ⟩CV⋆))
 
 -- Theorem 2.
-postulate
-  thm₂ : ∀ {Γ A} → (M : Γ ⊢ A) →
-           M ≅ nf M
+thm₂ : ∀ {Γ A} → (M : Γ ⊢ A) →
+         M ≅ nf M
+thm₂ M = trans≅ (sym≅ (conv≅₅ _ _))
+                (aux₄₆₉⟨ refl⊇ ⟩ M)
 
 -- It is now easy to prove the completeness theorem:
 
