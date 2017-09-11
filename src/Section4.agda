@@ -192,20 +192,19 @@ module _ {{_ : Model}} where
 -- for uniform input and equal results for equal input.
 
 module _ {{_ : Model}} where
-  congEq⟦∙⟧⟨_⟩ : ∀ {A B w w′} →
-                   (c : w′ ⊒ w) → {f f′ : w ⊩ A ⊃ B} → Eq f f′ → 𝒰 f → 𝒰 f′ →
-                                   {a a′ : w′ ⊩ A} → Eq a a′ → 𝒰 a → 𝒰 a′ →
+  congEq⟦∙⟧⟨_⟩ : ∀ {A B w w′} {f f′ : w ⊩ A ⊃ B} {a a′ : w′ ⊩ A} →
+                   (c : w′ ⊒ w) → Eq f f′ → 𝒰 f → 𝒰 f′ → Eq a a′ → 𝒰 a → 𝒰 a′ →
                    Eq (f ⟦∙⟧⟨ c ⟩ a) (f′ ⟦∙⟧⟨ c ⟩ a′)
   congEq⟦∙⟧⟨ c ⟩ (eq⊃ h) (𝓊⊃ h₀ h₁ h₂) (𝓊⊃ h₀′ h₁′ h₂′) eqₐ uₐ uₐ′ = transEq (h₁ c eqₐ uₐ uₐ′) (h c uₐ′)
 
-  congEq↑⟨_⟩ : ∀ {A w w′} →
-                 (c : w′ ⊒ w) → {a a′ : w ⊩ A} → Eq a a′ →
+  congEq↑⟨_⟩ : ∀ {A w w′} {a a′ : w ⊩ A} →
+                 (c : w′ ⊒ w) → Eq a a′ →
                  Eq (↑⟨ c ⟩ a) (↑⟨ c ⟩ a′)
   congEq↑⟨ c ⟩ (eq• h) = eq• (λ c′    → h (c ◇ c′))
   congEq↑⟨ c ⟩ (eq⊃ h) = eq⊃ (λ c′ uₐ → h (c ◇ c′) uₐ)
 
-  cong𝒰↑⟨_⟩ : ∀ {A w w′} →
-                (c : w′ ⊒ w) → {a : w ⊩ A} → 𝒰 a →
+  cong𝒰↑⟨_⟩ : ∀ {A w w′} {a : w ⊩ A} →
+                (c : w′ ⊒ w) → 𝒰 a →
                 𝒰 (↑⟨ c ⟩ a)
   cong𝒰↑⟨ c ⟩ 𝓊•            = 𝓊•
   cong𝒰↑⟨ c ⟩ (𝓊⊃ h₀ h₁ h₂) = 𝓊⊃ (λ c′ uₐ         → h₀ (c ◇ c′) uₐ)
@@ -757,21 +756,21 @@ mutual
                                                      (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
                                              (h refl⊇ (CV⟦ N ⟧ cv⋆)) }
   CV⟦ M ▶ γ ⟧ cv⋆ = cong≅CV (conv≅₇ _ _ _)
-                            (CV⟦ M ⟧ (CV⋆⟦ γ ⟧ cv⋆))
+                            (CV⟦ M ⟧ (CV⋆⟦ γ ⟧ₛ cv⋆))
 
-  CV⋆⟦_⟧ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
-             (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
-             CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
-  CV⋆⟦ π⟨ c ⟩ ⟧        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
-  CV⋆⟦ γ ● γ′ ⟧        cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
-                                       (CV⋆⟦ γ ⟧ (CV⋆⟦ γ′ ⟧ cv⋆))
-  CV⋆⟦ [ γ , x ≔ M ] ⟧ cv⋆ = cv⋆≔ {c = weak⊇}
-                                  (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                                      (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
-                                             (CV⋆⟦ γ ⟧ cv⋆))
-                                  (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                                   (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
-                                           (CV⟦ M ⟧ cv⋆))
+  CV⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
+              (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
+              CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
+  CV⋆⟦ π⟨ c ⟩ ⟧ₛ        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
+  CV⋆⟦ γ ● γ′ ⟧ₛ        cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
+                                        (CV⋆⟦ γ ⟧ₛ (CV⋆⟦ γ′ ⟧ₛ cv⋆))
+  CV⋆⟦ [ γ , x ≔ M ] ⟧ₛ cv⋆ = cv⋆≔ {c = weak⊇}
+                                   (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                                       (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
+                                              (CV⋆⟦ γ ⟧ₛ cv⋆))
+                                   (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                                    (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
+                                            (CV⟦ M ⟧ cv⋆))
 
 -- Both lemmas are proved by induction on the proof trees using the lemmas above.
 --
@@ -904,7 +903,7 @@ aux₄₆₉ₛ⟨_⟩ : ∀ {Γ Δ} →
                γ ● π⟨ c ⟩ ≅ₛ nf⋆ γ
 aux₄₆₉ₛ⟨ c ⟩ γ = subst (λ c′ → γ ● π⟨ c ⟩ ≅ₛ reify⋆ (⟦ γ ⟧ₛ proj⟨ c′ ⟩⊩⋆))
                        (uniq⊇ c refl⊇)
-                       (lem₉ₛ (CV⋆⟦ γ ⟧ proj⟨ c ⟩CV⋆))
+                       (lem₉ₛ (CV⋆⟦ γ ⟧ₛ proj⟨ c ⟩CV⋆))
 
 thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
           γ ≅ₛ nf⋆ γ
