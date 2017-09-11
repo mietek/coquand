@@ -742,36 +742,36 @@ congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv⋆≔ {c = weak⊇}
 
 -- Lemma 8.
 mutual
-  lem₈ : ∀ {Γ Δ A} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
-           (M : Γ ⊢ A) → CV⋆ γ ρ →
-           CV (M ▶ γ) (⟦ M ⟧ ρ)
-  lem₈ (ν x i) cv⋆ = congCVlookup cv⋆ i
-  lem₈ (ƛ x M) cv⋆ = cv⊃ (λ c cvₐ → cong≅CV (trans≅ (cong≅∙ (conv≅₇ _ _ _) refl≅)
-                                                     (conv≅₁ _ _ _))
-                                             (lem₈ M (cv⋆≔ {c = weak⊇}
+  CV⟦_⟧ : ∀ {Γ Δ A} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+            (M : Γ ⊢ A) → CV⋆ γ ρ →
+            CV (M ▶ γ) (⟦ M ⟧ ρ)
+  CV⟦ ν x i ⟧ cv⋆ = congCVlookup cv⋆ i
+  CV⟦ ƛ x M ⟧ cv⋆ = cv⊃ (λ c cvₐ → cong≅CV (trans≅ (cong≅∙ (conv≅₇ _ _ _) refl≅)
+                                                    (conv≅₁ _ _ _))
+                                            (CV⟦ M ⟧ (cv⋆≔ {c = weak⊇}
                                                            (cong≅ₛCV⋆ (conv≅ₛ₃ _ _ _)
                                                                       (congCV⋆↑⟨ c ⟩ cv⋆))
                                                            (cong≅CV (conv≅₃ _ _) cvₐ))))
-  lem₈ (M ∙ N) cv⋆ = case lem₈ M cv⋆ of
-                       λ { (cv⊃ h) → cong≅CV (trans≅ (conv≅₆ _ _ _)
-                                                      (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
-                                              (h refl⊇ (lem₈ N cv⋆)) }
-  lem₈ (M ▶ γ) cv⋆ = cong≅CV (conv≅₇ _ _ _)
-                             (lem₈ M (lem₈ₛ γ cv⋆))
+  CV⟦ M ∙ N ⟧ cv⋆ = case CV⟦ M ⟧ cv⋆ of
+                      λ { (cv⊃ h) → cong≅CV (trans≅ (conv≅₆ _ _ _)
+                                                     (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
+                                             (h refl⊇ (CV⟦ N ⟧ cv⋆)) }
+  CV⟦ M ▶ γ ⟧ cv⋆ = cong≅CV (conv≅₇ _ _ _)
+                            (CV⟦ M ⟧ (CV⋆⟦ γ ⟧ cv⋆))
 
-  lem₈ₛ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
-            (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
-            CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
-  lem₈ₛ π⟨ c ⟩        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
-  lem₈ₛ (γ ● γ′)      cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
-                                      (lem₈ₛ γ (lem₈ₛ γ′ cv⋆))
-  lem₈ₛ [ γ , x ≔ M ] cv⋆ = cv⋆≔ {c = weak⊇}
-                                 (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                                     (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
-                                            (lem₈ₛ γ cv⋆))
-                                 (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                                  (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
-                                          (lem₈ M cv⋆))
+  CV⋆⟦_⟧ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
+             (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
+             CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
+  CV⋆⟦ π⟨ c ⟩ ⟧        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
+  CV⋆⟦ γ ● γ′ ⟧        cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
+                                       (CV⋆⟦ γ ⟧ (CV⋆⟦ γ′ ⟧ cv⋆))
+  CV⋆⟦ [ γ , x ≔ M ] ⟧ cv⋆ = cv⋆≔ {c = weak⊇}
+                                  (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
+                                                      (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
+                                             (CV⋆⟦ γ ⟧ cv⋆))
+                                  (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
+                                                   (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
+                                           (CV⟦ M ⟧ cv⋆))
 
 -- Both lemmas are proved by induction on the proof trees using the lemmas above.
 --
@@ -838,7 +838,7 @@ aux₄₆₉⟨_⟩ : ∀ {Γ A} →
               M ▶ π⟨ c ⟩ ≅ nf M
 aux₄₆₉⟨ c ⟩ M = subst (λ c′ → M ▶ π⟨ c ⟩ ≅ reify (⟦ M ⟧ proj⟨ c′ ⟩⊩⋆))
                       (uniq⊇ c refl⊇)
-                      (lem₉ (lem₈ M proj⟨ c ⟩CV⋆))
+                      (lem₉ (CV⟦ M ⟧ proj⟨ c ⟩CV⋆))
 
 -- Theorem 2.
 thm₂ : ∀ {Γ A} → (M : Γ ⊢ A) →
@@ -904,7 +904,7 @@ aux₄₆₉ₛ⟨_⟩ : ∀ {Γ Δ} →
                γ ● π⟨ c ⟩ ≅ₛ nf⋆ γ
 aux₄₆₉ₛ⟨ c ⟩ γ = subst (λ c′ → γ ● π⟨ c ⟩ ≅ₛ reify⋆ (⟦ γ ⟧ₛ proj⟨ c′ ⟩⊩⋆))
                        (uniq⊇ c refl⊇)
-                       (lem₉ₛ (lem₈ₛ γ proj⟨ c ⟩CV⋆))
+                       (lem₉ₛ (CV⋆⟦ γ ⟧ proj⟨ c ⟩CV⋆))
 
 thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
           γ ≅ₛ nf⋆ γ
@@ -1002,7 +1002,7 @@ thm₅ M M′ p = begin
 -- The decision algorithm is also complete since by Theorem 4 and the hypothesis, `M ≅ M′`, we get
 -- `Eq (⟦ M ⟧ refl⊩⋆) (⟦ N ⟧ refl⊩⋆)` and by Corollary 1 we get `nf M ≡ nf N`.
 
--- NOTE: Omission in paper?
+-- NOTE: Added missing lemmas.
 module _ where
   proj⟨_⟩𝒰⋆ : ∀ {Γ Δ} →
                 (c : Δ ⊇ Γ) →
