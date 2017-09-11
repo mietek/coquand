@@ -195,7 +195,8 @@ module _ {{_ : Model}} where
   congEq⟦∙⟧⟨_⟩ : ∀ {A B w w′} {f f′ : w ⊩ A ⊃ B} {a a′ : w′ ⊩ A} →
                    (c : w′ ⊒ w) → Eq f f′ → 𝒰 f → 𝒰 f′ → Eq a a′ → 𝒰 a → 𝒰 a′ →
                    Eq (f ⟦∙⟧⟨ c ⟩ a) (f′ ⟦∙⟧⟨ c ⟩ a′)
-  congEq⟦∙⟧⟨ c ⟩ (eq⊃ h) (𝓊⊃ h₀ h₁ h₂) (𝓊⊃ h₀′ h₁′ h₂′) eqₐ uₐ uₐ′ = transEq (h₁ c eqₐ uₐ uₐ′) (h c uₐ′)
+  congEq⟦∙⟧⟨ c ⟩ (eq⊃ h) (𝓊⊃ h₀ h₁ h₂) (𝓊⊃ h₀′ h₁′ h₂′) eqₐ uₐ uₐ′ =
+    transEq (h₁ c eqₐ uₐ uₐ′) (h c uₐ′)
 
   congEq↑⟨_⟩ : ∀ {A w w′} {a a′ : w ⊩ A} →
                  (c : w′ ⊒ w) → Eq a a′ →
@@ -542,22 +543,24 @@ mutual
 -- the result of applying the inversion function to them is intensionally equal.  To prove this
 -- we first have to show the following two lemmas:
 
-aux₄₄₁ : ∀ {A Γ} → (f f′ : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) → (∀ {Δ} → (c : Δ ⊇ Γ) → f c ≡ f′ c) →
+aux₄₄₁ : ∀ {A Γ} →
+           (f f′ : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) → (∀ {Δ} → (c : Δ ⊇ Γ) → f c ≡ f′ c) →
            Eq (val f) (val f′)
 aux₄₄₁ {•}     f f′ h = eq• (λ c        → h c)
 aux₄₄₁ {A ⊃ B} f f′ h = eq⊃ (λ c {a} uₐ → aux₄₄₁ (λ c′ → f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a))
-                                                  (λ c′ → f′ (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a))
-                                                  (λ c′ → cong (_∙ reify (↑⟨ c′ ⟩ a))
-                                                             (h (c ○ c′))))
+                            (λ c′       → f′ (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a))
+                            (λ c′       → cong (_∙ reify (↑⟨ c′ ⟩ a))
+                                             (h (c ○ c′))))
 
-aux₄₄₂⟨_⟩ : ∀ {A Γ Δ} → (c : Δ ⊇ Γ) (f : (∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A)) →
+aux₄₄₂⟨_⟩ : ∀ {A Γ Δ} →
+              (c : Δ ⊇ Γ) (f : (∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A)) →
               Eq (↑⟨ c ⟩ (val f)) (val (λ c′ → f (c ○ c′)))
 aux₄₄₂⟨_⟩ {•}     c f = eq• (λ c′        → cong f refl)
 aux₄₄₂⟨_⟩ {A ⊃ B} c f = eq⊃ (λ c′ {a} uₐ → aux₄₄₁ (λ c″ → f ((c ○ c′) ○ c″) ∙ reify (↑⟨ c″ ⟩ a))
-                                                   (λ c″ → f (c ○ (c′ ○ c″)) ∙ reify (↑⟨ c″ ⟩ a))
-                                                   (λ c″ → cong (_∙ reify (↑⟨ c″ ⟩ a))
-                                                              (cong f
-                                                                (sym (assoc○ c c′ c″)))))
+                            (λ c″        → f (c ○ (c′ ○ c″)) ∙ reify (↑⟨ c″ ⟩ a))
+                            (λ c″        → cong (_∙ reify (↑⟨ c″ ⟩ a))
+                                              (cong f
+                                                (sym (assoc○ c c′ c″)))))
 
 -- Both lemmas are proved by induction on the type and they are used in order to prove the
 -- following theorem,
@@ -585,14 +588,15 @@ mutual
                                           (λ c′ → f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a′))
                                           (λ c′ → cong (f (c ○ c′) ∙_)
                                                      (thm₁ (congEq↑⟨ c′ ⟩ eqₐ))))
-       (λ c c′ c″ {a} uₐ        → transEq (aux₄₄₂⟨ c′ ⟩ (λ c‴ → f (c ○ c‴) ∙ reify (↑⟨ c‴ ⟩ a)))
-                                           (aux₄₄₁ (λ c‴ → f (c ○ (c′ ○ c‴)) ∙ reify (↑⟨ c′ ○ c‴ ⟩ a))
-                                                   (λ c‴ → f (c″ ○ c‴) ∙ reify (↑⟨ c‴ ⟩ (↑⟨ c′ ⟩ a)))
-                                                   (λ c‴ → cong² _∙_
-                                                              (cong f
-                                                                (trans (assoc○ c c′ c‴)
-                                                                       (comp○ (c ○ c′) c‴ (c″ ○ c‴))))
-                                                              (thm₁ (symEq (aux₄₁₂ c′ c‴ (c′ ○ c‴) uₐ))))))
+       (λ c c′ c″ {a} uₐ        →
+         transEq (aux₄₄₂⟨ c′ ⟩ (λ c‴ → f (c ○ c‴) ∙ reify (↑⟨ c‴ ⟩ a)))
+                 (aux₄₄₁ (λ c‴ → f (c ○ (c′ ○ c‴)) ∙ reify (↑⟨ c′ ○ c‴ ⟩ a))
+                         (λ c‴ → f (c″ ○ c‴) ∙ reify (↑⟨ c‴ ⟩ (↑⟨ c′ ⟩ a)))
+                         (λ c‴ → cong² _∙_
+                                    (cong f
+                                      (trans (assoc○ c c′ c‴)
+                                             (comp○ (c ○ c′) c‴ (c″ ○ c‴))))
+                                    (thm₁ (symEq (aux₄₁₂ c′ c‴ (c′ ○ c‴) uₐ))))))
 
 -- We are now ready to define the function that given a proof tree computes its normal form.
 -- For this we define the identity environment `proj⟨_⟩⊩⋆` which to each variable
@@ -984,15 +988,16 @@ mutual
   Eq↑⟨ c ⟩⟦ ƛ x M ⟧ u⋆ = eq⊃ (λ c′ uₐ → Eq⟦ M ⟧ (eq⋆≔ (symEq⋆ (aux₄₂₇ c c′ (c ○ c′) u⋆)) (reflEq uₐ))
                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c ○ c′ ⟩ u⋆) uₐ)
                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ (cong𝒰⋆↑⟨ c ⟩ u⋆)) uₐ))
-  Eq↑⟨ c ⟩⟦ M ∙ N ⟧ u⋆ = case 𝒰⟦ M ⟧ u⋆ of
-                           λ { (𝓊⊃ h₀ h₁ h₂) → transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
-                                                        (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆)))
-                                                                 (congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
-                                                                                     (cong𝒰↑⟨ c ⟩ (𝒰⟦ M ⟧ u⋆))
-                                                                                     (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆))
-                                                                                     (Eq↑⟨ c ⟩⟦ N ⟧ u⋆)
-                                                                                     (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆))
-                                                                                     (𝒰⟦ N ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆)))) }
+  Eq↑⟨ c ⟩⟦ M ∙ N ⟧ u⋆ =
+    case 𝒰⟦ M ⟧ u⋆ of
+      λ { (𝓊⊃ h₀ h₁ h₂) → transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
+                                   (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆)))
+                                            (congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
+                                                                (cong𝒰↑⟨ c ⟩ (𝒰⟦ M ⟧ u⋆))
+                                                                (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆))
+                                                                (Eq↑⟨ c ⟩⟦ N ⟧ u⋆)
+                                                                (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆))
+                                                                (𝒰⟦ N ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆)))) }
   Eq↑⟨ c ⟩⟦ M ▶ γ ⟧ u⋆ = transEq (Eq↑⟨ c ⟩⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                  (Eq⟦ M ⟧ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ u⋆)
                                           (cong𝒰⋆↑⟨ c ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
