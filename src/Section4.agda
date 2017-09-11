@@ -930,35 +930,83 @@ thm₃ₛ γ γ′ eq⋆ = begin
 --
 -- In order to prove the soundness of the conversion rules we first have to show:
 
-postulate
-  aux₄₈₁ : ∀ {Γ Δ A} →
-             (M : Γ ⊢ A) → {ρ : Δ ⊩⋆ Γ} → 𝒰⋆ ρ →
-             𝒰 (⟦ M ⟧ ρ)
+-- NOTE: Added missing uniformity assumptions.
+mutual
+  𝒰⟦_⟧ : ∀ {A Γ Δ} {ρ : Δ ⊩⋆ Γ} →
+           (M : Γ ⊢ A) → 𝒰⋆ ρ →
+           𝒰 (⟦ M ⟧ ρ)
+  𝒰⟦ ν x i ⟧ u⋆ = cong𝒰lookup u⋆ i
+  𝒰⟦ ƛ x M ⟧ u⋆ = 𝓊⊃ (λ c uₐ         → 𝒰⟦ M ⟧ (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ))
+                     (λ c eqₐ uₐ uₐ′ → Eq⟦ M ⟧ (eq⋆≔ (congEq⋆↑⟨ c ⟩ (reflEq⋆ u⋆)) eqₐ)
+                                                (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ)
+                                                (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ′))
+                     (λ c c′ c″ uₐ   → transEq (Eq↑⟨ c′ ⟩⟦ M ⟧ (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ))
+                                                (Eq⟦ M ⟧ (eq⋆≔ (aux₄₂₇ c c′ c″ u⋆)
+                                                               (reflEq (cong𝒰↑⟨ c′ ⟩ uₐ)))
+                                                         (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ (cong𝒰⋆↑⟨ c ⟩ u⋆))
+                                                              (cong𝒰↑⟨ c′ ⟩ uₐ))
+                                                         (𝓊⋆≔ (cong𝒰⋆↑⟨ c″ ⟩ u⋆)
+                                                              (cong𝒰↑⟨ c′ ⟩ uₐ))))
+  𝒰⟦ M ∙ N ⟧ u⋆ = case 𝒰⟦ M ⟧ u⋆ of
+                    λ { (𝓊⊃ h₀ h₁ h₂) → h₀ refl⊇ (𝒰⟦ N ⟧ u⋆) }
+  𝒰⟦ M ▶ γ ⟧ u⋆ = 𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)
 
-postulate
-  aux₄₈₂ : ∀ {Γ Δ} →
-             (γ : Γ ⋙ Δ) → {ρ : Δ ⊩⋆ Γ} → 𝒰⋆ ρ →
+  𝒰⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {ρ : Θ ⊩⋆ Δ} →
+             (γ : Δ ⋙ Γ) → 𝒰⋆ ρ →
              𝒰⋆ (⟦ γ ⟧ₛ ρ)
+  𝒰⋆⟦ π⟨ c ⟩ ⟧ₛ        u⋆ = cong𝒰⋆↓⟨ c ⟩ u⋆
+  𝒰⋆⟦ γ ● γ′ ⟧ₛ        u⋆ = 𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ γ′ ⟧ₛ u⋆)
+  𝒰⋆⟦ [ γ , x ≔ M ] ⟧ₛ u⋆ = 𝓊⋆≔ (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⟦ M ⟧ u⋆)
 
-postulate
-  aux₄₈₃ : ∀ {Γ Δ A} →
-             {M : Γ ⊢ A} → {ρ ρ′ : Δ ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
-             Eq (⟦ M ⟧ ρ) (⟦ M ⟧ ρ′)
+  Eq⟦_⟧ : ∀ {Γ Δ A} {ρ ρ′ : Δ ⊩⋆ Γ} →
+            (M : Γ ⊢ A) → Eq⋆ ρ ρ′ → 𝒰⋆ ρ → 𝒰⋆ ρ′ →
+            Eq (⟦ M ⟧ ρ) (⟦ M ⟧ ρ′)
+  Eq⟦ ν x i ⟧ eq⋆ u⋆ u⋆′ = congEqlookup eq⋆ i
+  Eq⟦ ƛ x M ⟧ eq⋆ u⋆ u⋆′ = eq⊃ (λ c uₐ → Eq⟦ M ⟧ (eq⋆≔ (congEq⋆↑⟨ c ⟩ eq⋆) (reflEq uₐ))
+                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ)
+                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆′) uₐ))
+  Eq⟦ M ∙ N ⟧ eq⋆ u⋆ u⋆′ = congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq⟦ M ⟧ eq⋆ u⋆ u⋆′) (𝒰⟦ M ⟧ u⋆) (𝒰⟦ M ⟧ u⋆′)
+                                              (Eq⟦ N ⟧ eq⋆ u⋆ u⋆′) (𝒰⟦ N ⟧ u⋆) (𝒰⟦ N ⟧ u⋆′)
+  Eq⟦ M ▶ γ ⟧ eq⋆ u⋆ u⋆′ = Eq⟦ M ⟧ (Eq⋆⟦ γ ⟧ₛ eq⋆ u⋆ u⋆′) (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⋆⟦ γ ⟧ₛ u⋆′)
 
-postulate
-  aux₄₈₄ : ∀ {Γ Δ} →
-             {γ : Γ ⋙ Δ} → {ρ ρ′ : Δ ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
-             Eq⋆ (⟦ γ ⟧ₛ ρ) (⟦ γ ⟧ₛ ρ′)
+  Eq⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {ρ ρ′ : Θ ⊩⋆ Δ} →
+              (γ : Δ ⋙ Γ) → Eq⋆ ρ ρ′ → 𝒰⋆ ρ → 𝒰⋆ ρ′ →
+              Eq⋆ (⟦ γ ⟧ₛ ρ) (⟦ γ ⟧ₛ ρ′)
+  Eq⋆⟦ π⟨ c ⟩ ⟧ₛ        eq⋆ u⋆ u⋆′ = congEq⋆↓⟨ c ⟩ eq⋆
+  Eq⋆⟦ γ ● γ′ ⟧ₛ        eq⋆ u⋆ u⋆′ = Eq⋆⟦ γ ⟧ₛ (Eq⋆⟦ γ′ ⟧ₛ eq⋆ u⋆ u⋆′) (𝒰⋆⟦ γ′ ⟧ₛ u⋆) (𝒰⋆⟦ γ′ ⟧ₛ u⋆′)
+  Eq⋆⟦ [ γ , x ≔ M ] ⟧ₛ eq⋆ u⋆ u⋆′ = eq⋆≔ (Eq⋆⟦ γ ⟧ₛ eq⋆ u⋆ u⋆′)
+                                          (Eq⟦ M ⟧ eq⋆ u⋆ u⋆′)
 
-postulate
-  aux₄₈₅⟨_⟩ : ∀ {Γ Δ Θ A} →
-                (c : Θ ⊇ Δ) (M : Γ ⊢ A) (ρ : Δ ⊩⋆ Γ) →
+  Eq↑⟨_⟩⟦_⟧ : ∀ {Γ Δ Θ A} {ρ : Δ ⊩⋆ Γ} →
+                (c : Θ ⊇ Δ) (M : Γ ⊢ A) → 𝒰⋆ ρ →
                 Eq (↑⟨ c ⟩ (⟦ M ⟧ ρ)) (⟦ M ⟧ (↑⟨ c ⟩ ρ))
+  Eq↑⟨ c ⟩⟦ ν x i ⟧ u⋆ = aux₄₂₂⟨ c ⟩ u⋆ i
+  Eq↑⟨ c ⟩⟦ ƛ x M ⟧ u⋆ = eq⊃ (λ c′ uₐ → Eq⟦ M ⟧ (eq⋆≔ (symEq⋆ (aux₄₂₇ c c′ (c ○ c′) u⋆)) (reflEq uₐ))
+                                                 (𝓊⋆≔ (cong𝒰⋆↑⟨ c ○ c′ ⟩ u⋆) uₐ)
+                                                 (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ (cong𝒰⋆↑⟨ c ⟩ u⋆)) uₐ))
+  Eq↑⟨ c ⟩⟦ M ∙ N ⟧ u⋆ = case 𝒰⟦ M ⟧ u⋆ of
+                           λ { (𝓊⊃ h₀ h₁ h₂) → transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
+                                                        (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆)))
+                                                                 (congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
+                                                                                     (cong𝒰↑⟨ c ⟩ (𝒰⟦ M ⟧ u⋆))
+                                                                                     (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆))
+                                                                                     (Eq↑⟨ c ⟩⟦ N ⟧ u⋆)
+                                                                                     (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆))
+                                                                                     (𝒰⟦ N ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆)))) }
+  Eq↑⟨ c ⟩⟦ M ▶ γ ⟧ u⋆ = transEq (Eq↑⟨ c ⟩⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+                                 (Eq⟦ M ⟧ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ u⋆)
+                                          (cong𝒰⋆↑⟨ c ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+                                          (𝒰⋆⟦ γ ⟧ₛ (cong𝒰⋆↑⟨ c ⟩ u⋆)))
 
-postulate
-  aux₄₈₆⟨_⟩ : ∀ {Γ Δ Θ} →
-                (c : Θ ⊇ Δ) (γ : Γ ⋙ Δ) (ρ : Δ ⊩⋆ Γ) →
-                Eq⋆ (↑⟨ c ⟩ (⟦ γ ⟧ₛ ρ)) (⟦ γ ⟧ₛ (↑⟨ c ⟩ ρ))
+  Eq⋆↑⟨_⟩⟦_⟧ₛ : ∀ {Γ Δ Θ Ω} {ρ : Θ ⊩⋆ Δ} →
+                  (c : Ω ⊇ Θ) (γ : Δ ⋙ Γ) → 𝒰⋆ ρ →
+                  Eq⋆ (↑⟨ c ⟩ (⟦ γ ⟧ₛ ρ)) (⟦ γ ⟧ₛ (↑⟨ c ⟩ ρ))
+  Eq⋆↑⟨ c ⟩⟦ π⟨ c′ ⟩ ⟧ₛ       u⋆ = aux₄₂₈ c′ c u⋆
+  Eq⋆↑⟨ c ⟩⟦ γ ● γ′ ⟧ₛ        u⋆ = transEq⋆ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
+                                            (Eq⋆⟦ γ ⟧ₛ (Eq⋆↑⟨ c ⟩⟦ γ′ ⟧ₛ u⋆)
+                                                      (cong𝒰⋆↑⟨ c ⟩ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
+                                                      (𝒰⋆⟦ γ′ ⟧ₛ (cong𝒰⋆↑⟨ c ⟩ u⋆)))
+  Eq⋆↑⟨ c ⟩⟦ [ γ , x ≔ M ] ⟧ₛ u⋆ = eq⋆≔ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ u⋆) (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
 
 -- The soundness theorem is shown mutually with a corresponding lemma for substitutions:
 
