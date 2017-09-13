@@ -338,13 +338,13 @@ module _ {{_ : Model}} where
     begin_ : ∀ {Γ w} {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ → Eq⋆ ρ ρ′
     begin eq⋆ = eq⋆
 
-    infixr 2 _Eq⟨⟩_
-    _Eq⟨⟩_ : ∀ {Γ w} (ρ {ρ′} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ ρ′
-    ρ Eq⟨⟩ eq⋆ = eq⋆
+    infixr 2 _Eq⋆⟨⟩_
+    _Eq⋆⟨⟩_ : ∀ {Γ w} (ρ {ρ′} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ ρ′
+    ρ Eq⋆⟨⟩ eq⋆ = eq⋆
 
-    infixr 2 _Eq⟨_⟩_
-    _Eq⟨_⟩_ : ∀ {Γ w} (ρ {ρ′ ρ″} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ′ ρ″ → Eq⋆ ρ ρ″
-    ρ Eq⟨ eq⋆ ⟩ eq⋆′ = transEq⋆ eq⋆ eq⋆′
+    infixr 2 _Eq⋆⟨_⟩_
+    _Eq⋆⟨_⟩_ : ∀ {Γ w} (ρ {ρ′ ρ″} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ′ ρ″ → Eq⋆ ρ ρ″
+    ρ Eq⋆⟨ eq⋆ ⟩ eq⋆′ = transEq⋆ eq⋆ eq⋆′
 
     infixr 2 _≡⟨⟩_
     _≡⟨⟩_ : ∀ {Γ w} (ρ {ρ′} : w ⊩⋆ Γ) → Eq⋆ ρ ρ′ → Eq⋆ ρ ρ′
@@ -828,7 +828,7 @@ proj⟨ weak {x = x} c i ⟩CV⋆ = cv⋆≔ {c = weak⊇}
                                      ≅⟨ cong≅▶ (conv≅₄ _ _ _) refl≅ₛ ⟩
                                        ν x i ▶ π⟨ c′ ⟩
                                      ≅⟨ conv≅₄ _ _ _ ⟩
-                                       ν x (↑⟨ c′ ⟩∋ i)
+                                       ν x (↑⟨ c′ ⟩ i)
                                      ∎))
                                      where
                                        open ≅-Reasoning
