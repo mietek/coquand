@@ -113,38 +113,38 @@ mutual
                Γ ⊢ t ≊ t′ ∷ A → Γ ⊢ t′ ≊ t″ ∷ A →
                Γ ⊢ t ≊ t″ ∷ A
 
-    cong≊ƛ : ∀ {Γ A B t t′ x} {{_ : T (fresh x Γ)}} →
+    congƛ≊ : ∀ {Γ A B t t′ x} {{_ : T (fresh x Γ)}} →
                [ Γ , x ∷ A ] ⊢ t ≊ t′ ∷ B →
                Γ ⊢ ƛ x t ≊ ƛ x t′ ∷ A ⊃ B
-    cong≊∙ : ∀ {Γ A B t t′ u u′} →
+    cong∙≊ : ∀ {Γ A B t t′ u u′} →
                Γ ⊢ t ≊ t′ ∷ A ⊃ B → Γ ⊢ u ≊ u′ ∷ A →
                Γ ⊢ t ∙ u ≊ t′ ∙ u′ ∷ B
-    cong≊▶ : ∀ {Γ Δ A t t′ s s′} →
+    cong▶≊ : ∀ {Γ Δ A t t′ s s′} →
                Γ ⊢ t ≊ t′ ∷ A → Δ ⋙ s ≊ₛ s′ ∷ Γ →
                Γ ⊢ t ▶ s ≊ t′ ▶ s′ ∷ A
 
-    conv≊₁ : ∀ {Γ A t} →
+    conv₁≊ : ∀ {Γ A t} →
                Γ ⊢ t ∷ A →
                Γ ⊢ t ≊ t ∷ A
-    conv≊₂ : ∀ {Γ Δ A B s t₁ t₂ x} {{_ : T (fresh x Δ)}} →
+    conv₂≊ : ∀ {Γ Δ A B s t₁ t₂ x} {{_ : T (fresh x Δ)}} →
                Γ ⋙ s ∷ Δ → [ Δ , x ∷ A ] ⊢ t₁ ∷ B → Γ ⊢ t₂ ∷ A →
                Γ ⊢ (ƛ x t₁ ▶ s) ∙ t₂ ≊ t₁ ▶ [ s , x ≔ t₂ ] ∷ B
-    conv≊₃ : ∀ {Γ A B t x} {{_ : T (fresh x Γ)}} →
+    conv₃≊ : ∀ {Γ A B t x} {{_ : T (fresh x Γ)}} →
                Γ ⊢ t ∷ A ⊃ B →
                Γ ⊢ t ≊ ƛ x (t ∙ ν x) ∷ A ⊃ B
-    conv≊₄ : ∀ {Γ Δ A t₁ t₂} →
+    conv₄≊ : ∀ {Γ Δ A t₁ t₂} →
                Γ ⊇ Δ → Δ ⊢ t₁ ≊ t₂ ∷ A →
                Γ ⊢ t₁ ≊ t₂ ∷ A
-    conv≊₅ : ∀ {Γ Δ A s t x} {{_ : T (fresh x Δ)}} →
+    conv₅≊ : ∀ {Γ Δ A s t x} {{_ : T (fresh x Δ)}} →
                Γ ⋙ s ∷ Δ → Γ ⊢ t ∷ A →
                Γ ⊢ ν x ▶ [ s , x ≔ t ] ≊ t ∷ A
-    conv≊₆ : ∀ {Γ A t} →
+    conv₆≊ : ∀ {Γ A t} →
                Γ ⊢ t ∷ A →
                Γ ⊢ t ▶ [] ≊ t ∷ A
-    conv≊₇ : ∀ {Γ Δ A B s t₁ t₂} →
+    conv₇≊ : ∀ {Γ Δ A B s t₁ t₂} →
                Δ ⊢ t₁ ∷ A ⊃ B → Δ ⊢ t₂ ∷ A → Γ ⋙ s ∷ Δ →
                Γ ⊢ (t₁ ∙ t₂) ▶ s ≊ (t₁ ▶ s) ∙ (t₂ ▶ s) ∷ B
-    conv≊₈ : ∀ {Γ₁ Γ₂ Γ₃ A s₁ s₂ t} →
+    conv₈≊ : ∀ {Γ₁ Γ₂ Γ₃ A s₁ s₂ t} →
                Γ₂ ⋙ s₁ ∷ Γ₃ → Γ₁ ⋙ s₂ ∷ Γ₂ → Γ₃ ⊢ t ∷ A →
                Γ₁ ⊢ (t ▶ s₁) ▶ s₂ ≊ t ▶ (s₁ ● s₂) ∷ A
 
@@ -158,38 +158,38 @@ mutual
                 Δ ⋙ s ≊ₛ s′ ∷ Γ → Δ ⋙ s′ ≊ₛ s″ ∷ Γ →
                 Δ ⋙ s ≊ₛ s″ ∷ Γ
 
-    cong≊ₛ≔ : ∀ {Γ Δ A s s′ t t′ x} {{_ : T (fresh x Δ)}} →
+    cong≔≊ₛ : ∀ {Γ Δ A s s′ t t′ x} {{_ : T (fresh x Δ)}} →
                 Γ ⋙ s ≊ₛ s′ ∷ Δ → Γ ⊢ t ≊ t′ ∷ A →
                 Γ ⋙ [ s , x ≔ t ] ≊ₛ [ s′ , x ≔ t′ ] ∷ [ Δ , x ∷ A ]
-    cong≊ₛ● : ∀ {Γ Δ Θ s₁ s₁′ s₂ s₂′} →
+    cong●≊ₛ : ∀ {Γ Δ Θ s₁ s₁′ s₂ s₂′} →
                 Δ ⋙ s₂ ≊ₛ s₂′ ∷ Θ → Γ ⋙ s₁ ≊ₛ s₁′ ∷ Δ →
                 Γ ⋙ s₂ ● s₁ ≊ₛ s₂′ ● s₁′ ∷ Θ
 
-    conv≊ₛ₁ : ∀ {Γ₁ Γ₂ Δ s₁ s₂} →
+    conv₁≊ₛ : ∀ {Γ₁ Γ₂ Δ s₁ s₂} →
                 Γ₁ ⊇ Γ₂ → Γ₂ ⋙ s₁ ≊ₛ s₂ ∷ Δ →
                 Γ₁ ⋙ s₁ ≊ₛ s₂ ∷ Δ
-    conv≊ₛ₂ : ∀ {Γ Δ₁ Δ₂ s₁ s₂} →
+    conv₂≊ₛ : ∀ {Γ Δ₁ Δ₂ s₁ s₂} →
                 Δ₁ ⊇ Δ₂ → Γ ⋙ s₁ ≊ₛ s₂ ∷ Δ₁ →
                 Γ ⋙ s₁ ≊ₛ s₂ ∷ Δ₂
-    conv≊ₛ₃ : ∀ {Γ Δ s} →
+    conv₃≊ₛ : ∀ {Γ Δ s} →
                 Γ ⋙ s ∷ Δ →
                 Γ ⋙ s ● [] ≊ₛ s ∷ Δ
-    conv≊ₛ₄ : ∀ {Γ₁ Γ₂ Γ₃ Δ s₁ s₂ s₃} →
+    conv₄≊ₛ : ∀ {Γ₁ Γ₂ Γ₃ Δ s₁ s₂ s₃} →
                 Γ₁ ⋙ s₃ ∷ Γ₂ → Γ₂ ⋙ s₂ ∷ Γ₃ → Γ₃ ⋙ s₁ ∷ Δ →
                 Γ₃ ⋙ (s₁ ● s₂) ● s₃ ≊ₛ s₁ ● (s₂ ● s₃) ∷ Δ
-    conv≊ₛ₅ : ∀ {Γ₁ Γ₂ Δ A s₁ s₂ t x} {{_ : T (fresh x Δ)}} →
+    conv₅≊ₛ : ∀ {Γ₁ Γ₂ Δ A s₁ s₂ t x} {{_ : T (fresh x Δ)}} →
                 Γ₁ ⋙ s₂ ∷ Γ₂ → Γ₂ ⋙ s₁ ∷ Δ → Γ₂ ⊢ t ∷ A →
                 Γ₁ ⋙ [ s₁ , x ≔ t ] ● s₂ ≊ₛ [ s₁ ● s₂ , x ≔ t ▶ s₂ ] ∷ [ Δ , x ∷ A ]
-    conv≊ₛ₆ : ∀ {Γ s} →
+    conv₆≊ₛ : ∀ {Γ s} →
                 Γ ⋙ s ∷ [] →
                 Γ ⋙ s ≊ₛ [] ∷ []
-    conv≊ₛ₇ : ∀ {Γ Δ A s x} {{_ : T (fresh x Δ)}} →
+    conv₇≊ₛ : ∀ {Γ Δ A s x} {{_ : T (fresh x Δ)}} →
                 Γ ⋙ s ∷ [ Δ , x ∷ A ] →
                 Γ ⋙ s ≊ₛ [ s , x ≔ ν x ▶ s ] ∷ [ Δ , x ∷ A ]
-    conv≊ₛ₈ : ∀ {Γ Δ A s t x} {{_ : T (fresh x Δ)}} →
+    conv₈≊ₛ : ∀ {Γ Δ A s t x} {{_ : T (fresh x Δ)}} →
                 Γ ⋙ s ∷ Δ → Δ ⊢ t ∷ A →
                 Γ ⋙ [ s , x ≔ t ] ≊ₛ s ∷ Δ
-    conv≊ₛ₉ : ∀ {Γ Δ s} →
+    conv₉≊ₛ : ∀ {Γ Δ s} →
                 Γ ⋙ s ∷ Δ →
                 Γ ⋙ [] ● s ≊ₛ s ∷ Δ
 

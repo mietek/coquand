@@ -209,11 +209,11 @@ mutual
 
   infix 3 _⟶ₛ_
   data _⟶ₛ_ : 𝕊 → 𝕊 → Set where
-    redₛ₁ : ∀ {s₀ s₁ t x} →
+    red₁ₛ : ∀ {s₀ s₁ t x} →
               [ s₀ , x ≔ t ] ● s₁ ⟶ₛ [ s₀ ● s₁ , x ≔ t ▶ s₁ ]
-    redₛ₂ : ∀ {s₁ s₂ s₃} →
+    red₂ₛ : ∀ {s₁ s₂ s₃} →
               (s₁ ● s₂) ● s₃ ⟶ₛ s₁ ● (s₂ ● s₃)
-    redₛ₃ : ∀ {s} →
+    red₃ₛ : ∀ {s} →
               [] ● s ⟶ₛ s
 
 -- The untyped evaluation to `whnf`, `_⟹_`, is inductively defined by:

@@ -30,11 +30,11 @@ module _ {{_ : Model}} where
   trans⊒ : ∀ {w w′ w″} → w″ ⊒ w′ → w′ ⊒ w → w″ ⊒ w
   trans⊒ = flip _◇_
 
-  id◇₁ : ∀ {w w′} → (c : w ⊒ w) (c′ : w′ ⊒ w) → c ◇ c′ ≡ c′
-  id◇₁ c c′ = uniq⊒ (c ◇ c′) c′
+  id₁◇ : ∀ {w w′} → (c : w ⊒ w) (c′ : w′ ⊒ w) → c ◇ c′ ≡ c′
+  id₁◇ c c′ = uniq⊒ (c ◇ c′) c′
 
-  id◇₂ : ∀ {w w′} → (c : w′ ⊒ w) (c′ : w′ ⊒ w′) → c ◇ c′ ≡ c
-  id◇₂ c c′ = uniq⊒ (c ◇ c′) c
+  id₂◇ : ∀ {w w′} → (c : w′ ⊒ w) (c′ : w′ ⊒ w′) → c ◇ c′ ≡ c
+  id₂◇ c c′ = uniq⊒ (c ◇ c′) c
 
   assoc◇ : ∀ {w w′ w″ w‴} → (c : w′ ⊒ w) (c′ : w″ ⊒ w′) (c″ : w‴ ⊒ w″) →
              c ◇ (c′ ◇ c″) ≡ (c ◇ c′) ◇ c″
@@ -192,23 +192,23 @@ module _ {{_ : Model}} where
 -- for uniform input and equal results for equal input.
 
 module _ {{_ : Model}} where
-  congEq⟦∙⟧⟨_⟩ : ∀ {A B w w′} {f f′ : w ⊩ A ⊃ B} {a a′ : w′ ⊩ A} →
+  cong⟦∙⟧⟨_⟩Eq : ∀ {A B w w′} {f f′ : w ⊩ A ⊃ B} {a a′ : w′ ⊩ A} →
                    (c : w′ ⊒ w) → Eq f f′ → 𝒰 f → 𝒰 f′ → Eq a a′ → 𝒰 a → 𝒰 a′ →
                    Eq (f ⟦∙⟧⟨ c ⟩ a) (f′ ⟦∙⟧⟨ c ⟩ a′)
-  congEq⟦∙⟧⟨ c ⟩ (eq⊃ h) (𝓊⊃ h₀ h₁ h₂) (𝓊⊃ h₀′ h₁′ h₂′) eqₐ uₐ uₐ′ =
+  cong⟦∙⟧⟨ c ⟩Eq (eq⊃ h) (𝓊⊃ h₀ h₁ h₂) (𝓊⊃ h₀′ h₁′ h₂′) eqₐ uₐ uₐ′ =
     transEq (h₁ c eqₐ uₐ uₐ′) (h c uₐ′)
 
-  congEq↑⟨_⟩ : ∀ {A w w′} {a a′ : w ⊩ A} →
+  cong↑⟨_⟩Eq : ∀ {A w w′} {a a′ : w ⊩ A} →
                  (c : w′ ⊒ w) → Eq a a′ →
                  Eq (↑⟨ c ⟩ a) (↑⟨ c ⟩ a′)
-  congEq↑⟨ c ⟩ (eq• h) = eq• (λ c′    → h (c ◇ c′))
-  congEq↑⟨ c ⟩ (eq⊃ h) = eq⊃ (λ c′ uₐ → h (c ◇ c′) uₐ)
+  cong↑⟨ c ⟩Eq (eq• h) = eq• (λ c′    → h (c ◇ c′))
+  cong↑⟨ c ⟩Eq (eq⊃ h) = eq⊃ (λ c′ uₐ → h (c ◇ c′) uₐ)
 
-  cong𝒰↑⟨_⟩ : ∀ {A w w′} {a : w ⊩ A} →
+  cong↑⟨_⟩𝒰 : ∀ {A w w′} {a : w ⊩ A} →
                 (c : w′ ⊒ w) → 𝒰 a →
                 𝒰 (↑⟨ c ⟩ a)
-  cong𝒰↑⟨ c ⟩ 𝓊•            = 𝓊•
-  cong𝒰↑⟨ c ⟩ (𝓊⊃ h₀ h₁ h₂) = 𝓊⊃ (λ c′ uₐ         → h₀ (c ◇ c′) uₐ)
+  cong↑⟨ c ⟩𝒰 𝓊•            = 𝓊•
+  cong↑⟨ c ⟩𝒰 (𝓊⊃ h₀ h₁ h₂) = 𝓊⊃ (λ c′ uₐ         → h₀ (c ◇ c′) uₐ)
                                  (λ c′ eqₐ uₐ uₐ′ → h₁ (c ◇ c′) eqₐ uₐ uₐ′)
                                  (λ c′ c″ c‴ uₐ   → h₂ (c ◇ c′) c″ (c ◇ c‴) uₐ)
 
@@ -220,10 +220,10 @@ module _ {{_ : Model}} where
                 (c : w ⊒ w) → {a : w ⊩ A} → 𝒰 a →
                 Eq (↑⟨ c ⟩ a) a
   aux₄₁₁⟨ c ⟩ {f} 𝓊•            = eq• (λ c′        → cong (f ⟦g⟧⟨_⟩)
-                                                        (id◇₁ c c′))
+                                                        (id₁◇ c c′))
   aux₄₁₁⟨ c ⟩ {f} (𝓊⊃ h₀ h₁ h₂) = eq⊃ (λ c′ {a} uₐ → ≡→Eq (h₀ (c ◇ c′) uₐ)
                                                         (cong (f ⟦∙⟧⟨_⟩ a)
-                                                          (id◇₁ c c′)))
+                                                          (id₁◇ c c′)))
 
   aux₄₁₂ : ∀ {A w w′ w″} →
              (c : w′ ⊒ w) (c′ : w″ ⊒ w′) (c″ : w″ ⊒ w) → {a : w ⊩ A} → 𝒰 a →
@@ -240,7 +240,7 @@ module _ {{_ : Model}} where
              Eq (f ⟦∙⟧⟨ c ⟩ a) (↑⟨ c ⟩ f ⟦∙⟧⟨ c′ ⟩ a)
   aux₄₁₃ c c′ {f} (𝓊⊃ h₀ h₁ h₂) {a} uₐ = ≡→Eq (h₀ c uₐ)
                                            (cong (f ⟦∙⟧⟨_⟩ a)
-                                             (sym (id◇₂ c c′)))
+                                             (sym (id₂◇ c c′)))
 
 
 -- 4.2. Semantic environments
@@ -288,7 +288,7 @@ module _ {{_ : Model}} where
 module _ {{_ : Model}} where
   ↓⟨_⟩⊩⋆ : ∀ {Γ Δ w} → Γ ⊇ Δ → w ⊩⋆ Γ → w ⊩⋆ Δ
   ↓⟨ done ⟩⊩⋆             ρ = []
-  ↓⟨ weak {x = x} c i ⟩⊩⋆ ρ = [ ↓⟨ c ⟩⊩⋆ ρ , x ≔ lookup ρ i ]
+  ↓⟨ step {x = x} c i ⟩⊩⋆ ρ = [ ↓⟨ c ⟩⊩⋆ ρ , x ≔ lookup ρ i ]
 
   instance
     lower⊩⋆ : ∀ {w} → Lowerable (w ⊩⋆_)
@@ -362,43 +362,43 @@ module _ {{_ : Model}} where
 -- and the result of applying these functions to uniform environments is also uniform.
 
 module _ {{_ : Model}} where
-  congEqlookup : ∀ {Γ A w x} →
+  conglookupEq : ∀ {Γ A w x} →
                    {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ → (i : Γ ∋ x ∷ A) →
                    Eq (lookup ρ i) (lookup ρ′ i)
-  congEqlookup eq⋆[]         ()
-  congEqlookup (eq⋆≔ eq⋆ eq) zero    = eq
-  congEqlookup (eq⋆≔ eq⋆ eq) (suc i) = congEqlookup eq⋆ i
+  conglookupEq eq⋆[]         ()
+  conglookupEq (eq⋆≔ eq⋆ eq) zero    = eq
+  conglookupEq (eq⋆≔ eq⋆ eq) (suc i) = conglookupEq eq⋆ i
 
-  congEq⋆↑⟨_⟩ : ∀ {Γ w w′} →
+  cong↑⟨_⟩Eq⋆ : ∀ {Γ w w′} →
                   (c : w′ ⊒ w) → {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
                   Eq⋆ (↑⟨ c ⟩ ρ) (↑⟨ c ⟩ ρ′)
-  congEq⋆↑⟨ c ⟩ eq⋆[]         = eq⋆[]
-  congEq⋆↑⟨ c ⟩ (eq⋆≔ eq⋆ eq) = eq⋆≔ (congEq⋆↑⟨ c ⟩ eq⋆) (congEq↑⟨ c ⟩ eq)
+  cong↑⟨ c ⟩Eq⋆ eq⋆[]         = eq⋆[]
+  cong↑⟨ c ⟩Eq⋆ (eq⋆≔ eq⋆ eq) = eq⋆≔ (cong↑⟨ c ⟩Eq⋆ eq⋆) (cong↑⟨ c ⟩Eq eq)
 
-  congEq⋆↓⟨_⟩ : ∀ {Γ Δ w} →
+  cong↓⟨_⟩Eq⋆ : ∀ {Γ Δ w} →
                   (c : Γ ⊇ Δ) → {ρ ρ′ : w ⊩⋆ Γ} → Eq⋆ ρ ρ′ →
                   Eq⋆ (↓⟨ c ⟩ ρ) (↓⟨ c ⟩ ρ′)
-  congEq⋆↓⟨ done ⟩     eq⋆ = eq⋆[]
-  congEq⋆↓⟨ weak c i ⟩ eq⋆ = eq⋆≔ (congEq⋆↓⟨ c ⟩ eq⋆) (congEqlookup eq⋆ i)
+  cong↓⟨ done ⟩Eq⋆     eq⋆ = eq⋆[]
+  cong↓⟨ step c i ⟩Eq⋆ eq⋆ = eq⋆≔ (cong↓⟨ c ⟩Eq⋆ eq⋆) (conglookupEq eq⋆ i)
 
-  cong𝒰lookup : ∀ {Γ A w x} →
+  conglookup𝒰 : ∀ {Γ A w x} →
                   {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
                   𝒰 (lookup ρ i)
-  cong𝒰lookup 𝓊⋆[]       ()
-  cong𝒰lookup (𝓊⋆≔ u⋆ u) zero    = u
-  cong𝒰lookup (𝓊⋆≔ u⋆ u) (suc i) = cong𝒰lookup u⋆ i
+  conglookup𝒰 𝓊⋆[]       ()
+  conglookup𝒰 (𝓊⋆≔ u⋆ u) zero    = u
+  conglookup𝒰 (𝓊⋆≔ u⋆ u) (suc i) = conglookup𝒰 u⋆ i
 
-  cong𝒰⋆↑⟨_⟩ : ∀ {Γ w w′} →
+  cong↑⟨_⟩𝒰⋆ : ∀ {Γ w w′} →
                  (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
                  𝒰⋆ (↑⟨ c ⟩ ρ)
-  cong𝒰⋆↑⟨ c ⟩ 𝓊⋆[]       = 𝓊⋆[]
-  cong𝒰⋆↑⟨ c ⟩ (𝓊⋆≔ u⋆ u) = 𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) (cong𝒰↑⟨ c ⟩ u)
+  cong↑⟨ c ⟩𝒰⋆ 𝓊⋆[]       = 𝓊⋆[]
+  cong↑⟨ c ⟩𝒰⋆ (𝓊⋆≔ u⋆ u) = 𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) (cong↑⟨ c ⟩𝒰 u)
 
-  cong𝒰⋆↓⟨_⟩ : ∀ {Γ Δ w} →
+  cong↓⟨_⟩𝒰⋆ : ∀ {Γ Δ w} →
                  (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
                  𝒰⋆ (↓⟨ c ⟩ ρ)
-  cong𝒰⋆↓⟨ done ⟩     u⋆ = 𝓊⋆[]
-  cong𝒰⋆↓⟨ weak c i ⟩ u⋆ = 𝓊⋆≔ (cong𝒰⋆↓⟨ c ⟩ u⋆) (cong𝒰lookup u⋆ i)
+  cong↓⟨ done ⟩𝒰⋆     u⋆ = 𝓊⋆[]
+  cong↓⟨ step c i ⟩𝒰⋆ u⋆ = 𝓊⋆≔ (cong↓⟨ c ⟩𝒰⋆ u⋆) (conglookup𝒰 u⋆ i)
 
 -- We also
 -- need to prove the following properties about `Eq⋆` for semantic environments which basically
@@ -409,34 +409,34 @@ module _ {{_ : Model}} where
                 (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) (j : Δ ∋ x ∷ A) →
                 Eq (lookup ρ i) (lookup (↓⟨ c ⟩ ρ) j)
   aux₄₂₁⟨ done ⟩      u⋆ i ()
-  aux₄₂₁⟨ weak c i′ ⟩ u⋆ i zero    = subst (λ i′ → Eq (lookup _ i) (lookup _ i′))
+  aux₄₂₁⟨ step c i′ ⟩ u⋆ i zero    = subst (λ i′ → Eq (lookup _ i) (lookup _ i′))
                                            (uniq∋ i i′)
-                                           (congEqlookup (reflEq⋆ u⋆) i)
-  aux₄₂₁⟨ weak c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
+                                           (conglookupEq (reflEq⋆ u⋆) i)
+  aux₄₂₁⟨ step c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
 
   aux₄₂₂⟨_⟩ : ∀ {Γ A w w′ x} →
                 (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
                 Eq (↑⟨ c ⟩ (lookup ρ i)) (lookup (↑⟨ c ⟩ ρ) i)
   aux₄₂₂⟨ c ⟩ 𝓊⋆[]       ()
-  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) zero    = congEq↑⟨ c ⟩ (reflEq u)
+  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) zero    = cong↑⟨ c ⟩Eq (reflEq u)
   aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) (suc i) = aux₄₂₂⟨ c ⟩ u⋆ i
 
   aux₄₂₃ : ∀ {Γ Δ A w x} {{_ : T (fresh x Δ)}} {{_ : T (fresh x Γ)}} →
              (c : Γ ⊇ Δ) (c′ : [ Γ , x ∷ A ] ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → {a : w ⊩ A} →
              Eq⋆ (↓⟨ c′ ⟩ [ ρ , x ≔ a ]) (↓⟨ c ⟩ ρ)
   aux₄₂₃               done       done               u⋆ = eq⋆[]
-  aux₄₂₃ {x = x} {{φ}} (weak c i) (weak c′ zero)     u⋆ = elim⊥ (freshlem₁ x φ)
-  aux₄₂₃ {x = x} {{φ}} (weak c i) (weak c′ (suc i′)) u⋆ =
+  aux₄₂₃ {x = x} {{φ}} (step c i) (step c′ zero)     u⋆ = elim⊥ (freshlem₁ x φ)
+  aux₄₂₃ {x = x} {{φ}} (step c i) (step c′ (suc i′)) u⋆ =
     subst (λ i′ → Eq⋆ [ _ , _ ≔ lookup _ i′ ] _)
           (uniq∋ i i′)
           (eq⋆≔ (aux₄₂₃ {{freshlem₂ x φ}} c c′ u⋆)
-                (reflEq (cong𝒰lookup u⋆ i)))
+                (reflEq (conglookup𝒰 u⋆ i)))
 
   aux₄₂₄⟨_⟩ : ∀ {Γ w} →
                 (c : Γ ⊇ Γ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
                 Eq⋆ (↓⟨ c ⟩ ρ) ρ
   aux₄₂₄⟨ done ⟩     𝓊⋆[]       = eq⋆[]
-  aux₄₂₄⟨ weak c i ⟩ (𝓊⋆≔ u⋆ u) = eq⋆≔ (transEq⋆ (aux₄₂₃ refl⊇ c u⋆)
+  aux₄₂₄⟨ step c i ⟩ (𝓊⋆≔ u⋆ u) = eq⋆≔ (transEq⋆ (aux₄₂₃ refl⊇ c u⋆)
                                                  (aux₄₂₄⟨ refl⊇ ⟩ u⋆))
                                        (aux₄₂₁⟨ refl⊇ ⟩ (𝓊⋆≔ u⋆ u) i zero)
 
@@ -450,7 +450,7 @@ module _ {{_ : Model}} where
              (c : Δ ⊇ Γ) (c′ : Θ ⊇ Δ) (c″ : Θ ⊇ Γ) → {ρ : w ⊩⋆ Θ} → 𝒰⋆ ρ →
              Eq⋆ (↓⟨ c ⟩ (↓⟨ c′ ⟩ ρ)) (↓⟨ c″ ⟩ ρ)
   aux₄₂₆ done        c′ done         u⋆ = eq⋆[]
-  aux₄₂₆ (weak c i)  c′ (weak c″ i″) u⋆ = eq⋆≔ (aux₄₂₆ c c′ c″ u⋆)
+  aux₄₂₆ (step c i)  c′ (step c″ i″) u⋆ = eq⋆≔ (aux₄₂₆ c c′ c″ u⋆)
                                                (symEq (aux₄₂₁⟨ c′ ⟩ u⋆ i″ i))
 
   aux₄₂₇ : ∀ {Γ w w′ w″} →
@@ -463,7 +463,7 @@ module _ {{_ : Model}} where
              (c : Δ ⊇ Γ) (c′ : w′ ⊒ w) → {ρ : w ⊩⋆ Δ} → 𝒰⋆ ρ →
              Eq⋆ (↑⟨ c′ ⟩ (↓⟨ c ⟩ ρ)) (↓⟨ c ⟩ (↑⟨ c′ ⟩ ρ))
   aux₄₂₈ done       c′ u⋆ = eq⋆[]
-  aux₄₂₈ (weak c i) c′ u⋆ = eq⋆≔ (aux₄₂₈ c c′ u⋆) (aux₄₂₂⟨ c′ ⟩ u⋆ i)
+  aux₄₂₈ (step c i) c′ u⋆ = eq⋆≔ (aux₄₂₈ c c′ u⋆) (aux₄₂₂⟨ c′ ⟩ u⋆ i)
 
 -- These properties are used in the proofs of soundness and completeness below.
 
@@ -587,7 +587,7 @@ mutual
        (λ c {a} {a′} eqₐ uₐ uₐ′ → aux₄₄₁ (λ c′ → f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a))
                                           (λ c′ → f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a′))
                                           (λ c′ → cong (f (c ○ c′) ∙_)
-                                                     (thm₁ (congEq↑⟨ c′ ⟩ eqₐ))))
+                                                     (thm₁ (cong↑⟨ c′ ⟩Eq eqₐ))))
        (λ c c′ c″ {a} uₐ        →
          transEq (aux₄₄₂⟨ c′ ⟩ (λ c‴ → f (c ○ c‴) ∙ reify (↑⟨ c‴ ⟩ a)))
                  (aux₄₄₁ (λ c‴ → f (c ○ (c′ ○ c‴)) ∙ reify (↑⟨ c′ ○ c‴ ⟩ a))
@@ -609,7 +609,7 @@ mutual
 
 proj⟨_⟩⊩⋆ : ∀ {Γ Δ} → Δ ⊇ Γ → Δ ⊩⋆ Γ
 proj⟨ done ⟩⊩⋆             = []
-proj⟨ weak {x = x} c i ⟩⊩⋆ = [ proj⟨ c ⟩⊩⋆ , x ≔ val-ν i ]
+proj⟨ step {x = x} c i ⟩⊩⋆ = [ proj⟨ c ⟩⊩⋆ , x ≔ val-ν i ]
 
 refl⊩⋆ : ∀ {Γ} → Γ ⊩⋆ Γ
 refl⊩⋆ = proj⟨ refl⊇ ⟩⊩⋆
@@ -687,56 +687,56 @@ data CV⋆ : ∀ {Γ Δ} → Δ ⋙ Γ → Δ ⊩⋆ Γ → Set where
 cong≅CV : ∀ {Γ A} {M M′ : Γ ⊢ A} {a : Γ ⊩ A} →
             M ≅ M′ → CV M′ a →
             CV M a
-cong≅CV p (cv• h) = cv• (λ c     → trans≅ (cong≅▶ p refl≅ₛ)
+cong≅CV p (cv• h) = cv• (λ c     → trans≅ (cong▶≅ p refl≅ₛ)
                                            (h c))
-cong≅CV p (cv⊃ h) = cv⊃ (λ c cvₐ → cong≅CV (cong≅∙ (cong≅▶ p refl≅ₛ) refl≅)
+cong≅CV p (cv⊃ h) = cv⊃ (λ c cvₐ → cong≅CV (cong∙≅ (cong▶≅ p refl≅ₛ) refl≅)
                                             (h c cvₐ))
 
 cong≅ₛCV⋆ : ∀ {Γ Δ} {γ γ′ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
               γ ≅ₛ γ′ → CV⋆ γ′ ρ →
               CV⋆ γ ρ
 cong≅ₛCV⋆ p cv⋆[]         = cv⋆[]
-cong≅ₛCV⋆ p (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (cong≅ₛ● refl≅ₛ p) cv⋆)
-                                 (cong≅CV (cong≅▶ refl≅ p) cv)
+cong≅ₛCV⋆ p (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (cong●≅ₛ refl≅ₛ p) cv⋆)
+                                 (cong≅CV (cong▶≅ refl≅ p) cv)
 
-congCV↑⟨_⟩ : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
+cong↑⟨_⟩CV : ∀ {Γ Δ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
                (c : Δ ⊇ Γ) → CV M a →
                CV (M ▶ π⟨ c ⟩) (↑⟨ c ⟩ a)
-congCV↑⟨ c ⟩ (cv• h) = cv• (λ c′     → trans≅ (trans≅ (conv≅₇ _ _ _)
-                                                       (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+cong↑⟨ c ⟩CV (cv• h) = cv• (λ c′     → trans≅ (trans≅ (conv₇≅ _ _ _)
+                                                       (cong▶≅ refl≅ (conv₄≅ₛ _ _ _)))
                                                (h (c ○ c′)))
-congCV↑⟨ c ⟩ (cv⊃ h) = cv⊃ (λ c′ cvₐ → cong≅CV (cong≅∙ (trans≅ (conv≅₇ _ _ _)
-                                                                (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)))
+cong↑⟨ c ⟩CV (cv⊃ h) = cv⊃ (λ c′ cvₐ → cong≅CV (cong∙≅ (trans≅ (conv₇≅ _ _ _)
+                                                                (cong▶≅ refl≅ (conv₄≅ₛ _ _ _)))
                                                         refl≅)
                                                 (h (c ○ c′) cvₐ))
 
-congCVlookup : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+conglookupCV : ∀ {Γ Δ A x} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                  CV⋆ γ ρ → (i : Γ ∋ x ∷ A) →
                  CV (ν x i ▶ γ) (lookup ρ i)
-congCVlookup cv⋆[]         ()
-congCVlookup (cv⋆≔ cv⋆ cv) zero    = cv
-congCVlookup (cv⋆≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong≅▶ (sym≅ (conv≅₄ _ _ _)) refl≅ₛ)
-                                                     (conv≅₇ _ _ _))
-                                             (congCVlookup cv⋆ i)
+conglookupCV cv⋆[]         ()
+conglookupCV (cv⋆≔ cv⋆ cv) zero    = cv
+conglookupCV (cv⋆≔ cv⋆ cv) (suc i) = cong≅CV (trans≅ (cong▶≅ (sym≅ (conv₄≅ _ _ _)) refl≅ₛ)
+                                                     (conv₇≅ _ _ _))
+                                             (conglookupCV cv⋆ i)
 
-congCV⋆↑⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+cong↑⟨_⟩CV⋆ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                 (c : Θ ⊇ Δ) → CV⋆ γ ρ →
                 CV⋆ (γ ● π⟨ c ⟩) (↑⟨ c ⟩ ρ)
-congCV⋆↑⟨ c ⟩ cv⋆[]         = cv⋆[]
-congCV⋆↑⟨ c ⟩ (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (sym≅ₛ (conv≅ₛ₁ _ _ _)) (congCV⋆↑⟨ c ⟩ cv⋆))
-                                   (cong≅CV (sym≅ (conv≅₇ _ _ _)) (congCV↑⟨ c ⟩ cv))
+cong↑⟨ c ⟩CV⋆ cv⋆[]         = cv⋆[]
+cong↑⟨ c ⟩CV⋆ (cv⋆≔ cv⋆ cv) = cv⋆≔ (cong≅ₛCV⋆ (sym≅ₛ (conv₁≅ₛ _ _ _)) (cong↑⟨ c ⟩CV⋆ cv⋆))
+                                   (cong≅CV (sym≅ (conv₇≅ _ _ _)) (cong↑⟨ c ⟩CV cv))
 
-congCV⋆↓⟨_⟩ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
+cong↓⟨_⟩CV⋆ : ∀ {Γ Δ Θ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
                 (c : Γ ⊇ Θ) → CV⋆ γ ρ →
                 CV⋆ (π⟨ c ⟩ ● γ) (↓⟨ c ⟩ ρ)
-congCV⋆↓⟨ done ⟩     cv⋆ = cv⋆[]
-congCV⋆↓⟨ weak c i ⟩ cv⋆ = cv⋆≔ {c = weak⊇}
-                                (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                                    (cong≅ₛ● (conv≅ₛ₄ _ _ _) refl≅ₛ))
-                                           (congCV⋆↓⟨ c ⟩ cv⋆))
-                                (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                                 (cong≅▶ (conv≅₄ _ _ _) refl≅ₛ))
-                                         (congCVlookup cv⋆ i))
+cong↓⟨ done ⟩CV⋆     cv⋆ = cv⋆[]
+cong↓⟨ step c i ⟩CV⋆ cv⋆ = cv⋆≔ {c = weak⊇}
+                                (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv₁≅ₛ _ _ _))
+                                                    (cong●≅ₛ (conv₄≅ₛ _ _ _) refl≅ₛ))
+                                           (cong↓⟨ c ⟩CV⋆ cv⋆))
+                                (cong≅CV (trans≅ (sym≅ (conv₇≅ _ _ _))
+                                                 (cong▶≅ (conv₄≅ _ _ _) refl≅ₛ))
+                                         (conglookupCV cv⋆ i))
 
 -- Now we are ready to prove that if `γ` and `ρ` are `CV`-related, then `M ▶ γ` and `⟦ M ⟧ ρ` are
 -- `CV`-related.  This lemma corresponds to Tait’s lemma saying that each term is computable
@@ -748,32 +748,32 @@ mutual
   CV⟦_⟧ : ∀ {Γ Δ A} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
             (M : Γ ⊢ A) → CV⋆ γ ρ →
             CV (M ▶ γ) (⟦ M ⟧ ρ)
-  CV⟦ ν x i ⟧ cv⋆ = congCVlookup cv⋆ i
-  CV⟦ ƛ x M ⟧ cv⋆ = cv⊃ (λ c cvₐ → cong≅CV (trans≅ (cong≅∙ (conv≅₇ _ _ _) refl≅)
-                                                    (conv≅₁ _ _ _))
+  CV⟦ ν x i ⟧ cv⋆ = conglookupCV cv⋆ i
+  CV⟦ ƛ x M ⟧ cv⋆ = cv⊃ (λ c cvₐ → cong≅CV (trans≅ (cong∙≅ (conv₇≅ _ _ _) refl≅)
+                                                    (conv₁≅ _ _ _))
                                             (CV⟦ M ⟧ (cv⋆≔ {c = weak⊇}
-                                                           (cong≅ₛCV⋆ (conv≅ₛ₃ _ _ _)
-                                                                      (congCV⋆↑⟨ c ⟩ cv⋆))
-                                                           (cong≅CV (conv≅₃ _ _) cvₐ))))
+                                                           (cong≅ₛCV⋆ (conv₃≅ₛ _ _ _)
+                                                                      (cong↑⟨ c ⟩CV⋆ cv⋆))
+                                                           (cong≅CV (conv₃≅ _ _) cvₐ))))
   CV⟦ M ∙ N ⟧ cv⋆ = case CV⟦ M ⟧ cv⋆ of
-                      λ { (cv⊃ h) → cong≅CV (trans≅ (conv≅₆ _ _ _)
-                                                     (cong≅∙ (sym≅ (conv≅₅ _ _)) refl≅))
+                      λ { (cv⊃ h) → cong≅CV (trans≅ (conv₆≅ _ _ _)
+                                                     (cong∙≅ (sym≅ (conv₅≅ _ _)) refl≅))
                                              (h refl⊇ (CV⟦ N ⟧ cv⋆)) }
-  CV⟦ M ▶ γ ⟧ cv⋆ = cong≅CV (conv≅₇ _ _ _)
+  CV⟦ M ▶ γ ⟧ cv⋆ = cong≅CV (conv₇≅ _ _ _)
                             (CV⟦ M ⟧ (CV⋆⟦ γ ⟧ₛ cv⋆))
 
   CV⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {δ : Θ ⋙ Δ} {ρ : Θ ⊩⋆ Δ} →
               (γ : Δ ⋙ Γ) → CV⋆ δ ρ →
               CV⋆ (γ ● δ) (⟦ γ ⟧ₛ ρ)
-  CV⋆⟦ π⟨ c ⟩ ⟧ₛ        cv⋆ = congCV⋆↓⟨ c ⟩ cv⋆
-  CV⋆⟦ γ ● γ′ ⟧ₛ        cv⋆ = cong≅ₛCV⋆ (conv≅ₛ₁ _ _ _)
+  CV⋆⟦ π⟨ c ⟩ ⟧ₛ        cv⋆ = cong↓⟨ c ⟩CV⋆ cv⋆
+  CV⋆⟦ γ ● γ′ ⟧ₛ        cv⋆ = cong≅ₛCV⋆ (conv₁≅ₛ _ _ _)
                                         (CV⋆⟦ γ ⟧ₛ (CV⋆⟦ γ′ ⟧ₛ cv⋆))
   CV⋆⟦ [ γ , x ≔ M ] ⟧ₛ cv⋆ = cv⋆≔ {c = weak⊇}
-                                   (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv≅ₛ₁ _ _ _))
-                                                       (cong≅ₛ● (conv≅ₛ₃ _ _ _) refl≅ₛ))
+                                   (cong≅ₛCV⋆ (trans≅ₛ (sym≅ₛ (conv₁≅ₛ _ _ _))
+                                                       (cong●≅ₛ (conv₃≅ₛ _ _ _) refl≅ₛ))
                                               (CV⋆⟦ γ ⟧ₛ cv⋆))
-                                   (cong≅CV (trans≅ (sym≅ (conv≅₇ _ _ _))
-                                                    (cong≅▶ (conv≅₃ _ _) refl≅ₛ))
+                                   (cong≅CV (trans≅ (sym≅ (conv₇≅ _ _ _))
+                                                    (cong▶≅ (conv₃≅ _ _) refl≅ₛ))
                                             (CV⟦ M ⟧ cv⋆))
 
 -- Both lemmas are proved by induction on the proof trees using the lemmas above.
@@ -785,10 +785,10 @@ mutual
   lem₉ : ∀ {Γ A} {M : Γ ⊢ A} {a : Γ ⊩ A} →
            CV M a →
            M ≅ reify a
-  lem₉ (cv• h) = trans≅ (sym≅ (conv≅₅ _ _))
+  lem₉ (cv• h) = trans≅ (sym≅ (conv₅≅ _ _))
                         (h refl⊇)
-  lem₉ (cv⊃ h) = trans≅ (conv≅₂ _ _)
-                        (cong≅ƛ (lem₉ (h weak⊇ (aux₄₆₈ (λ c → conv≅₄ _ _ _)))))
+  lem₉ (cv⊃ h) = trans≅ (conv₂≅ _ _)
+                        (congƛ≅ (lem₉ (h weak⊇ (aux₄₆₈ (λ c → conv₄≅ _ _ _)))))
 
   aux₄₆₈ : ∀ {A Γ} {M : Γ ⊢ A} {f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A} →
              (∀ {Δ} → (c : Δ ⊇ Γ) → M ▶ π⟨ c ⟩ ≅ f c) →
@@ -798,15 +798,15 @@ mutual
                                        aux₄₆₈ (λ {Δ′} c′ →
                                          begin
                                            ((M ▶ π⟨ c ⟩) ∙ N) ▶ π⟨ c′ ⟩
-                                         ≅⟨ conv≅₆ _ _ _ ⟩
+                                         ≅⟨ conv₆≅ _ _ _ ⟩
                                            ((M ▶ π⟨ c ⟩) ▶ π⟨ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
-                                         ≅⟨ cong≅∙ (conv≅₇ _ _ _) refl≅ ⟩
+                                         ≅⟨ cong∙≅ (conv₇≅ _ _ _) refl≅ ⟩
                                            (M ▶ (π⟨ c ⟩ ● π⟨ c′ ⟩)) ∙ (N ▶ π⟨ c′ ⟩)
-                                         ≅⟨ cong≅∙ (cong≅▶ refl≅ (conv≅ₛ₄ _ _ _)) refl≅ ⟩
+                                         ≅⟨ cong∙≅ (cong▶≅ refl≅ (conv₄≅ₛ _ _ _)) refl≅ ⟩
                                            (M ▶ π⟨ c ○ c′ ⟩) ∙ (N ▶ π⟨ c′ ⟩)
-                                         ≅⟨ cong≅∙ (h (c ○ c′)) refl≅ ⟩
+                                         ≅⟨ cong∙≅ (h (c ○ c′)) refl≅ ⟩
                                            f (c ○ c′) ∙ (N ▶ π⟨ c′ ⟩)
-                                         ≅⟨ cong≅∙ refl≅ (lem₉ (congCV↑⟨ c′ ⟩ cvₐ)) ⟩
+                                         ≅⟨ cong∙≅ refl≅ (lem₉ (cong↑⟨ c′ ⟩CV cvₐ)) ⟩
                                            f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a)
                                          ∎))
                                          where
@@ -820,14 +820,14 @@ proj⟨_⟩CV⋆ : ∀ {Γ Δ} →
                (c : Δ ⊇ Γ) →
                CV⋆ π⟨ c ⟩ proj⟨ c ⟩⊩⋆
 proj⟨ done ⟩CV⋆             = cv⋆[]
-proj⟨ weak {x = x} c i ⟩CV⋆ = cv⋆≔ {c = weak⊇}
-                                   (cong≅ₛCV⋆ (conv≅ₛ₄ _ _ _) (proj⟨ c ⟩CV⋆))
+proj⟨ step {x = x} c i ⟩CV⋆ = cv⋆≔ {c = weak⊇}
+                                   (cong≅ₛCV⋆ (conv₄≅ₛ _ _ _) (proj⟨ c ⟩CV⋆))
                                    (aux₄₆₈ (λ c′ →
                                      begin
-                                       (ν x zero ▶ π⟨ weak c i ⟩) ▶ π⟨ c′ ⟩
-                                     ≅⟨ cong≅▶ (conv≅₄ _ _ _) refl≅ₛ ⟩
+                                       (ν x zero ▶ π⟨ step c i ⟩) ▶ π⟨ c′ ⟩
+                                     ≅⟨ cong▶≅ (conv₄≅ _ _ _) refl≅ₛ ⟩
                                        ν x i ▶ π⟨ c′ ⟩
-                                     ≅⟨ conv≅₄ _ _ _ ⟩
+                                     ≅⟨ conv₄≅ _ _ _ ⟩
                                        ν x (↑⟨ c′ ⟩ i)
                                      ∎))
                                      where
@@ -846,7 +846,7 @@ aux₄₆₉⟨ c ⟩ M = subst (λ c′ → M ▶ π⟨ c ⟩ ≅ reify (⟦ M 
 -- Theorem 2.
 thm₂ : ∀ {Γ A} → (M : Γ ⊢ A) →
          M ≅ nf M
-thm₂ M = trans≅ (sym≅ (conv≅₅ _ _))
+thm₂ M = trans≅ (sym≅ (conv₅≅ _ _))
                 (aux₄₆₉⟨ refl⊇ ⟩ M)
 
 -- It is now easy to prove the completeness theorem:
@@ -898,9 +898,9 @@ cor₁ₛ γ γ′ = thm₁ₛ
 lem₉ₛ : ∀ {Γ Δ} {γ : Δ ⋙ Γ} {ρ : Δ ⊩⋆ Γ} →
           CV⋆ γ ρ →
           γ ≅ₛ reify⋆ ρ
-lem₉ₛ cv⋆[]         = conv≅ₛ₆ _ _
-lem₉ₛ (cv⋆≔ cv⋆ cv) = trans≅ₛ (conv≅ₛ₇ _ _ _)
-                              (cong≅ₛ≔ (lem₉ₛ cv⋆) (lem₉ cv))
+lem₉ₛ cv⋆[]         = conv₆≅ₛ _ _
+lem₉ₛ (cv⋆≔ cv⋆ cv) = trans≅ₛ (conv₇≅ₛ _ _ _)
+                              (cong≔≅ₛ (lem₉ₛ cv⋆) (lem₉ cv))
 
 aux₄₆₉ₛ⟨_⟩ : ∀ {Γ Δ} →
                (c : Δ ⊇ Δ) (γ : Δ ⋙ Γ) →
@@ -911,7 +911,7 @@ aux₄₆₉ₛ⟨ c ⟩ γ = subst (λ c′ → γ ● π⟨ c ⟩ ≅ₛ reify
 
 thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
           γ ≅ₛ nf⋆ γ
-thm₂ₛ γ = trans≅ₛ (sym≅ₛ (conv≅ₛ₅ _ _))
+thm₂ₛ γ = trans≅ₛ (sym≅ₛ (conv₅≅ₛ _ _))
                   (aux₄₆₉ₛ⟨ refl⊇ ⟩ γ)
 
 thm₃ₛ : ∀ {Γ Δ} → (γ γ′ : Δ ⋙ Γ) → Eq⋆ (⟦ γ ⟧ₛ refl⊩⋆) (⟦ γ′ ⟧ₛ refl⊩⋆) →
@@ -939,18 +939,18 @@ mutual
   𝒰⟦_⟧ : ∀ {A Γ Δ} {ρ : Δ ⊩⋆ Γ} →
            (M : Γ ⊢ A) → 𝒰⋆ ρ →
            𝒰 (⟦ M ⟧ ρ)
-  𝒰⟦ ν x i ⟧ u⋆ = cong𝒰lookup u⋆ i
-  𝒰⟦ ƛ x M ⟧ u⋆ = 𝓊⊃ (λ c uₐ         → 𝒰⟦ M ⟧ (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ))
-                     (λ c eqₐ uₐ uₐ′ → Eq⟦ M ⟧ (eq⋆≔ (congEq⋆↑⟨ c ⟩ (reflEq⋆ u⋆)) eqₐ)
-                                                (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ)
-                                                (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ′))
-                     (λ c c′ c″ uₐ   → transEq (Eq↑⟨ c′ ⟩⟦ M ⟧ (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ))
+  𝒰⟦ ν x i ⟧ u⋆ = conglookup𝒰 u⋆ i
+  𝒰⟦ ƛ x M ⟧ u⋆ = 𝓊⊃ (λ c uₐ         → 𝒰⟦ M ⟧ (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ))
+                     (λ c eqₐ uₐ uₐ′ → Eq⟦ M ⟧ (eq⋆≔ (cong↑⟨ c ⟩Eq⋆ (reflEq⋆ u⋆)) eqₐ)
+                                                (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ)
+                                                (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ′))
+                     (λ c c′ c″ uₐ   → transEq (↑⟨ c′ ⟩Eq⟦ M ⟧ (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ))
                                                 (Eq⟦ M ⟧ (eq⋆≔ (aux₄₂₇ c c′ c″ u⋆)
-                                                               (reflEq (cong𝒰↑⟨ c′ ⟩ uₐ)))
-                                                         (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ (cong𝒰⋆↑⟨ c ⟩ u⋆))
-                                                              (cong𝒰↑⟨ c′ ⟩ uₐ))
-                                                         (𝓊⋆≔ (cong𝒰⋆↑⟨ c″ ⟩ u⋆)
-                                                              (cong𝒰↑⟨ c′ ⟩ uₐ))))
+                                                               (reflEq (cong↑⟨ c′ ⟩𝒰 uₐ)))
+                                                         (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ (cong↑⟨ c ⟩𝒰⋆ u⋆))
+                                                              (cong↑⟨ c′ ⟩𝒰 uₐ))
+                                                         (𝓊⋆≔ (cong↑⟨ c″ ⟩𝒰⋆ u⋆)
+                                                              (cong↑⟨ c′ ⟩𝒰 uₐ))))
   𝒰⟦ M ∙ N ⟧ u⋆ = case 𝒰⟦ M ⟧ u⋆ of
                     λ { (𝓊⊃ h₀ h₁ h₂) → h₀ refl⊇ (𝒰⟦ N ⟧ u⋆) }
   𝒰⟦ M ▶ γ ⟧ u⋆ = 𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)
@@ -958,60 +958,60 @@ mutual
   𝒰⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {ρ : Θ ⊩⋆ Δ} →
              (γ : Δ ⋙ Γ) → 𝒰⋆ ρ →
              𝒰⋆ (⟦ γ ⟧ₛ ρ)
-  𝒰⋆⟦ π⟨ c ⟩ ⟧ₛ        u⋆ = cong𝒰⋆↓⟨ c ⟩ u⋆
+  𝒰⋆⟦ π⟨ c ⟩ ⟧ₛ        u⋆ = cong↓⟨ c ⟩𝒰⋆ u⋆
   𝒰⋆⟦ γ ● γ′ ⟧ₛ        u⋆ = 𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ γ′ ⟧ₛ u⋆)
   𝒰⋆⟦ [ γ , x ≔ M ] ⟧ₛ u⋆ = 𝓊⋆≔ (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⟦ M ⟧ u⋆)
 
   Eq⟦_⟧ : ∀ {Γ Δ A} {ρ ρ′ : Δ ⊩⋆ Γ} →
             (M : Γ ⊢ A) → Eq⋆ ρ ρ′ → 𝒰⋆ ρ → 𝒰⋆ ρ′ →
             Eq (⟦ M ⟧ ρ) (⟦ M ⟧ ρ′)
-  Eq⟦ ν x i ⟧ eq⋆ u⋆ u⋆′ = congEqlookup eq⋆ i
-  Eq⟦ ƛ x M ⟧ eq⋆ u⋆ u⋆′ = eq⊃ (λ c uₐ → Eq⟦ M ⟧ (eq⋆≔ (congEq⋆↑⟨ c ⟩ eq⋆) (reflEq uₐ))
-                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ)
-                                                  (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆′) uₐ))
-  Eq⟦ M ∙ N ⟧ eq⋆ u⋆ u⋆′ = congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq⟦ M ⟧ eq⋆ u⋆ u⋆′) (𝒰⟦ M ⟧ u⋆) (𝒰⟦ M ⟧ u⋆′)
+  Eq⟦ ν x i ⟧ eq⋆ u⋆ u⋆′ = conglookupEq eq⋆ i
+  Eq⟦ ƛ x M ⟧ eq⋆ u⋆ u⋆′ = eq⊃ (λ c uₐ → Eq⟦ M ⟧ (eq⋆≔ (cong↑⟨ c ⟩Eq⋆ eq⋆) (reflEq uₐ))
+                                                  (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ)
+                                                  (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆′) uₐ))
+  Eq⟦ M ∙ N ⟧ eq⋆ u⋆ u⋆′ = cong⟦∙⟧⟨ refl⊇ ⟩Eq (Eq⟦ M ⟧ eq⋆ u⋆ u⋆′) (𝒰⟦ M ⟧ u⋆) (𝒰⟦ M ⟧ u⋆′)
                                               (Eq⟦ N ⟧ eq⋆ u⋆ u⋆′) (𝒰⟦ N ⟧ u⋆) (𝒰⟦ N ⟧ u⋆′)
   Eq⟦ M ▶ γ ⟧ eq⋆ u⋆ u⋆′ = Eq⟦ M ⟧ (Eq⋆⟦ γ ⟧ₛ eq⋆ u⋆ u⋆′) (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⋆⟦ γ ⟧ₛ u⋆′)
 
   Eq⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {ρ ρ′ : Θ ⊩⋆ Δ} →
               (γ : Δ ⋙ Γ) → Eq⋆ ρ ρ′ → 𝒰⋆ ρ → 𝒰⋆ ρ′ →
               Eq⋆ (⟦ γ ⟧ₛ ρ) (⟦ γ ⟧ₛ ρ′)
-  Eq⋆⟦ π⟨ c ⟩ ⟧ₛ        eq⋆ u⋆ u⋆′ = congEq⋆↓⟨ c ⟩ eq⋆
+  Eq⋆⟦ π⟨ c ⟩ ⟧ₛ        eq⋆ u⋆ u⋆′ = cong↓⟨ c ⟩Eq⋆ eq⋆
   Eq⋆⟦ γ ● γ′ ⟧ₛ        eq⋆ u⋆ u⋆′ = Eq⋆⟦ γ ⟧ₛ (Eq⋆⟦ γ′ ⟧ₛ eq⋆ u⋆ u⋆′) (𝒰⋆⟦ γ′ ⟧ₛ u⋆) (𝒰⋆⟦ γ′ ⟧ₛ u⋆′)
   Eq⋆⟦ [ γ , x ≔ M ] ⟧ₛ eq⋆ u⋆ u⋆′ = eq⋆≔ (Eq⋆⟦ γ ⟧ₛ eq⋆ u⋆ u⋆′)
                                           (Eq⟦ M ⟧ eq⋆ u⋆ u⋆′)
 
-  Eq↑⟨_⟩⟦_⟧ : ∀ {Γ Δ Θ A} {ρ : Δ ⊩⋆ Γ} →
+  ↑⟨_⟩Eq⟦_⟧ : ∀ {Γ Δ Θ A} {ρ : Δ ⊩⋆ Γ} →
                 (c : Θ ⊇ Δ) (M : Γ ⊢ A) → 𝒰⋆ ρ →
                 Eq (↑⟨ c ⟩ (⟦ M ⟧ ρ)) (⟦ M ⟧ (↑⟨ c ⟩ ρ))
-  Eq↑⟨ c ⟩⟦ ν x i ⟧ u⋆ = aux₄₂₂⟨ c ⟩ u⋆ i
-  Eq↑⟨ c ⟩⟦ ƛ x M ⟧ u⋆ = eq⊃ (λ c′ uₐ → Eq⟦ M ⟧ (eq⋆≔ (symEq⋆ (aux₄₂₇ c c′ (c ○ c′) u⋆)) (reflEq uₐ))
-                                                 (𝓊⋆≔ (cong𝒰⋆↑⟨ c ○ c′ ⟩ u⋆) uₐ)
-                                                 (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ (cong𝒰⋆↑⟨ c ⟩ u⋆)) uₐ))
-  Eq↑⟨ c ⟩⟦ M ∙ N ⟧ u⋆ =
+  ↑⟨ c ⟩Eq⟦ ν x i ⟧ u⋆ = aux₄₂₂⟨ c ⟩ u⋆ i
+  ↑⟨ c ⟩Eq⟦ ƛ x M ⟧ u⋆ = eq⊃ (λ c′ uₐ → Eq⟦ M ⟧ (eq⋆≔ (symEq⋆ (aux₄₂₇ c c′ (c ○ c′) u⋆)) (reflEq uₐ))
+                                                 (𝓊⋆≔ (cong↑⟨ c ○ c′ ⟩𝒰⋆ u⋆) uₐ)
+                                                 (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ (cong↑⟨ c ⟩𝒰⋆ u⋆)) uₐ))
+  ↑⟨ c ⟩Eq⟦ M ∙ N ⟧ u⋆ =
     case 𝒰⟦ M ⟧ u⋆ of
       λ { (𝓊⊃ h₀ h₁ h₂) → transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
-                                   (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆)))
-                                            (congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
-                                                                (cong𝒰↑⟨ c ⟩ (𝒰⟦ M ⟧ u⋆))
-                                                                (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆))
-                                                                (Eq↑⟨ c ⟩⟦ N ⟧ u⋆)
-                                                                (cong𝒰↑⟨ c ⟩ (𝒰⟦ N ⟧ u⋆))
-                                                                (𝒰⟦ N ⟧ (cong𝒰⋆↑⟨ c ⟩ u⋆)))) }
-  Eq↑⟨ c ⟩⟦ M ▶ γ ⟧ u⋆ = transEq (Eq↑⟨ c ⟩⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
-                                 (Eq⟦ M ⟧ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ u⋆)
-                                          (cong𝒰⋆↑⟨ c ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
-                                          (𝒰⋆⟦ γ ⟧ₛ (cong𝒰⋆↑⟨ c ⟩ u⋆)))
+                                   (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆)))
+                                            (cong⟦∙⟧⟨ refl⊇ ⟩Eq (↑⟨ c ⟩Eq⟦ M ⟧ u⋆)
+                                                                (cong↑⟨ c ⟩𝒰 (𝒰⟦ M ⟧ u⋆))
+                                                                (𝒰⟦ M ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆))
+                                                                (↑⟨ c ⟩Eq⟦ N ⟧ u⋆)
+                                                                (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆))
+                                                                (𝒰⟦ N ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆)))) }
+  ↑⟨ c ⟩Eq⟦ M ▶ γ ⟧ u⋆ = transEq (↑⟨ c ⟩Eq⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+                                 (Eq⟦ M ⟧ (↑⟨ c ⟩Eq⋆⟦ γ ⟧ₛ u⋆)
+                                          (cong↑⟨ c ⟩𝒰⋆ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+                                          (𝒰⋆⟦ γ ⟧ₛ (cong↑⟨ c ⟩𝒰⋆ u⋆)))
 
-  Eq⋆↑⟨_⟩⟦_⟧ₛ : ∀ {Γ Δ Θ Ω} {ρ : Θ ⊩⋆ Δ} →
+  ↑⟨_⟩Eq⋆⟦_⟧ₛ : ∀ {Γ Δ Θ Ω} {ρ : Θ ⊩⋆ Δ} →
                   (c : Ω ⊇ Θ) (γ : Δ ⋙ Γ) → 𝒰⋆ ρ →
                   Eq⋆ (↑⟨ c ⟩ (⟦ γ ⟧ₛ ρ)) (⟦ γ ⟧ₛ (↑⟨ c ⟩ ρ))
-  Eq⋆↑⟨ c ⟩⟦ π⟨ c′ ⟩ ⟧ₛ       u⋆ = aux₄₂₈ c′ c u⋆
-  Eq⋆↑⟨ c ⟩⟦ γ ● γ′ ⟧ₛ        u⋆ = transEq⋆ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
-                                            (Eq⋆⟦ γ ⟧ₛ (Eq⋆↑⟨ c ⟩⟦ γ′ ⟧ₛ u⋆)
-                                                      (cong𝒰⋆↑⟨ c ⟩ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
-                                                      (𝒰⋆⟦ γ′ ⟧ₛ (cong𝒰⋆↑⟨ c ⟩ u⋆)))
-  Eq⋆↑⟨ c ⟩⟦ [ γ , x ≔ M ] ⟧ₛ u⋆ = eq⋆≔ (Eq⋆↑⟨ c ⟩⟦ γ ⟧ₛ u⋆) (Eq↑⟨ c ⟩⟦ M ⟧ u⋆)
+  ↑⟨ c ⟩Eq⋆⟦ π⟨ c′ ⟩ ⟧ₛ       u⋆ = aux₄₂₈ c′ c u⋆
+  ↑⟨ c ⟩Eq⋆⟦ γ ● γ′ ⟧ₛ        u⋆ = transEq⋆ (↑⟨ c ⟩Eq⋆⟦ γ ⟧ₛ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
+                                            (Eq⋆⟦ γ ⟧ₛ (↑⟨ c ⟩Eq⋆⟦ γ′ ⟧ₛ u⋆)
+                                                      (cong↑⟨ c ⟩𝒰⋆ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
+                                                      (𝒰⋆⟦ γ′ ⟧ₛ (cong↑⟨ c ⟩𝒰⋆ u⋆)))
+  ↑⟨ c ⟩Eq⋆⟦ [ γ , x ≔ M ] ⟧ₛ u⋆ = eq⋆≔ (↑⟨ c ⟩Eq⋆⟦ γ ⟧ₛ u⋆) (↑⟨ c ⟩Eq⟦ M ⟧ u⋆)
 
 
 -- NOTE: Added missing lemmas.
@@ -1037,21 +1037,21 @@ module _ where
              Eq (lookup [ ρ , x ≔ a ] i) a
   aux₄₈₄ i uₐ rewrite uniq∋ i zero = reflEq uₐ
 
-  Eq⋆conv≅ₛ₆⟨_⟩ : ∀ {Γ Δ} {ρ : Δ ⊩⋆ Γ} →
+  conv₆Eq⋆⟨_⟩ : ∀ {Γ Δ} {ρ : Δ ⊩⋆ Γ} →
                   (c : Γ ⊇ []) (γ : Γ ⋙ []) → 𝒰⋆ ρ →
                   Eq⋆ (⟦ γ ⟧ₛ ρ) (↓⟨ c ⟩⊩⋆ ρ)
-  Eq⋆conv≅ₛ₆⟨ c ⟩ γ u⋆ rewrite aux₄₈₂⟨ c ⟩ u⋆ = aux₄₈₃ γ u⋆
+  conv₆Eq⋆⟨ c ⟩ γ u⋆ rewrite aux₄₈₂⟨ c ⟩ u⋆ = aux₄₈₃ γ u⋆
 
-  Eq⋆conv≅ₛ₇⟨_⟩ : ∀ {Γ Δ Θ A x} {{_ : T (fresh x Γ)}} {ρ : Θ ⊩⋆ Δ} →
-                    (c : [ Γ , x ∷ A ] ⊇ Γ) (γ : Δ ⋙ [ Γ , x ∷ A ]) (i : [ Γ , x ∷ A ] ∋ x ∷ A) → 𝒰⋆ ρ →
-                    Eq⋆ (⟦ γ ⟧ₛ ρ) [ ↓⟨ c ⟩ (⟦ γ ⟧ₛ ρ) , x ≔ lookup (⟦ γ ⟧ₛ ρ) i ]
-  Eq⋆conv≅ₛ₇⟨_⟩ {x = x} {ρ = ρ} c γ i u⋆ with ⟦ γ ⟧ₛ ρ | 𝒰⋆⟦ γ ⟧ₛ u⋆
-  Eq⋆conv≅ₛ₇⟨_⟩ {x = x} {ρ = ρ} c γ i u⋆ | [ ρ′ , .x ≔ a ] | 𝓊⋆≔ u⋆′ uₐ =
+  conv₇Eq⋆⟨_⟩ : ∀ {Γ Δ Θ A x} {{_ : T (fresh x Γ)}} {ρ : Θ ⊩⋆ Δ} →
+                  (c : [ Γ , x ∷ A ] ⊇ Γ) (γ : Δ ⋙ [ Γ , x ∷ A ]) (i : [ Γ , x ∷ A ] ∋ x ∷ A) → 𝒰⋆ ρ →
+                  Eq⋆ (⟦ γ ⟧ₛ ρ) [ ↓⟨ c ⟩ (⟦ γ ⟧ₛ ρ) , x ≔ lookup (⟦ γ ⟧ₛ ρ) i ]
+  conv₇Eq⋆⟨_⟩ {x = x} {ρ = ρ} c γ i u⋆ with ⟦ γ ⟧ₛ ρ | 𝒰⋆⟦ γ ⟧ₛ u⋆
+  conv₇Eq⋆⟨_⟩ {x = x} {ρ = ρ} c γ i u⋆ | [ ρ′ , .x ≔ a ] | 𝓊⋆≔ u⋆′ uₐ =
     begin
       [ ρ′ , x ≔ a ]
     Eq⋆⟨ eq⋆≔ (symEq⋆ (aux₄₈₁⟨ c ⟩ u⋆′)) (symEq (aux₄₈₄ i uₐ)) ⟩
       [ ↓⟨ c ⟩⊩⋆ [ ρ′ , x ≔ a ] , x ≔ lookup [ ρ′ , x ≔ a ] i ]
-    ∎⟨ 𝓊⋆≔ (cong𝒰⋆↓⟨ c ⟩ (𝓊⋆≔ u⋆′ uₐ)) (cong𝒰lookup (𝓊⋆≔ u⋆′ uₐ) i) ⟩
+    ∎⟨ 𝓊⋆≔ (cong↓⟨ c ⟩𝒰⋆ (𝓊⋆≔ u⋆′ uₐ)) (conglookup𝒰 (𝓊⋆≔ u⋆′ uₐ) i) ⟩
    where
      open Eq⋆Reasoning
 
@@ -1067,54 +1067,54 @@ mutual
   Eq⟦ refl≅ {M = M} ⟧≅                     u⋆ = reflEq (𝒰⟦ M ⟧ u⋆)
   Eq⟦ sym≅ p ⟧≅                            u⋆ = symEq (Eq⟦ p ⟧≅ u⋆)
   Eq⟦ trans≅ p p′ ⟧≅                       u⋆ = transEq (Eq⟦ p ⟧≅ u⋆) (Eq⟦ p′ ⟧≅ u⋆)
-  Eq⟦ cong≅ƛ {M = M} {M′} p ⟧≅             u⋆ = eq⊃ (λ c uₐ → Eq⟦ p ⟧≅ (𝓊⋆≔ (cong𝒰⋆↑⟨ c ⟩ u⋆) uₐ))
-  Eq⟦ cong≅∙ {M = M} {M′} {N} {N′} p p′ ⟧≅ u⋆ = congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq⟦ p ⟧≅ u⋆)
+  Eq⟦ congƛ≅ {M = M} {M′} p ⟧≅             u⋆ = eq⊃ (λ c uₐ → Eq⟦ p ⟧≅ (𝓊⋆≔ (cong↑⟨ c ⟩𝒰⋆ u⋆) uₐ))
+  Eq⟦ cong∙≅ {M = M} {M′} {N} {N′} p p′ ⟧≅ u⋆ = cong⟦∙⟧⟨ refl⊇ ⟩Eq (Eq⟦ p ⟧≅ u⋆)
                                                                    (𝒰⟦ M ⟧ u⋆)
                                                                    (𝒰⟦ M′ ⟧ u⋆)
                                                                    (Eq⟦ p′ ⟧≅ u⋆)
                                                                    (𝒰⟦ N ⟧ u⋆)
                                                                    (𝒰⟦ N′ ⟧ u⋆)
-  Eq⟦ cong≅▶ {M = M} {M′} {γ} {γ′} p pₛ ⟧≅ u⋆ = transEq (Eq⟦ M ⟧ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆) (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
+  Eq⟦ cong▶≅ {M = M} {M′} {γ} {γ′} p pₛ ⟧≅ u⋆ = transEq (Eq⟦ M ⟧ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆) (𝒰⋆⟦ γ ⟧ₛ u⋆) (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
                                                         (transEq (Eq⟦ p ⟧≅ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))
                                                                  (reflEq (𝒰⟦ M′ ⟧ (𝒰⋆⟦ γ′ ⟧ₛ u⋆))))
-  Eq⟦ conv≅₁ M γ N ⟧≅                      u⋆ = Eq⟦ M ⟧ (eq⋆≔ (aux₄₂₅⟨ refl⊇ ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+  Eq⟦ conv₁≅ M N γ ⟧≅                      u⋆ = Eq⟦ M ⟧ (eq⋆≔ (aux₄₂₅⟨ refl⊇ ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                               (reflEq (𝒰⟦ N ⟧ u⋆)))
-                                                        (𝓊⋆≔ (cong𝒰⋆↑⟨ refl⊇ ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
+                                                        (𝓊⋆≔ (cong↑⟨ refl⊇ ⟩𝒰⋆ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                              (𝒰⟦ N ⟧ u⋆))
                                                         (𝓊⋆≔ (𝒰⋆⟦ γ ⟧ₛ u⋆)
                                                              (𝒰⟦ N ⟧ u⋆))
-  Eq⟦_⟧≅ {ρ = ρ} (conv≅₂ {x = x} M c) u⋆ =
+  Eq⟦_⟧≅ {ρ = ρ} (conv₂≅ {x = x} c M) u⋆ =
     eq⊃ (λ c′ {a} uₐ →
       begin
         ⟦ M ⟧ ρ ⟦∙⟧⟨ c′ ⟩ a
       Eq⟨ aux₄₁₃ c′ refl⊇ (𝒰⟦ M ⟧ u⋆) uₐ ⟩
         (↑⟨ c′ ⟩ (⟦ M ⟧ ρ) ⟦∙⟧⟨ refl⊇ ⟩ a)
-      Eq⟨ congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq↑⟨ c′ ⟩⟦ M ⟧ u⋆)
-                             (cong𝒰↑⟨ c′ ⟩ (𝒰⟦ M ⟧ u⋆))
-                             (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c′ ⟩ u⋆))
+      Eq⟨ cong⟦∙⟧⟨ refl⊇ ⟩Eq (↑⟨ c′ ⟩Eq⟦ M ⟧ u⋆)
+                             (cong↑⟨ c′ ⟩𝒰 (𝒰⟦ M ⟧ u⋆))
+                             (𝒰⟦ M ⟧ (cong↑⟨ c′ ⟩𝒰⋆ u⋆))
                              (reflEq uₐ) uₐ uₐ ⟩
         ⟦ M ⟧ (↑⟨ c′ ⟩ ρ) ⟦∙⟧⟨ refl⊇ ⟩ a
-      Eq⟨ congEq⟦∙⟧⟨ refl⊇ ⟩ (Eq⟦ M ⟧ (symEq⋆ (aux₄₈₁⟨ c ⟩ (cong𝒰⋆↑⟨ c′ ⟩ u⋆)))
-                                      (cong𝒰⋆↑⟨ c′ ⟩ u⋆)
-                                      (cong𝒰⋆↓⟨ c ⟩ (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ u⋆) uₐ)))
-                             (𝒰⟦ M ⟧ (cong𝒰⋆↑⟨ c′ ⟩ u⋆))
-                             (𝒰⟦ M ⟧ (cong𝒰⋆↓⟨ c ⟩ (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ u⋆) uₐ)))
+      Eq⟨ cong⟦∙⟧⟨ refl⊇ ⟩Eq (Eq⟦ M ⟧ (symEq⋆ (aux₄₈₁⟨ c ⟩ (cong↑⟨ c′ ⟩𝒰⋆ u⋆)))
+                                      (cong↑⟨ c′ ⟩𝒰⋆ u⋆)
+                                      (cong↓⟨ c ⟩𝒰⋆ (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ u⋆) uₐ)))
+                             (𝒰⟦ M ⟧ (cong↑⟨ c′ ⟩𝒰⋆ u⋆))
+                             (𝒰⟦ M ⟧ (cong↓⟨ c ⟩𝒰⋆ (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ u⋆) uₐ)))
                              (reflEq uₐ) uₐ uₐ ⟩
         ⟦ M ⟧ (↓⟨ c ⟩ [ ↑⟨ c′ ⟩ ρ , x ≔ a ]) ⟦∙⟧⟨ refl⊇ ⟩ a
-      ∎⟨ case (𝒰⟦ M ⟧ (cong𝒰⋆↓⟨ c ⟩ (𝓊⋆≔ (cong𝒰⋆↑⟨ c′ ⟩ u⋆) uₐ))) of
+      ∎⟨ case (𝒰⟦ M ⟧ (cong↓⟨ c ⟩𝒰⋆ (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ u⋆) uₐ))) of
            (λ { (𝓊⊃ h₀ h₁ h₂) → h₀ refl⊇ uₐ }) ⟩)
       where
         open EqReasoning
-  Eq⟦ conv≅₃ M γ ⟧≅                        u⋆ = reflEq (𝒰⟦ M ⟧ u⋆)
-  Eq⟦ conv≅₄ c i j ⟧≅                      u⋆ = symEq (aux₄₂₁⟨ c ⟩ u⋆ j i)
-  Eq⟦ conv≅₅ c M ⟧≅                        u⋆ = Eq⟦ M ⟧ (aux₄₂₄⟨ c ⟩ u⋆) (cong𝒰⋆↓⟨ c ⟩ u⋆) u⋆
-  Eq⟦ conv≅₆ M N γ ⟧≅                      u⋆ = congEq⟦∙⟧⟨ refl⊇ ⟩ (reflEq (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)))
+  Eq⟦ conv₃≅ M γ ⟧≅                        u⋆ = reflEq (𝒰⟦ M ⟧ u⋆)
+  Eq⟦ conv₄≅ c i j ⟧≅                      u⋆ = symEq (aux₄₂₁⟨ c ⟩ u⋆ j i)
+  Eq⟦ conv₅≅ c M ⟧≅                        u⋆ = Eq⟦ M ⟧ (aux₄₂₄⟨ c ⟩ u⋆) (cong↓⟨ c ⟩𝒰⋆ u⋆) u⋆
+  Eq⟦ conv₆≅ M N γ ⟧≅                      u⋆ = cong⟦∙⟧⟨ refl⊇ ⟩Eq (reflEq (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)))
                                                                    (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                                    (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                                    (reflEq (𝒰⟦ N ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)))
                                                                    (𝒰⟦ N ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                                    (𝒰⟦ N ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
-  Eq⟦ conv≅₇ M γ δ ⟧≅                      u⋆ = reflEq (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆)))
+  Eq⟦ conv₇≅ M γ δ ⟧≅                      u⋆ = reflEq (𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆)))
 
   Eq⋆⟦_⟧≅ₛ : ∀ {Γ Δ w} {γ γ′ : Γ ⋙ Δ} {ρ : w ⊩⋆ Γ} →
                γ ≅ₛ γ′ → 𝒰⋆ ρ →
@@ -1122,20 +1122,20 @@ mutual
   Eq⋆⟦ refl≅ₛ {γ = γ} ⟧≅ₛ                    u⋆ = reflEq⋆ (𝒰⋆⟦ γ ⟧ₛ u⋆)
   Eq⋆⟦ sym≅ₛ pₛ ⟧≅ₛ                          u⋆ = symEq⋆ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆)
   Eq⋆⟦ trans≅ₛ pₛ pₛ′ ⟧≅ₛ                    u⋆ = transEq⋆ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆) (Eq⋆⟦ pₛ′ ⟧≅ₛ u⋆)
-  Eq⋆⟦ cong≅ₛ● {γ′ = γ′} {δ} {δ′} pₛ pₛ′ ⟧≅ₛ u⋆ = transEq⋆ (Eq⋆⟦ pₛ ⟧≅ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆))
+  Eq⋆⟦ cong●≅ₛ {γ′ = γ′} {δ} {δ′} pₛ pₛ′ ⟧≅ₛ u⋆ = transEq⋆ (Eq⋆⟦ pₛ ⟧≅ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆))
                                                            (Eq⋆⟦ γ′ ⟧ₛ (Eq⋆⟦ pₛ′ ⟧≅ₛ u⋆)
                                                                        (𝒰⋆⟦ δ ⟧ₛ u⋆)
                                                                        (𝒰⋆⟦ δ′ ⟧ₛ u⋆))
-  Eq⋆⟦ cong≅ₛ≔ pₛ p ⟧≅ₛ                      u⋆ = eq⋆≔ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆) (Eq⟦ p ⟧≅ u⋆)
-  Eq⋆⟦ conv≅ₛ₁ γ δ θ ⟧≅ₛ                     u⋆ = reflEq⋆ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ (𝒰⋆⟦ θ ⟧ₛ u⋆)))
-  Eq⋆⟦ conv≅ₛ₂ M γ δ ⟧≅ₛ                     u⋆ = reflEq⋆ (𝓊⋆≔ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆))
+  Eq⋆⟦ cong≔≅ₛ pₛ p ⟧≅ₛ                      u⋆ = eq⋆≔ (Eq⋆⟦ pₛ ⟧≅ₛ u⋆) (Eq⟦ p ⟧≅ u⋆)
+  Eq⋆⟦ conv₁≅ₛ γ δ θ ⟧≅ₛ                     u⋆ = reflEq⋆ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ (𝒰⋆⟦ θ ⟧ₛ u⋆)))
+  Eq⋆⟦ conv₂≅ₛ M γ δ ⟧≅ₛ                     u⋆ = reflEq⋆ (𝓊⋆≔ (𝒰⋆⟦ γ ⟧ₛ (𝒰⋆⟦ δ ⟧ₛ u⋆))
                                                                (𝒰⟦ M ⟧ (𝒰⋆⟦ δ ⟧ₛ u⋆)))
-  Eq⋆⟦ conv≅ₛ₃ c M γ ⟧≅ₛ                     u⋆ = transEq⋆ (aux₄₂₃ refl⊇ c (𝒰⋆⟦ γ ⟧ₛ u⋆))
+  Eq⋆⟦ conv₃≅ₛ c M γ ⟧≅ₛ                     u⋆ = transEq⋆ (aux₄₂₃ refl⊇ c (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                                            (aux₄₂₄⟨ refl⊇ ⟩ (𝒰⋆⟦ γ ⟧ₛ u⋆))
-  Eq⋆⟦ conv≅ₛ₄ c c′ c″ ⟧≅ₛ                   u⋆ = aux₄₂₆ c′ c″ c u⋆
-  Eq⋆⟦ conv≅ₛ₅ c γ ⟧≅ₛ                       u⋆ = Eq⋆⟦ γ ⟧ₛ (aux₄₂₄⟨ c ⟩ u⋆) (cong𝒰⋆↓⟨ c ⟩ u⋆) u⋆
-  Eq⋆⟦ conv≅ₛ₆ c γ ⟧≅ₛ                       u⋆ = Eq⋆conv≅ₛ₆⟨ c ⟩ γ u⋆
-  Eq⋆⟦ conv≅ₛ₇ c γ i ⟧≅ₛ                     u⋆ = Eq⋆conv≅ₛ₇⟨ c ⟩ γ i u⋆
+  Eq⋆⟦ conv₄≅ₛ c c′ c″ ⟧≅ₛ                   u⋆ = aux₄₂₆ c′ c″ c u⋆
+  Eq⋆⟦ conv₅≅ₛ c γ ⟧≅ₛ                       u⋆ = Eq⋆⟦ γ ⟧ₛ (aux₄₂₄⟨ c ⟩ u⋆) (cong↓⟨ c ⟩𝒰⋆ u⋆) u⋆
+  Eq⋆⟦ conv₆≅ₛ c γ ⟧≅ₛ                       u⋆ = conv₆Eq⋆⟨ c ⟩ γ u⋆
+  Eq⋆⟦ conv₇≅ₛ c γ i ⟧≅ₛ                     u⋆ = conv₇Eq⋆⟨ c ⟩ γ i u⋆
 
 -- They are both shown by induction on the rules of conversion.  Notice that the soundness
 -- result holds in any Kripke model.
@@ -1172,7 +1172,7 @@ module _ where
                 (c : Δ ⊇ Γ) →
                 𝒰⋆ proj⟨ c ⟩⊩⋆
   proj⟨ done ⟩𝒰⋆     = 𝓊⋆[]
-  proj⟨ weak c i ⟩𝒰⋆ = 𝓊⋆≔ proj⟨ c ⟩𝒰⋆ (aux₄₄₃-ν i)
+  proj⟨ step c i ⟩𝒰⋆ = 𝓊⋆≔ proj⟨ c ⟩𝒰⋆ (aux₄₄₃-ν i)
 
   refl𝒰⋆ : ∀ {Γ} → 𝒰⋆ (refl⊩⋆ {Γ})
   refl𝒰⋆ = proj⟨ refl⊇ ⟩𝒰⋆

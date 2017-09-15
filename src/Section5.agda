@@ -117,7 +117,7 @@ mutual
 
 proj⟨_⟩𝒩⋆ : ∀ {Γ Δ} → (c : Δ ⊇ Γ) → 𝒩⋆ proj⟨ c ⟩⊩⋆
 proj⟨ done ⟩𝒩⋆     = 𝓃⋆[]
-proj⟨ weak c i ⟩𝒩⋆ = 𝓃⋆≔ proj⟨ c ⟩𝒩⋆ (𝒩-ν i)
+proj⟨ step c i ⟩𝒩⋆ = 𝓃⋆≔ proj⟨ c ⟩𝒩⋆ (𝒩-ν i)
 
 refl𝒩⋆ : ∀ {Γ} → 𝒩⋆ (refl⊩⋆ {Γ})
 refl𝒩⋆ = proj⟨ refl⊇ ⟩𝒩⋆
