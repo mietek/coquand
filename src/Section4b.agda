@@ -273,10 +273,10 @@ mutual
                                                            (cong≅ₛCV⋆ (conv₃≅ₛ _ _ _)
                                                                       (cong↑⟨ c ⟩CV⋆ cv⋆))
                                                            (cong≅CV (conv₃≅ _ _) cvₐ))))
-  CV⟦ M ∙ N ⟧ cv⋆ = case CV⟦ M ⟧ cv⋆ of
-                      λ { (cv⊃ h) → cong≅CV (trans≅ (conv₆≅ _ _ _)
-                                                     (cong∙≅ (sym≅ (conv₅≅ _ _)) refl≅))
-                                             (h refl⊇ (CV⟦ N ⟧ cv⋆)) }
+  CV⟦ M ∙ N ⟧ cv⋆ with CV⟦ M ⟧ cv⋆
+  CV⟦ M ∙ N ⟧ cv⋆ | (cv⊃ h) = cong≅CV (trans≅ (conv₆≅ _ _ _)
+                                              (cong∙≅ (sym≅ (conv₅≅ _ _)) refl≅))
+                                      (h refl⊇ (CV⟦ N ⟧ cv⋆))
   CV⟦ M ▶ γ ⟧ cv⋆ = cong≅CV (conv₇≅ _ _ _)
                             (CV⟦ M ⟧ (CV⋆⟦ γ ⟧ₛ cv⋆))
 
@@ -469,8 +469,8 @@ mutual
                                                               (cong↑⟨ c′ ⟩𝒰 uₐ))
                                                          (𝓊⋆≔ (cong↑⟨ c″ ⟩𝒰⋆ u⋆)
                                                               (cong↑⟨ c′ ⟩𝒰 uₐ))))
-  𝒰⟦ M ∙ N ⟧ u⋆ = case 𝒰⟦ M ⟧ u⋆ of
-                    λ { (𝓊⊃ h₀ h₁ h₂) → h₀ refl⊇ (𝒰⟦ N ⟧ u⋆) }
+  𝒰⟦ M ∙ N ⟧ u⋆ with 𝒰⟦ M ⟧ u⋆
+  𝒰⟦ M ∙ N ⟧ u⋆ | (𝓊⊃ h₀ h₁ h₂) = h₀ refl⊇ (𝒰⟦ N ⟧ u⋆)
   𝒰⟦ M ▶ γ ⟧ u⋆ = 𝒰⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆)
 
   𝒰⋆⟦_⟧ₛ : ∀ {Γ Δ Θ} {ρ : Θ ⊩⋆ Δ} →
@@ -502,20 +502,19 @@ mutual
   ↑⟨_⟩Eq⟦_⟧ : ∀ {Γ Δ Θ A} {ρ : Δ ⊩⋆ Γ} →
                 (c : Θ ⊇ Δ) (M : Γ ⊢ A) → 𝒰⋆ ρ →
                 Eq (↑⟨ c ⟩ (⟦ M ⟧ ρ)) (⟦ M ⟧ (↑⟨ c ⟩ ρ))
-  ↑⟨ c ⟩Eq⟦ ν x i ⟧ u⋆ = aux₄₂₂⟨ c ⟩ u⋆ i
+  ↑⟨ c ⟩Eq⟦ ν x i ⟧ u⋆ = conglookup↑⟨ c ⟩Eq u⋆ i
   ↑⟨ c ⟩Eq⟦ ƛ x M ⟧ u⋆ = eq⊃ (λ c′ uₐ → Eq⟦ M ⟧ (eq⋆≔ (symEq⋆ (aux₄₂₇ c c′ (c ○ c′) u⋆)) (reflEq uₐ))
                                                  (𝓊⋆≔ (cong↑⟨ c ○ c′ ⟩𝒰⋆ u⋆) uₐ)
                                                  (𝓊⋆≔ (cong↑⟨ c′ ⟩𝒰⋆ (cong↑⟨ c ⟩𝒰⋆ u⋆)) uₐ))
-  ↑⟨ c ⟩Eq⟦ M ∙ N ⟧ u⋆ =
-    case 𝒰⟦ M ⟧ u⋆ of
-      λ { (𝓊⊃ h₀ h₁ h₂) → transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
-                                   (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆)))
-                                            (cong⟦∙⟧⟨ refl⊇ ⟩Eq (↑⟨ c ⟩Eq⟦ M ⟧ u⋆)
-                                                                (cong↑⟨ c ⟩𝒰 (𝒰⟦ M ⟧ u⋆))
-                                                                (𝒰⟦ M ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆))
-                                                                (↑⟨ c ⟩Eq⟦ N ⟧ u⋆)
-                                                                (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆))
-                                                                (𝒰⟦ N ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆)))) }
+  ↑⟨ c ⟩Eq⟦ M ∙ N ⟧ u⋆ with 𝒰⟦ M ⟧ u⋆
+  ↑⟨ c ⟩Eq⟦ M ∙ N ⟧ u⋆ | (𝓊⊃ h₀ h₁ h₂) = transEq (h₂ refl⊇ c c (𝒰⟦ N ⟧ u⋆))
+                                                 (transEq (aux₄₁₃ c refl⊇ (𝒰⟦ M ⟧ u⋆) (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆)))
+                                                          (cong⟦∙⟧⟨ refl⊇ ⟩Eq (↑⟨ c ⟩Eq⟦ M ⟧ u⋆)
+                                                                              (cong↑⟨ c ⟩𝒰 (𝒰⟦ M ⟧ u⋆))
+                                                                              (𝒰⟦ M ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆))
+                                                                              (↑⟨ c ⟩Eq⟦ N ⟧ u⋆)
+                                                                              (cong↑⟨ c ⟩𝒰 (𝒰⟦ N ⟧ u⋆))
+                                                                              (𝒰⟦ N ⟧ (cong↑⟨ c ⟩𝒰⋆ u⋆))))
   ↑⟨ c ⟩Eq⟦ M ▶ γ ⟧ u⋆ = transEq (↑⟨ c ⟩Eq⟦ M ⟧ (𝒰⋆⟦ γ ⟧ₛ u⋆))
                                  (Eq⟦ M ⟧ (↑⟨ c ⟩Eq⋆⟦ γ ⟧ₛ u⋆)
                                           (cong↑⟨ c ⟩𝒰⋆ (𝒰⋆⟦ γ ⟧ₛ u⋆))

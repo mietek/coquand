@@ -60,29 +60,29 @@ data 𝒩⋆ : ∀ {Γ Δ} → Δ ⊩⋆ Γ → Set where
 
 -- We prove the following lemmas which are used to prove Lemma 10.
 
-aux₅₀₁⟨_⟩ : ∀ {Γ Δ A} →
+cong↑⟨_⟩𝒩 : ∀ {Γ Δ A} →
               (c : Δ ⊇ Γ) → {a : Γ ⊩ A} → 𝒩 a →
               𝒩 (↑⟨ c ⟩ a)
-aux₅₀₁⟨ c ⟩ (𝓃• h) = 𝓃• (λ c′    → h (c ○ c′))
-aux₅₀₁⟨ c ⟩ (𝓃⊃ h) = 𝓃⊃ (λ c′ nₐ → h (c ○ c′) nₐ)
+cong↑⟨ c ⟩𝒩 (𝓃• h) = 𝓃• (λ c′    → h (c ○ c′))
+cong↑⟨ c ⟩𝒩 (𝓃⊃ h) = 𝓃⊃ (λ c′ nₐ → h (c ○ c′) nₐ)
 
-aux₅₀₂ : ∀ {Γ Δ A x} {ρ : Δ ⊩⋆ Γ} →
-           𝒩⋆ ρ → (i : Γ ∋ x ∷ A) →
-           𝒩 (lookup ρ i)
-aux₅₀₂ (𝓃⋆≔ n⋆ n) zero    = n
-aux₅₀₂ (𝓃⋆≔ n⋆ n) (suc i) = aux₅₀₂ n⋆ i
+conglookup𝒩 : ∀ {Γ Δ A x} {ρ : Δ ⊩⋆ Γ} →
+                 𝒩⋆ ρ → (i : Γ ∋ x ∷ A) →
+                 𝒩 (lookup ρ i)
+conglookup𝒩 (𝓃⋆≔ n⋆ n) zero    = n
+conglookup𝒩 (𝓃⋆≔ n⋆ n) (suc i) = conglookup𝒩 n⋆ i
 
-aux₅₀₃⟨_⟩ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
-              (c : Θ ⊇ Δ) → 𝒩⋆ ρ →
-              𝒩⋆ (↑⟨ c ⟩ ρ)
-aux₅₀₃⟨ c ⟩ 𝓃⋆[]       = 𝓃⋆[]
-aux₅₀₃⟨ c ⟩ (𝓃⋆≔ n⋆ n) = 𝓃⋆≔ (aux₅₀₃⟨ c ⟩ n⋆) (aux₅₀₁⟨ c ⟩ n)
+cong↑⟨_⟩𝒩⋆ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
+               (c : Θ ⊇ Δ) → 𝒩⋆ ρ →
+               𝒩⋆ (↑⟨ c ⟩ ρ)
+cong↑⟨ c ⟩𝒩⋆ 𝓃⋆[]       = 𝓃⋆[]
+cong↑⟨ c ⟩𝒩⋆ (𝓃⋆≔ n⋆ n) = 𝓃⋆≔ (cong↑⟨ c ⟩𝒩⋆ n⋆) (cong↑⟨ c ⟩𝒩 n)
 
-aux₅₀₄⟨_⟩ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
-              (c : Γ ⊇ Θ) → 𝒩⋆ ρ →
-              𝒩⋆ (↓⟨ c ⟩ ρ)
-aux₅₀₄⟨ done ⟩     n⋆ = 𝓃⋆[]
-aux₅₀₄⟨ step c i ⟩ n⋆ = 𝓃⋆≔ (aux₅₀₄⟨ c ⟩ n⋆) (aux₅₀₂ n⋆ i)
+cong↓⟨_⟩𝒩⋆ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
+               (c : Γ ⊇ Θ) → 𝒩⋆ ρ →
+               𝒩⋆ (↓⟨ c ⟩ ρ)
+cong↓⟨ done ⟩𝒩⋆     n⋆ = 𝓃⋆[]
+cong↓⟨ step c i ⟩𝒩⋆ n⋆ = 𝓃⋆≔ (cong↓⟨ c ⟩𝒩⋆ n⋆) (conglookup𝒩 n⋆ i)
 
 -- The lemma is proved together with a corresponding lemma for substitutions:
 

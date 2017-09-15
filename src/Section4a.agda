@@ -414,12 +414,12 @@ module _ {{_ : Model}} where
                                            (conglookupEq (reflEq⋆ u⋆) i)
   aux₄₂₁⟨ step c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
 
-  aux₄₂₂⟨_⟩ : ∀ {Γ A w w′ x} →
-                (c : w′ ⊒ w) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
-                Eq (↑⟨ c ⟩ (lookup ρ i)) (lookup (↑⟨ c ⟩ ρ) i)
-  aux₄₂₂⟨ c ⟩ 𝓊⋆[]       ()
-  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) zero    = cong↑⟨ c ⟩Eq (reflEq u)
-  aux₄₂₂⟨ c ⟩ (𝓊⋆≔ u⋆ u) (suc i) = aux₄₂₂⟨ c ⟩ u⋆ i
+  conglookup↑⟨_⟩Eq : ∀ {Γ A w w′ x} {ρ : w ⊩⋆ Γ} →
+                       (c : w′ ⊒ w) → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) →
+                       Eq (↑⟨ c ⟩ (lookup ρ i)) (lookup (↑⟨ c ⟩ ρ) i)
+  conglookup↑⟨ c ⟩Eq 𝓊⋆[]       ()
+  conglookup↑⟨ c ⟩Eq (𝓊⋆≔ u⋆ u) zero    = cong↑⟨ c ⟩Eq (reflEq u)
+  conglookup↑⟨ c ⟩Eq (𝓊⋆≔ u⋆ u) (suc i) = conglookup↑⟨ c ⟩Eq u⋆ i
 
   aux₄₂₃ : ∀ {Γ Δ A w x} {{_ : T (fresh x Δ)}} {{_ : T (fresh x Γ)}} →
              (c : Γ ⊇ Δ) (c′ : [ Γ , x ∷ A ] ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → {a : w ⊩ A} →
@@ -463,7 +463,7 @@ module _ {{_ : Model}} where
              (c : Δ ⊇ Γ) (c′ : w′ ⊒ w) → {ρ : w ⊩⋆ Δ} → 𝒰⋆ ρ →
              Eq⋆ (↑⟨ c′ ⟩ (↓⟨ c ⟩ ρ)) (↓⟨ c ⟩ (↑⟨ c′ ⟩ ρ))
   aux₄₂₈ done       c′ u⋆ = eq⋆[]
-  aux₄₂₈ (step c i) c′ u⋆ = eq⋆≔ (aux₄₂₈ c c′ u⋆) (aux₄₂₂⟨ c′ ⟩ u⋆ i)
+  aux₄₂₈ (step c i) c′ u⋆ = eq⋆≔ (aux₄₂₈ c c′ u⋆) (conglookup↑⟨ c′ ⟩Eq u⋆ i)
 
 -- These properties are used in the proofs of soundness and completeness below.
 
