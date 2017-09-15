@@ -19,7 +19,8 @@ import Section1
 import Section3
 
 -- 4. The semantic model
-import Section4
+import Section4a
+import Section4b
 
 -- 5. Normal form
 import Section5

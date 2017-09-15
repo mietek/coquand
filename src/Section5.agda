@@ -2,7 +2,7 @@
 
 module Section5 where
 
-open import Section4 public
+open import Section4b public
 
 
 -- 5. Normal form
