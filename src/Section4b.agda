@@ -39,7 +39,7 @@ postulate
 -- The function `reify` is mutually defined with `val`, which given a function from a context
 -- extension to a proof tree returns a semantic object as result.
 --
--- We define an abbreviation for the semantic object corresponding to a variable, `val-ν`.
+-- We define an abbreviation for the semantic object corresponding to a variable, `⟦ν⟧`.
 --
 -- The functions `reify` and `val` are both defined by induction on the type:
 
@@ -48,14 +48,14 @@ mutual
   reify {•}     {Γ} f = f ⟦g⟧⟨ refl⊇ ⟩
   reify {A ⊃ B} {Γ} f = let x , φ = gensym Γ in
                         let instance _ = φ in
-                        ƛ x (reify (f ⟦∙⟧⟨ weak⊇ ⟩ val-ν zero))
+                        ƛ x (reify (f ⟦∙⟧⟨ weak⊇ ⟩ ⟦ν⟧ zero))
 
   val : ∀ {A Γ} → (∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) → Γ ⊩ A
   val {•}     f = ⟦𝒢⟧ f
   val {A ⊃ B} f = ⟦ƛ⟧ (λ c a → val (λ c′ → f (c ○ c′) ∙ reify (↑⟨ c′ ⟩ a)))
 
-  val-ν : ∀ {x Γ A} → Γ ∋ x ∷ A → Γ ⊩ A
-  val-ν {x} i = val (λ c → ν x (↑⟨ c ⟩ i))
+  ⟦ν⟧ : ∀ {x Γ A} → Γ ∋ x ∷ A → Γ ⊩ A
+  ⟦ν⟧ {x} i = val (λ c → ν x (↑⟨ c ⟩ i))
 
 -- We also have that if two semantic objects in a Kripke model are extensionally equal, then
 -- the result of applying the inversion function to them is intensionally equal.  To prove this
@@ -93,10 +93,10 @@ mutual
   thm₁ {Γ} (eq⊃ h) = let x , φ = gensym Γ in
                      let instance _ = φ in
                      cong (ƛ x)
-                       (thm₁ (h weak⊇ (aux₄₄₃-ν zero)))
+                       (thm₁ (h weak⊇ (⟦ν⟧𝒰 zero)))
 
-  aux₄₄₃-ν : ∀ {x Γ A} → (i : Γ ∋ x ∷ A) → 𝒰 (val-ν i)
-  aux₄₄₃-ν {x} i = aux₄₄₃ (λ c → ν x (↑⟨ c ⟩ i))
+  ⟦ν⟧𝒰 : ∀ {x Γ A} → (i : Γ ∋ x ∷ A) → 𝒰 (⟦ν⟧ i)
+  ⟦ν⟧𝒰 {x} i = aux₄₄₃ (λ c → ν x (↑⟨ c ⟩ i))
 
   aux₄₄₃ : ∀ {A Γ} → (f : ∀ {Δ} → Δ ⊇ Γ → Δ ⊢ A) → 𝒰 (val f)
   aux₄₄₃ {•}     f = 𝓊•
@@ -118,7 +118,7 @@ mutual
 
 -- We are now ready to define the function that given a proof tree computes its normal form.
 -- For this we define the identity environment `proj⟨_⟩⊩⋆` which to each variable
--- in the context `Γ` associates the corresponding value of the variable in `Δ` (`val-ν` gives the
+-- in the context `Γ` associates the corresponding value of the variable in `Δ` (`⟦ν⟧` gives the
 -- value of this variable).  The normalisation function, `nf`, is defined as the composition of the
 -- evaluation function and `reify`.  This function is similar to the normalisation algorithm given
 -- by Berger [3]; one difference is our use of Kripke models to deal with reduction under `λ`.
@@ -127,7 +127,7 @@ mutual
 
 proj⟨_⟩⊩⋆ : ∀ {Γ Δ} → Δ ⊇ Γ → Δ ⊩⋆ Γ
 proj⟨ done ⟩⊩⋆             = []
-proj⟨ step {x = x} c i ⟩⊩⋆ = [ proj⟨ c ⟩⊩⋆ , x ≔ val-ν i ]
+proj⟨ step {x = x} c i ⟩⊩⋆ = [ proj⟨ c ⟩⊩⋆ , x ≔ ⟦ν⟧ i ]
 
 refl⊩⋆ : ∀ {Γ} → Γ ⊩⋆ Γ
 refl⊩⋆ = proj⟨ refl⊇ ⟩⊩⋆
@@ -691,7 +691,7 @@ module _ where
                 (c : Δ ⊇ Γ) →
                 𝒰⋆ proj⟨ c ⟩⊩⋆
   proj⟨ done ⟩𝒰⋆     = 𝓊⋆[]
-  proj⟨ step c i ⟩𝒰⋆ = 𝓊⋆≔ proj⟨ c ⟩𝒰⋆ (aux₄₄₃-ν i)
+  proj⟨ step c i ⟩𝒰⋆ = 𝓊⋆≔ proj⟨ c ⟩𝒰⋆ (⟦ν⟧𝒰 i)
 
   refl𝒰⋆ : ∀ {Γ} → 𝒰⋆ (refl⊩⋆ {Γ})
   refl𝒰⋆ = proj⟨ refl⊇ ⟩𝒰⋆
