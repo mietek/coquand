@@ -60,25 +60,29 @@ data 𝒩⋆ : ∀ {Γ Δ} → Δ ⊩⋆ Γ → Set where
 
 -- We prove the following lemmas which are used to prove Lemma 10.
 
-postulate
-  aux₅₀₁⟨_⟩ : ∀ {Γ Δ A} →
-                (c : Δ ⊇ Γ) → {a : Γ ⊩ A} → 𝒩 a →
-                𝒩 (↑⟨ c ⟩ a)
+aux₅₀₁⟨_⟩ : ∀ {Γ Δ A} →
+              (c : Δ ⊇ Γ) → {a : Γ ⊩ A} → 𝒩 a →
+              𝒩 (↑⟨ c ⟩ a)
+aux₅₀₁⟨ c ⟩ (𝓃• h) = 𝓃• (λ c′    → h (c ○ c′))
+aux₅₀₁⟨ c ⟩ (𝓃⊃ h) = 𝓃⊃ (λ c′ nₐ → h (c ○ c′) nₐ)
 
-postulate
-  aux₅₀₂ : ∀ {Γ Δ A x} →
-             {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ → (i : Γ ∋ x ∷ A) →
-             𝒩 (lookup ρ i)
+aux₅₀₂ : ∀ {Γ Δ A x} {ρ : Δ ⊩⋆ Γ} →
+           𝒩⋆ ρ → (i : Γ ∋ x ∷ A) →
+           𝒩 (lookup ρ i)
+aux₅₀₂ (𝓃⋆≔ n⋆ n) zero    = n
+aux₅₀₂ (𝓃⋆≔ n⋆ n) (suc i) = aux₅₀₂ n⋆ i
 
-postulate
-  aux₅₀₃⟨_⟩ : ∀ {Γ Δ Θ} →
-                (c : Θ ⊇ Δ) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
-                𝒩⋆ (↑⟨ c ⟩ ρ)
+aux₅₀₃⟨_⟩ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
+              (c : Θ ⊇ Δ) → 𝒩⋆ ρ →
+              𝒩⋆ (↑⟨ c ⟩ ρ)
+aux₅₀₃⟨ c ⟩ 𝓃⋆[]       = 𝓃⋆[]
+aux₅₀₃⟨ c ⟩ (𝓃⋆≔ n⋆ n) = 𝓃⋆≔ (aux₅₀₃⟨ c ⟩ n⋆) (aux₅₀₁⟨ c ⟩ n)
 
-postulate
-  aux₅₀₄⟨_⟩ : ∀ {Γ Δ Θ} →
-                (c : Γ ⊇ Θ) → {ρ : Δ ⊩⋆ Γ} → 𝒩⋆ ρ →
-                𝒩⋆ (↓⟨ c ⟩ ρ)
+aux₅₀₄⟨_⟩ : ∀ {Γ Δ Θ} {ρ : Δ ⊩⋆ Γ} →
+              (c : Γ ⊇ Θ) → 𝒩⋆ ρ →
+              𝒩⋆ (↓⟨ c ⟩ ρ)
+aux₅₀₄⟨ done ⟩     n⋆ = 𝓃⋆[]
+aux₅₀₄⟨ step c i ⟩ n⋆ = 𝓃⋆≔ (aux₅₀₄⟨ c ⟩ n⋆) (aux₅₀₂ n⋆ i)
 
 -- The lemma is proved together with a corresponding lemma for substitutions:
 
