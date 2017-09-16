@@ -409,9 +409,8 @@ module _ {{_ : Model}} where
                 (c : Γ ⊇ Δ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ → (i : Γ ∋ x ∷ A) (j : Δ ∋ x ∷ A) →
                 Eq (lookup ρ i) (lookup (↓⟨ c ⟩ ρ) j)
   aux₄₂₁⟨ done ⟩      u⋆ i ()
-  aux₄₂₁⟨ step c i′ ⟩ u⋆ i zero    = subst (λ i′ → Eq (lookup _ i) (lookup _ i′))
-                                           (uniq∋ i i′)
-                                           (conglookupEq (reflEq⋆ u⋆) i)
+  aux₄₂₁⟨ step c i′ ⟩ u⋆ i zero    rewrite uniq∋ i′ i
+                                   = conglookupEq (reflEq⋆ u⋆) i
   aux₄₂₁⟨ step c i′ ⟩ u⋆ i (suc j) = aux₄₂₁⟨ c ⟩ u⋆ i j
 
   conglookup↑⟨_⟩Eq : ∀ {Γ A w w′ x} {ρ : w ⊩⋆ Γ} →
@@ -426,11 +425,9 @@ module _ {{_ : Model}} where
              Eq⋆ (↓⟨ c′ ⟩ [ ρ , x ≔ a ]) (↓⟨ c ⟩ ρ)
   aux₄₂₃               done       done               u⋆ = eq⋆[]
   aux₄₂₃ {x = x} {{φ}} (step c i) (step c′ zero)     u⋆ = elim⊥ (freshlem₁ x φ)
-  aux₄₂₃ {x = x} {{φ}} (step c i) (step c′ (suc i′)) u⋆ =
-    subst (λ i′ → Eq⋆ [ _ , _ ≔ lookup _ i′ ] _)
-          (uniq∋ i i′)
-          (eq⋆≔ (aux₄₂₃ {{freshlem₂ x φ}} c c′ u⋆)
-                (reflEq (conglookup𝒰 u⋆ i)))
+  aux₄₂₃ {x = x} {{φ}} (step c i) (step c′ (suc i′)) u⋆ rewrite uniq∋ i′ i
+                                                        = eq⋆≔ (aux₄₂₃ {{freshlem₂ x φ}} c c′ u⋆)
+                                                               (reflEq (conglookup𝒰 u⋆ i))
 
   aux₄₂₄⟨_⟩ : ∀ {Γ w} →
                 (c : Γ ⊇ Γ) → {ρ : w ⊩⋆ Γ} → 𝒰⋆ ρ →
@@ -485,4 +482,3 @@ module _ {{_ : Model}} where
     ⟦ π⟨ c ⟩ ⟧ₛ        ρ = ↓⟨ c ⟩ ρ
     ⟦ γ ● γ′ ⟧ₛ        ρ = ⟦ γ ⟧ₛ (⟦ γ′ ⟧ₛ ρ)
     ⟦ [ γ , x ≔ M ] ⟧ₛ ρ = [ ⟦ γ ⟧ₛ ρ , x ≔ ⟦ M ⟧ ρ ]
-

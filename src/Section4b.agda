@@ -357,9 +357,8 @@ reflCV⋆ = proj⟨ refl⊇ ⟩CV⋆
 aux₄₆₉⟨_⟩ : ∀ {Γ A} →
               (c : Γ ⊇ Γ) (M : Γ ⊢ A) →
               M ▶ π⟨ c ⟩ ≅ nf M
-aux₄₆₉⟨ c ⟩ M = subst (λ c′ → M ▶ π⟨ c ⟩ ≅ reify (⟦ M ⟧ proj⟨ c′ ⟩⊩⋆))
-                      (uniq⊇ c refl⊇)
-                      (lem₉ (CV⟦ M ⟧ proj⟨ c ⟩CV⋆))
+aux₄₆₉⟨ c ⟩ M rewrite uniq⊇ refl⊇ c
+              = lem₉ (CV⟦ M ⟧ proj⟨ c ⟩CV⋆)
 
 -- Theorem 2.
 thm₂ : ∀ {Γ A} → (M : Γ ⊢ A) →
@@ -423,9 +422,8 @@ lem₉ₛ (cv⋆≔ cv⋆ cv) = trans≅ₛ (conv₇≅ₛ _ _ _)
 aux₄₆₉ₛ⟨_⟩ : ∀ {Γ Δ} →
                (c : Δ ⊇ Δ) (γ : Δ ⋙ Γ) →
                γ ● π⟨ c ⟩ ≅ₛ nf⋆ γ
-aux₄₆₉ₛ⟨ c ⟩ γ = subst (λ c′ → γ ● π⟨ c ⟩ ≅ₛ reify⋆ (⟦ γ ⟧ₛ proj⟨ c′ ⟩⊩⋆))
-                       (uniq⊇ c refl⊇)
-                       (lem₉ₛ (CV⋆⟦ γ ⟧ₛ proj⟨ c ⟩CV⋆))
+aux₄₆₉ₛ⟨ c ⟩ γ rewrite uniq⊇ refl⊇ c
+               = lem₉ₛ (CV⋆⟦ γ ⟧ₛ proj⟨ c ⟩CV⋆)
 
 thm₂ₛ : ∀ {Γ Δ} → (γ : Δ ⋙ Γ) →
           γ ≅ₛ nf⋆ γ

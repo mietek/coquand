@@ -115,7 +115,8 @@ postulate
 
 -- Lemma 15.
 lem₁₅ : ∀ {Γ A t} → Γ ⊢ t ∷ A → Σ (Γ ⊢ A) (λ M → t 𝒟 M)
-lem₁₅ D = case lem₁₄ D of λ { (M , refl) → M , lem₁₃ M }
+lem₁₅ D with lem₁₄ D
+…           | (M , refl) = M , lem₁₃ M
 
 -- As a consequence of this lemma we can now define the semantics of a well-typed term in
 -- a Kripke model as the semantics of the decorated term.  In the remaining text, however, we
